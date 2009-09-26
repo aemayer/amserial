@@ -18,6 +18,8 @@
 //  - removed oldPortList as it is no longer needed
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
+//  2008-10-21 Sean McBride
+//  - fixed some memory management issues
 
 
 #import "AMSDKCompatibility.h"
@@ -40,12 +42,6 @@ NSString *const AMSerialPortListDidAddPortsNotification = @"AMSerialPortListDidA
 NSString *const AMSerialPortListDidRemovePortsNotification = @"AMSerialPortListDidRemovePortsNotification";
 NSString *const AMSerialPortListAddedPorts = @"AMSerialPortListAddedPorts";
 NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
-
-
-// Private prototypes
-void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterator);
-void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator);
-
 
 
 @implementation AMSerialPortList
@@ -204,13 +200,13 @@ void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator);
 	[notifCenter postNotificationName:AMSerialPortListDidRemovePortsNotification object:self userInfo:userInfo];
 }
 
-void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterator)
+static void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterator)
 {
 	(void)refcon;
 	[[AMSerialPortList sharedPortList] portsWereAdded:iterator];
 }
 
-void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator)
+static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator)
 {
 	(void)refcon;
 	[[AMSerialPortList sharedPortList] portsWereRemoved:iterator];
@@ -218,46 +214,49 @@ void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator)
 
 - (void)registerForSerialPortChangeNotifications
 {
-	kern_return_t kernResult; 
-	io_iterator_t unused;
-	CFMutableDictionaryRef classesToMatch1, classesToMatch2;
-
-	// Serial devices are instances of class IOSerialBSDClient
-	classesToMatch1 = IOServiceMatching(kIOSerialBSDServiceValue);
-	if (classesToMatch1 == NULL) {
-#ifdef AMSerialDebug
-		NSLog(@"IOServiceMatching returned a NULL dictionary.");
-#endif
-	} else {
-		CFDictionarySetValue(classesToMatch1, CFSTR(kIOSerialBSDTypeKey), CFSTR(kIOSerialBSDAllTypes));
-		classesToMatch2 = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, classesToMatch1);
-	}
-	
-	if (classesToMatch1 != NULL)
-	{
-		IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
+	IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault); 
+	if (notificationPort) {
 		CFRunLoopSourceRef notificationSource = IONotificationPortGetRunLoopSource(notificationPort);
-		
-		CFRunLoopAddSource([[NSRunLoop currentRunLoop] getCFRunLoop], notificationSource, kCFRunLoopCommonModes);
-		
-		// Set up notifications; consumes a reference to classesToMatch1
-		kernResult = IOServiceAddMatchingNotification(notificationPort, kIOPublishNotification, classesToMatch1, AMSerialPortWasAddedNotification, NULL, &unused);
-		if (kernResult != KERN_SUCCESS) {
+		if (notificationSource) {
+			// Serial devices are instances of class IOSerialBSDClient
+			CFMutableDictionaryRef classesToMatch1 = IOServiceMatching(kIOSerialBSDServiceValue);
+			if (classesToMatch1) {
+				CFDictionarySetValue(classesToMatch1, CFSTR(kIOSerialBSDTypeKey), CFSTR(kIOSerialBSDAllTypes));
+				
+				// Copy classesToMatch1 now, while it has a non-zero ref count.
+				CFMutableDictionaryRef classesToMatch2 = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, classesToMatch1);			
+				// Add to the runloop
+				CFRunLoopAddSource([[NSRunLoop currentRunLoop] getCFRunLoop], notificationSource, kCFRunLoopCommonModes);
+				
+				// Set up notification for ports being added.
+				io_iterator_t unused;
+				kern_return_t kernResult = IOServiceAddMatchingNotification(notificationPort, kIOPublishNotification, classesToMatch1, AMSerialPortWasAddedNotification, NULL, &unused); // consumes a reference to classesToMatch1
+				if (kernResult != KERN_SUCCESS) {
 #ifdef AMSerialDebug
-			NSLog(@"Error %d when setting up add notifications!", kernResult);
+					NSLog(@"Error %d when setting up add notifications!", kernResult);
 #endif
-		} else {
-			while (IOIteratorNext(unused)) {}	// arm the notification
-		}
-		// consumes a reference to classesToMatch2
-		kernResult = IOServiceAddMatchingNotification(notificationPort, kIOTerminatedNotification, classesToMatch2, AMSerialPortWasRemovedNotification, NULL, &unused);
-		if (kernResult != KERN_SUCCESS) {
+				} else {
+					while (IOIteratorNext(unused)) {}	// arm the notification
+				}
+					
+				if (classesToMatch2) {
+					// Set up notification for ports being removed.
+					kernResult = IOServiceAddMatchingNotification(notificationPort, kIOTerminatedNotification, classesToMatch2, AMSerialPortWasRemovedNotification, NULL, &unused); // consumes a reference to classesToMatch2
+					if (kernResult != KERN_SUCCESS) {
 #ifdef AMSerialDebug
-			NSLog(@"Error %d when setting up add notifications!", kernResult);
+						NSLog(@"Error %d when setting up add notifications!", kernResult);
 #endif
-		} else {
-			while (IOIteratorNext(unused)) {}	// arm the notification
+					} else {
+						while (IOIteratorNext(unused)) {}	// arm the notification
+					}
+				}
+			} else {
+#ifdef AMSerialDebug
+				NSLog(@"IOServiceMatching returned a NULL dictionary.");
+#endif
+			}
 		}
+		// Note that IONotificationPortDestroy(notificationPort) is deliberately not called here because if it were our port change notifications would never fire.  This minor leak is pretty irrelevent since this object is a singleton that lives for the life of the application anyway.
 	}
 }
 
