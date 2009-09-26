@@ -1,0 +1,17 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {chooseDevice = id; listDevices = id; send = id; }; 
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                deviceTextField = NSTextField; 
+                inputTextField = NSTextField; 
+                outputTextView = NSTextView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

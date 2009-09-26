@@ -1,0 +1,409 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E15800010C58DE2E00B8171B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		E15800020C58DE2E00B8171B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B6E09E02D03CD90100010A /* IOKit.framework */; };
+		E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B6E09402D03AB10100010A /* AppController.h */; };
+		E158FFED0C58DE2E00B8171B /* AMStandardEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */; };
+		E158FFEE0C58DE2E00B8171B /* AMSerialErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF910C58DDAB00B8171B /* AMSerialErrors.h */; };
+		E158FFEF0C58DE2E00B8171B /* AMSerialPort_Deprecated.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF920C58DDAB00B8171B /* AMSerialPort_Deprecated.h */; };
+		E158FFF00C58DE2E00B8171B /* AMSerialPort.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF940C58DDAB00B8171B /* AMSerialPort.h */; };
+		E158FFF10C58DE2E00B8171B /* AMSerialPortAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */; };
+		E158FFF20C58DE2E00B8171B /* AMSerialPortList_Deprecated.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */; };
+		E158FFF30C58DE2E00B8171B /* AMSerialPortList.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */; };
+		E158FFF50C58DE2E00B8171B /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		E158FFF80C58DE2E00B8171B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		E158FFF90C58DE2E00B8171B /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6E09502D03AB10100010A /* AppController.m */; };
+		E158FFFA0C58DE2E00B8171B /* AMStandardEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */; };
+		E158FFFB0C58DE2E00B8171B /* AMSerialPort_Deprecated.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF930C58DDAB00B8171B /* AMSerialPort_Deprecated.m */; };
+		E158FFFC0C58DE2E00B8171B /* AMSerialPort.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF950C58DDAB00B8171B /* AMSerialPort.m */; };
+		E158FFFD0C58DE2E00B8171B /* AMSerialPortAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */; };
+		E158FFFE0C58DE2E00B8171B /* AMSerialPortList_Deprecated.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF990C58DDAB00B8171B /* AMSerialPortList_Deprecated.m */; };
+		E158FFFF0C58DE2E00B8171B /* AMSerialPortList.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */; };
+		E1D8DC0D0CE0F11400306A0A /* AMSDKCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMStandardEnumerator.h; path = ../SharedCode/AMStandardEnumerator.h; sourceTree = SOURCE_ROOT; };
+		E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMStandardEnumerator.m; path = ../SharedCode/AMStandardEnumerator.m; sourceTree = SOURCE_ROOT; };
+		E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-AMSerialTest.plist"; sourceTree = "<group>"; };
+		E15800080C58DE2F00B8171B /* AMSerialTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AMSerialTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E158FF910C58DDAB00B8171B /* AMSerialErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialErrors.h; path = ../SharedCode/AMSerialErrors.h; sourceTree = SOURCE_ROOT; };
+		E158FF920C58DDAB00B8171B /* AMSerialPort_Deprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPort_Deprecated.h; path = ../SharedCode/AMSerialPort_Deprecated.h; sourceTree = SOURCE_ROOT; };
+		E158FF930C58DDAB00B8171B /* AMSerialPort_Deprecated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPort_Deprecated.m; path = ../SharedCode/AMSerialPort_Deprecated.m; sourceTree = SOURCE_ROOT; };
+		E158FF940C58DDAB00B8171B /* AMSerialPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPort.h; path = ../SharedCode/AMSerialPort.h; sourceTree = SOURCE_ROOT; };
+		E158FF950C58DDAB00B8171B /* AMSerialPort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPort.m; path = ../SharedCode/AMSerialPort.m; sourceTree = SOURCE_ROOT; };
+		E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortAdditions.h; path = ../SharedCode/AMSerialPortAdditions.h; sourceTree = SOURCE_ROOT; };
+		E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortAdditions.m; path = ../SharedCode/AMSerialPortAdditions.m; sourceTree = SOURCE_ROOT; };
+		E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortList_Deprecated.h; path = ../SharedCode/AMSerialPortList_Deprecated.h; sourceTree = SOURCE_ROOT; };
+		E158FF990C58DDAB00B8171B /* AMSerialPortList_Deprecated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortList_Deprecated.m; path = ../SharedCode/AMSerialPortList_Deprecated.m; sourceTree = SOURCE_ROOT; };
+		E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortList.h; path = ../SharedCode/AMSerialPortList.h; sourceTree = SOURCE_ROOT; };
+		E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortList.m; path = ../SharedCode/AMSerialPortList.m; sourceTree = SOURCE_ROOT; };
+		E1CC710C106E6C2B00F7D688 /* BSD License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "BSD License.txt"; sourceTree = "<group>"; };
+		E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSDKCompatibility.h; path = ../SharedCode/AMSDKCompatibility.h; sourceTree = SOURCE_ROOT; };
+		F5B6E09402D03AB10100010A /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
+		F5B6E09502D03AB10100010A /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		F5B6E09E02D03CD90100010A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E15800000C58DE2E00B8171B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E15800010C58DE2E00B8171B /* Cocoa.framework in Frameworks */,
+				E15800020C58DE2E00B8171B /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				E158FF910C58DDAB00B8171B /* AMSerialErrors.h */,
+				E158FF920C58DDAB00B8171B /* AMSerialPort_Deprecated.h */,
+				E158FF930C58DDAB00B8171B /* AMSerialPort_Deprecated.m */,
+				E158FF940C58DDAB00B8171B /* AMSerialPort.h */,
+				E158FF950C58DDAB00B8171B /* AMSerialPort.m */,
+				E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */,
+				E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */,
+				E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */,
+				E158FF990C58DDAB00B8171B /* AMSerialPortList_Deprecated.m */,
+				E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */,
+				E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */,
+				E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */,
+				E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */,
+				E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */,
+				F5B6E09402D03AB10100010A /* AppController.h */,
+				F5B6E09502D03AB10100010A /* AppController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				F5B6E09E02D03CD90100010A /* IOKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E15800080C58DE2F00B8171B /* AMSerialTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* AMSerial */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = AMSerial;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				E1CC710C106E6C2B00F7D688 /* BSD License.txt */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E158FFEB0C58DE2E00B8171B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */,
+				E158FFED0C58DE2E00B8171B /* AMStandardEnumerator.h in Headers */,
+				E158FFEE0C58DE2E00B8171B /* AMSerialErrors.h in Headers */,
+				E158FFEF0C58DE2E00B8171B /* AMSerialPort_Deprecated.h in Headers */,
+				E158FFF00C58DE2E00B8171B /* AMSerialPort.h in Headers */,
+				E158FFF10C58DE2E00B8171B /* AMSerialPortAdditions.h in Headers */,
+				E158FFF20C58DE2E00B8171B /* AMSerialPortList_Deprecated.h in Headers */,
+				E158FFF30C58DE2E00B8171B /* AMSerialPortList.h in Headers */,
+				E1D8DC0D0CE0F11400306A0A /* AMSDKCompatibility.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E158FFEA0C58DE2E00B8171B /* AMSerialTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E15800030C58DE2E00B8171B /* Build configuration list for PBXNativeTarget "AMSerialTest" */;
+			buildPhases = (
+				E158FFEB0C58DE2E00B8171B /* Headers */,
+				E158FFF40C58DE2E00B8171B /* Resources */,
+				E158FFF70C58DE2E00B8171B /* Sources */,
+				E15800000C58DE2E00B8171B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AMSerialTest;
+			productInstallPath = "$(HOME)/Applications";
+			productName = AMSerial;
+			productReference = E15800080C58DE2F00B8171B /* AMSerialTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = E13F800C0863426A00EC3999 /* Build configuration list for PBXProject "AMSerial" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				de,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* AMSerial */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E158FFEA0C58DE2E00B8171B /* AMSerialTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E158FFF40C58DE2E00B8171B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E158FFF50C58DE2E00B8171B /* MainMenu.nib in Resources */,
+				E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E158FFF70C58DE2E00B8171B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E158FFF80C58DE2E00B8171B /* main.m in Sources */,
+				E158FFF90C58DE2E00B8171B /* AppController.m in Sources */,
+				E158FFFA0C58DE2E00B8171B /* AMStandardEnumerator.m in Sources */,
+				E158FFFB0C58DE2E00B8171B /* AMSerialPort_Deprecated.m in Sources */,
+				E158FFFC0C58DE2E00B8171B /* AMSerialPort.m in Sources */,
+				E158FFFD0C58DE2E00B8171B /* AMSerialPortAdditions.m in Sources */,
+				E158FFFE0C58DE2E00B8171B /* AMSerialPortList_Deprecated.m in Sources */,
+				E158FFFF0C58DE2E00B8171B /* AMSerialPortList.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29B97319FDCFA39411CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E13F800D0863426A00EC3999 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_OBJC_GC = NO;
+				GCC_VERSION = 4.0;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Development;
+		};
+		E13F800E0863426A00EC3999 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_OBJC_GC = NO;
+				GCC_VERSION = 4.0;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment;
+		};
+		E13F800F0863426A00EC3999 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_VERSION = 4.0;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Default;
+		};
+		E15800040C58DE2E00B8171B /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-AMSerialTest.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = AMSerialTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		E15800050C58DE2E00B8171B /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-AMSerialTest.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = AMSerialTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		E15800060C58DE2E00B8171B /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-AMSerialTest.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = AMSerialTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E13F800C0863426A00EC3999 /* Build configuration list for PBXProject "AMSerial" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E13F800D0863426A00EC3999 /* Development */,
+				E13F800E0863426A00EC3999 /* Deployment */,
+				E13F800F0863426A00EC3999 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		E15800030C58DE2E00B8171B /* Build configuration list for PBXNativeTarget "AMSerialTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E15800040C58DE2E00B8171B /* Development */,
+				E15800050C58DE2E00B8171B /* Deployment */,
+				E15800060C58DE2E00B8171B /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
