@@ -21,6 +21,9 @@
 // - replaced -debugDescription by -description; works for both, gdb's 'po' and NSLog()
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
+//  2008-10-21 Sean McBride
+//  - Added an API to open a serial port for exclusive use
+//  - fixed some memory management issues
 
 #import "AMSDKCompatibility.h"
 
@@ -59,15 +62,15 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		serviceType = [type copy];
 		optionsDictionary = [[NSMutableDictionary dictionaryWithCapacity:8] retain];
 #ifndef __OBJC_GC__
-		options = (struct termios*)malloc(sizeof(*options));
-		originalOptions = (struct termios*)malloc(sizeof(*originalOptions));
-		buffer = (char*)malloc(AMSER_MAXBUFSIZE);
-		readfds = (fd_set*)malloc(sizeof(*readfds));
+		options = (struct termios* __strong)malloc(sizeof(*options));
+		originalOptions = (struct termios* __strong)malloc(sizeof(*originalOptions));
+		buffer = (char* __strong)malloc(AMSER_MAXBUFSIZE);
+		readfds = (fd_set* __strong)malloc(sizeof(*readfds));
 #else
-		options = (struct termios*)NSAllocateCollectable(sizeof(*options), 0);
-		originalOptions = (struct termios*)NSAllocateCollectable(sizeof(*originalOptions), 0);
-		buffer = (char*)NSAllocateCollectable(AMSER_MAXBUFSIZE, 0);
-		readfds = (fd_set*)NSAllocateCollectable(sizeof(*readfds), 0);
+		options = (struct termios* __strong)NSAllocateCollectable(sizeof(*options), 0);
+		originalOptions = (struct termios* __strong)NSAllocateCollectable(sizeof(*originalOptions), 0);
+		buffer = (char* __strong)NSAllocateCollectable(AMSER_MAXBUFSIZE, 0);
+		readfds = (fd_set* __strong)NSAllocateCollectable(sizeof(*readfds), 0);
 #endif
 		fileDescriptor = -1;
 		
@@ -124,7 +127,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 // So NSLog and gdb's 'po' command give something useful
 - (NSString *)description
 {
-	NSString *result= [NSString stringWithFormat:@"<%@: %x = name: %@, path: %@, type: %@, fileHandle: %@, fileDescriptor: %d>", NSStringFromClass([self class]), (long unsigned)self, serviceName, bsdPath, serviceType, fileHandle, fileDescriptor];
+	NSString *result= [NSString stringWithFormat:@"<%@: address: %p, name: %@, path: %@, type: %@, fileHandle: %@, fileDescriptor: %d>", NSStringFromClass([self class]), self, serviceName, bsdPath, serviceType, fileHandle, fileDescriptor];
 	return result;
 }
 
@@ -190,19 +193,22 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		serialService = IOServiceGetMatchingService(kIOMasterPortDefault, matchingDictionary);
 		
 		if (serialService) {
-			NSMutableDictionary *propertiesDict;
-			kernResult = IORegistryEntryCreateCFProperties(serialService, (CFMutableDictionaryRef *)&propertiesDict, kCFAllocatorDefault, 0);
+			CFMutableDictionaryRef propertiesDict = NULL;
+			kernResult = IORegistryEntryCreateCFProperties(serialService, &propertiesDict, kCFAllocatorDefault, 0);
 			if (kernResult == KERN_SUCCESS) {
-				result = [propertiesDict autorelease];
+				result = [[(NSDictionary*)propertiesDict copy] autorelease];
 			}
+			if (propertiesDict) {
+				CFRelease(propertiesDict);
+			}
+			// We have sucked this service dry of information so release it now.
+			(void)IOObjectRelease(serialService);
 		} else {
 #ifdef AMSerialDebug
 			NSLog(@"properties: no matching service for %@", matchingDictionary);
 #endif
 		}
 		CFRelease(matchingDictionary);
-		// We have sucked this service dry of information so release it now.
-		(void)IOObjectRelease(serialService);
 	}
 	return result;
 }
@@ -243,13 +249,13 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return owner;
 }
 
-
-- (NSFileHandle *)open // use returned file handle to read and write
+// Private
+- (NSFileHandle *)openWithFlags:(int)flags // use returned file handle to read and write
 {
 	NSFileHandle *result = nil;
 	
 	const char *path = [bsdPath fileSystemRepresentation];
-	fileDescriptor = open(path, O_RDWR | O_NOCTTY); // | O_NONBLOCK);
+	fileDescriptor = open(path, flags);
 
 #ifdef AMSerialDebug
 	NSLog(@"open %@ (%d)\n", bsdPath, fileDescriptor);
@@ -290,6 +296,19 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return result;
 }
 
+// TODO: Sean: why is O_NONBLOCK commented?  Do we want it or not?
+
+// use returned file handle to read and write
+- (NSFileHandle *)open
+{
+	return [self openWithFlags:(O_RDWR | O_NOCTTY)]; // | O_NONBLOCK);
+}
+
+// use returned file handle to read and write
+- (NSFileHandle *)openExclusively
+{
+	return [self openWithFlags:(O_RDWR | O_NOCTTY | O_EXLOCK | O_NONBLOCK)]; // | O_NONBLOCK);
+}
 
 - (void)close
 {

@@ -181,7 +181,10 @@
 		}
 		*error = [NSError errorWithDomain:AMSerialErrorDomain code:errorCode userInfo:userInfo];
 	}
-		
+	
+	// To prevent premature collection.  (Under GC, the given NSData may have no strong references for all we know, and our inner pointer does not keep the NSData alive.  So without this, the data could be collected before we are done with it!)
+	[data self];
+	
 	return result;
 }
 
@@ -313,10 +316,8 @@
 		[closeLock unlock];
 	}
 	[localAutoreleasePool release];
-	if (localReadFDs)
-		free(localReadFDs);
-	if (localBuffer)
-		free(localBuffer);
+	free(localReadFDs);
+	free(localBuffer);
 
 	countReadInBackgroundThreads--;
 

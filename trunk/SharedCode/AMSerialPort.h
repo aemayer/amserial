@@ -23,6 +23,9 @@
 //	- cleaned up the code and removed some (presumably) unnecessary locks
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
+//  2008-10-21 Sean McBride
+//  - Added an API to open a serial port for exclusive use
+//  - fixed some memory management issues
 
 
 /*
@@ -171,7 +174,12 @@ extern NSString *const AMSerialErrorDomain;
 
 
 - (NSFileHandle *)open;
-// opens port for read and write operations
+// opens port for read and write operations, allow shared access of port
+// to actually read or write data use the methods provided by NSFileHandle
+// (alternatively you may use those from AMSerialPortAdditions)
+
+- (NSFileHandle *)openExclusively;
+// opens port for read and write operations, insist on exclusive access to port
 // to actually read or write data use the methods provided by NSFileHandle
 // (alternatively you may use those from AMSerialPortAdditions)
 
