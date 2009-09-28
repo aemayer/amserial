@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -24,6 +24,9 @@
 //  2008-10-21 Sean McBride
 //  - Added an API to open a serial port for exclusive use
 //  - fixed some memory management issues
+//  2009-08-06 Sean McBride
+//  - no longer compare BOOL against YES (dangerous!)
+//  - renamed method to start with lowercase letter, as per Cocoa convention
 
 #import "AMSDKCompatibility.h"
 
@@ -80,6 +83,14 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		
 		// By default blocking read attempts will timeout after 1 second
 		[self setReadTimeout:1.0];
+		
+		// These are used by the AMSerialPortAdditions category only; pretend to use them here to silence warnings by the clang static analyzer.
+		(void)am_readTarget;
+		(void)am_readSelector;
+		(void)stopWriteInBackground;
+		(void)countWriteInBackgroundThreads;
+		(void)stopReadInBackground;
+		(void)countReadInBackgroundThreads;
 	}
 	return self;
 }
@@ -93,19 +104,19 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
 #endif
 	
-	[readLock release];
-	[writeLock release];
-	[closeLock release];
-	[am_readTarget release];
+	[readLock release]; readLock = nil;
+	[writeLock release]; writeLock = nil;
+	[closeLock release]; closeLock = nil;
+	[am_readTarget release]; am_readTarget = nil;
 	
-	free(readfds);
-	free(buffer);
-	free(originalOptions);
-	free(options);
-	[optionsDictionary release];
-	[serviceName release];
-	[serviceType release];
-	[bsdPath release];
+	free(readfds); readfds = NULL;
+	free(buffer); buffer = NULL;
+	free(originalOptions); originalOptions = NULL;
+	free(options); options = NULL;
+	[optionsDictionary release]; optionsDictionary = nil;
+	[serviceName release]; serviceName = nil;
+	[serviceType release]; serviceType = nil;
+	[bsdPath release]; bsdPath = nil;
 	[super dealloc];
 }
 
@@ -356,12 +367,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return result;
 }
 
-- (BOOL)flushInput:(BOOL)fIn Output:(BOOL)fOut	// (fIn or fOut) must be YES
+- (BOOL)flushInput:(BOOL)fIn output:(BOOL)fOut	// (fIn or fOut) must be YES
 {
 	int mode = 0;
-	if (fIn == YES)
+	if (fIn)
 		mode = TCIFLUSH;
-	if (fOut == YES)
+	if (fOut)
 		mode = TCOFLUSH;
 	if (fIn && fOut)
 		mode = TCIOFLUSH;
@@ -395,8 +406,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 {
 	[optionsDictionary removeAllObjects];
 	[optionsDictionary setObject:[self name] forKey:AMSerialOptionServiceName];
-	[optionsDictionary setObject:[NSString stringWithFormat:@"%d", [self speed]] forKey:AMSerialOptionSpeed];
-	[optionsDictionary setObject:[NSString stringWithFormat:@"%ul", [self dataBits]] forKey:AMSerialOptionDataBits];
+	[optionsDictionary setObject:[NSString stringWithFormat:@"%ld", [self speed]] forKey:AMSerialOptionSpeed];
+	[optionsDictionary setObject:[NSString stringWithFormat:@"%lu", [self dataBits]] forKey:AMSerialOptionDataBits];
 	switch ([self parity]) {
 		case kAMSerialParityOdd: {
 			[optionsDictionary setObject:@"Odd" forKey:AMSerialOptionParity];
@@ -620,7 +631,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setEchoEnabled:(BOOL)echo
 {
-	if (echo == YES)
+	if (echo)
 		options->c_lflag |= ECHO;
 	else
 		options->c_lflag &= ~ECHO;
@@ -634,7 +645,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setRTSInputFlowControl:(BOOL)rts
 {
-	if (rts == YES)
+	if (rts)
 		options->c_cflag |= CRTS_IFLOW;
 	else
 		options->c_cflag &= ~CRTS_IFLOW;
@@ -648,7 +659,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setDTRInputFlowControl:(BOOL)dtr
 {
-	if (dtr == YES)
+	if (dtr)
 		options->c_cflag |= CDTR_IFLOW;
 	else
 		options->c_cflag &= ~CDTR_IFLOW;
@@ -662,7 +673,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setCTSOutputFlowControl:(BOOL)cts
 {
-	if (cts == YES)
+	if (cts)
 		options->c_cflag |= CCTS_OFLOW;
 	else
 		options->c_cflag &= ~CCTS_OFLOW;
@@ -676,7 +687,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setDSROutputFlowControl:(BOOL)dsr
 {
-	if (dsr == YES)
+	if (dsr)
 		options->c_cflag |= CDSR_OFLOW;
 	else
 		options->c_cflag &= ~CDSR_OFLOW;
@@ -690,7 +701,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setCAROutputFlowControl:(BOOL)car
 {
-	if (car == YES)
+	if (car)
 		options->c_cflag |= CCAR_OFLOW;
 	else
 		options->c_cflag &= ~CCAR_OFLOW;
@@ -704,7 +715,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setHangupOnClose:(BOOL)hangup
 {
-	if (hangup == YES)
+	if (hangup)
 		options->c_cflag |= HUPCL;
 	else
 		options->c_cflag &= ~HUPCL;
@@ -718,7 +729,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)setLocalMode:(BOOL)local
 {
 	// YES = ignore modem status lines
-	if (local == YES)
+	if (local)
 		options->c_cflag |= CLOCAL;
 	else
 		options->c_cflag &= ~CLOCAL;
@@ -731,7 +742,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setCanonicalMode:(BOOL)flag
 {
-	if (flag == YES)
+	if (flag)
 		options->c_lflag |= ICANON;
 	else
 		options->c_lflag &= ~ICANON;

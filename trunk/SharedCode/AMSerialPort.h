@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -119,23 +119,23 @@ extern NSString *const AMSerialErrorDomain;
 	BOOL gotError;
 	int	lastError;
 	id owner;
-	// used by AMSerialPortAdditions only:
 	char * __strong buffer;
-	id am_readTarget;
-	SEL am_readSelector;
 	NSTimeInterval readTimeout; // for public blocking read methods and doRead
 	fd_set * __strong readfds;
 	id delegate;
 	BOOL delegateHandlesReadInBackground;
 	BOOL delegateHandlesWriteInBackground;
-	
 	NSLock *writeLock;
+	NSLock *readLock;
+	NSLock *closeLock;
+	
+	// used by AMSerialPortAdditions only:
+	id am_readTarget;
+	SEL am_readSelector;
 	BOOL stopWriteInBackground;
 	int countWriteInBackgroundThreads;
-	NSLock *readLock;
 	BOOL stopReadInBackground;
 	int countReadInBackgroundThreads;
-	NSLock *closeLock;
 }
 
 - (id)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType;
@@ -187,7 +187,7 @@ extern NSString *const AMSerialErrorDomain;
 // close port - no more read or write operations allowed
 
 - (BOOL)drainInput;
-- (BOOL)flushInput:(BOOL)fIn Output:(BOOL)fOut;	// (fIn or fOut) must be YES
+- (BOOL)flushInput:(BOOL)fIn output:(BOOL)fOut;	// (fIn or fOut) must be YES
 - (BOOL)sendBreak;
 
 - (BOOL)setDTR;

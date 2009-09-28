@@ -2,7 +2,7 @@
 //  AMStandardEnumerator.m
 //
 //  Created by Andreas on Mon Aug 04 2003.
-//  Copyright (c) 2003 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2003-2009 Andreas Mayer. All rights reserved.
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
@@ -33,7 +33,7 @@
 
 - (void)dealloc
 {
-	[collection release];
+	[collection release]; collection = nil;
 	[super dealloc];
 }
 
