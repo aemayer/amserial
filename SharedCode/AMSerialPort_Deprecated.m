@@ -3,7 +3,7 @@
 //  AMSerialTest
 //
 //  Created by Andreas on 26.07.06.
-//  Copyright 2006 Andreas Mayer. All rights reserved.
+//  Copyright 2006-2009 Andreas Mayer. All rights reserved.
 //
 
 #import "AMSerialPort_Deprecated.h"
@@ -173,5 +173,10 @@
 	return result;
 }
 
+// renamed to -flushInput:output:
+- (BOOL)flushInput:(BOOL)fIn Output:(BOOL)fOut
+{
+	return [self flushInput:fIn output:fOut];
+}
 
 @end

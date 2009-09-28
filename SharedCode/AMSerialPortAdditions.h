@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.h
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
 //
 //  2002-10-04 Andreas Mayer
 //  - readDataInBackgroundWithTarget:selector: and writeDataInBackground: added
@@ -23,6 +23,8 @@
 //	- see AMSerialPort_Deprecated for old interfaces
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
+//  2009-05-08 Sean McBride
+//  - added writeBytes:length:error: method
 
 #import "AMSDKCompatibility.h"
 
@@ -66,6 +68,8 @@
 - (BOOL)writeData:(NSData *)data error:(NSError **)error;
 
 - (BOOL)writeString:(NSString *)string usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
+
+- (BOOL)writeBytes:(const void *)bytes length:(NSUInteger)length error:(NSError **)error;
 
 
 - (void)readDataInBackground;
