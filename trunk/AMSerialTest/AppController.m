@@ -2,6 +2,9 @@
 //  AppController.m
 //  AMSerialTest
 //
+//		2009-09-09		Andreas Mayer
+//		- fixed memory leak in -serialPortReadData:
+
 
 #import "AppController.h"
 #import "AMSerialPortList.h"
@@ -82,7 +85,9 @@
 	AMSerialPort *sendPort = [dataDictionary objectForKey:@"serialPort"];
 	NSData *data = [dataDictionary objectForKey:@"data"];
 	if ([data length] > 0) {
-		[outputTextView insertText:[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]];
+		NSString *text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+		[outputTextView insertText:text];
+		[text release];
 		// continue listening
 		[sendPort readDataInBackground];
 	} else { // port closed
