@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2010 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //	- initialize buffer in readString
@@ -27,6 +27,10 @@
 //  2009-05-08 Sean McBride
 //  - added writeBytes:length:error: method
 //  - associated a name with created threads (for debugging, 10.6 only)
+//  2010-01-04 Sean McBride
+//  - fixed some memory management issues
+//  - the timeout feature (for reading) was broken, now fixed
+//  - don't rely on system clock for measuring elapsed time (because the user can change the clock)
 
 
 #import "AMSDKCompatibility.h"
@@ -292,6 +296,16 @@
 
 #pragma mark -
 
+static int64_t AMMicrosecondsSinceBoot (void)
+{
+	AbsoluteTime uptime1 = UpTime();
+	Nanoseconds uptime2 = AbsoluteToNanoseconds(uptime1);
+	uint64_t uptime3 = (((uint64_t)uptime2.hi) << 32) + (uint64_t)uptime2.lo;
+	int64_t uptime4 = uptime3 / 1000;
+	
+	return uptime4;
+}
+
 @implementation AMSerialPort (AMSerialPortAdditionsPrivate)
 
 // ============================================================
@@ -333,7 +347,7 @@
 	} else {
 		[closeLock unlock];
 	}
-	[localAutoreleasePool release];
+	[localAutoreleasePool drain];
 	free(localReadFDs);
 	free(localBuffer);
 
@@ -387,7 +401,7 @@
 #endif
 		[delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
 		free(localReadFDs);
-		[localAutoreleasePool release];
+		[localAutoreleasePool drain];
 	} else {
 #ifdef AMSerialDebug
 		NSLog(@"read stopped: %@", [NSThread currentThread]);
@@ -470,7 +484,7 @@
 	
 	free(localBuffer);
 	[data release];
-	[localAutoreleasePool release];
+	[localAutoreleasePool drain];
 }
 
 - (id)am_readTarget
@@ -506,37 +520,34 @@
 	int endCode = kAMSerialEndOfStream;
 	NSError *underlyingError = nil;
 	
-	// Note the time that we start
-	NSDate *startTime = [NSDate date];
+	// How long, in total, in microseconds, do we block before timing out?
+	int64_t totalTimeout = (int64_t)([self readTimeout] * 1000000.0);
 	
-	// How long, in total, do we block before timing out?
-	NSTimeInterval totalTimeout = [self readTimeout];
-
 	// This value will be decreased each time through the loop
-	NSTimeInterval remainingTimeout = totalTimeout;
+	int64_t remainingTimeout = totalTimeout;
+	
+	// Note the time that we start
+	int64_t startTime = AMMicrosecondsSinceBoot();
 	
 	while (YES) {
-		if (remainingTimeout <= 0.0) {
+		if (remainingTimeout <= 0) {
 			errorCode = kAMSerialErrorTimeout;
 			break;
 		} else {
-			// Convert from NSTimeInterval to struct timeval
-			double numSecs = trunc(remainingTimeout);
-			double numUSecs = (remainingTimeout-numSecs)*1000000.0;
-			timeout.tv_sec = (time_t)lrint(numSecs);
-			timeout.tv_usec = (suseconds_t)lrint(numUSecs);
+			// Convert to 'struct timeval'
+			timeout.tv_sec = (__darwin_time_t)(remainingTimeout / 1000000);
+			timeout.tv_usec = (__darwin_suseconds_t)(remainingTimeout - (timeout.tv_sec * 1000000));
 #ifdef AMSerialDebug
-			NSLog(@"timeout: %fs = %ds and %dus", remainingTimeout, timeout.tv_sec, timeout.tv_usec);
+			NSLog(@"timeout remaining: %qd us = %d s and %d us", remainingTimeout, timeout.tv_sec, timeout.tv_usec);
 #endif
 			
-			// If the remaining time is so small that it has rounded to zero, bump it up to 1 microsec.
+			// If the remaining time is so small that it has rounded to zero, bump it up to 1 microsecond.
 			// Why?  Because passing a zeroed timeval to select() indicates that we want to poll, but we don't.
 			if ((timeout.tv_sec == 0) && (timeout.tv_usec == 0)) {
 				timeout.tv_usec = 1;
 			}
 			FD_ZERO(readfds);
 			FD_SET(fileDescriptor, readfds);
-			[self readTimeoutAsTimeval:&timeout];
 			int selectResult = select(fileDescriptor+1, readfds, NULL, NULL, &timeout);
 			if (selectResult == -1) {
 				errorCode = kAMSerialErrorFatal;
@@ -584,9 +595,13 @@
 			}
 			
 			// Reduce the timeout value by the amount of time actually spent so far
-			remainingTimeout = totalTimeout - [[NSDate date] timeIntervalSinceDate:startTime];
+			remainingTimeout -= (AMMicrosecondsSinceBoot() - startTime);
 		}
 	}
+	
+#ifdef AMSerialDebug
+	NSLog(@"timeout remaining at end: %qd us (negative means timeout occured!)", remainingTimeout);
+#endif
 	
 	if (error) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
