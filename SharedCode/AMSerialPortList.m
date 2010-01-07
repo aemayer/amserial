@@ -2,7 +2,7 @@
 //  AMSerialPortList.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2010 Andreas Mayer. All rights reserved.
 //
 //  2002-09-09 Andreas Mayer
 //  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
@@ -19,6 +19,8 @@
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
 //  2008-10-21 Sean McBride
+//  - fixed some memory management issues
+//  2010-01-04 Sean McBride
 //  - fixed some memory management issues
 
 
@@ -155,9 +157,15 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 				serialPort = [[[AMSerialPort alloc] init:(NSString*)bsdPath withName:(NSString*)modemName type:(NSString*)serviceType] autorelease];
 			}
 		}
-		CFRelease(modemName);
-		CFRelease(bsdPath);
-		CFRelease(serviceType);
+		if (modemName) {
+			CFRelease(modemName);
+		}
+		if (bsdPath) {
+			CFRelease(bsdPath);
+		}
+		if (serviceType) {
+			CFRelease(serviceType);
+		}
 		
 		// We have sucked this service dry of information so release it now.
 		(void)IOObjectRelease(serialService);
