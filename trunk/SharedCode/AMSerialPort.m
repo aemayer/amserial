@@ -640,7 +640,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)RTSInputFlowControl
 {
-	return (options->c_cflag & CRTS_IFLOW);
+	return (options->c_cflag & CRTS_IFLOW) != 0;
 }
 
 - (void)setRTSInputFlowControl:(BOOL)rts
@@ -654,7 +654,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)DTRInputFlowControl
 {
-	return (options->c_cflag & CDTR_IFLOW);
+	return (options->c_cflag & CDTR_IFLOW) != 0;
 }
 
 - (void)setDTRInputFlowControl:(BOOL)dtr
@@ -668,7 +668,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)CTSOutputFlowControl
 {
-	return (options->c_cflag & CCTS_OFLOW);
+	return (options->c_cflag & CCTS_OFLOW) != 0;
 }
 
 - (void)setCTSOutputFlowControl:(BOOL)cts
@@ -682,7 +682,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)DSROutputFlowControl
 {
-	return (options->c_cflag & CDSR_OFLOW);
+	return (options->c_cflag & CDSR_OFLOW) != 0;
 }
 
 - (void)setDSROutputFlowControl:(BOOL)dsr
@@ -696,7 +696,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)CAROutputFlowControl
 {
-	return (options->c_cflag & CCAR_OFLOW);
+	return (options->c_cflag & CCAR_OFLOW) != 0;
 }
 
 - (void)setCAROutputFlowControl:(BOOL)car
@@ -710,7 +710,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)hangupOnClose
 {
-	return (options->c_cflag & HUPCL);
+	return (options->c_cflag & HUPCL) != 0;
 }
 
 - (void)setHangupOnClose:(BOOL)hangup
@@ -723,7 +723,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)localMode
 {
-	return (options->c_cflag & CLOCAL);
+	return (options->c_cflag & CLOCAL) != 0;
 }
 
 - (void)setLocalMode:(BOOL)local
@@ -737,7 +737,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)canonicalMode
 {
-	return (options->c_lflag & ICANON);
+	return (options->c_lflag & ICANON) != 0;
 }
 
 - (void)setCanonicalMode:(BOOL)flag
