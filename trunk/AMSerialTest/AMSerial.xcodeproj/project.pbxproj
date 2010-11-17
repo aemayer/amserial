@@ -209,6 +209,7 @@
 			isa = PBXProject;
 			buildConfigurationList = E13F800C0863426A00EC3999 /* Build configuration list for PBXProject "AMSerial" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
