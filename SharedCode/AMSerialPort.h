@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -206,8 +206,8 @@ extern NSString *const AMSerialErrorDomain;
 // method.
 
 // reading and setting parameters is only useful if the serial port is already open
-- (long)speed;
-- (BOOL)setSpeed:(long)speed;
+- (unsigned long)speed;
+- (BOOL)setSpeed:(unsigned long)speed;
 
 - (unsigned long)dataBits;
 - (void)setDataBits:(unsigned long)bits;	// 5 to 8 (5 may not work)

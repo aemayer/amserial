@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -265,7 +265,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 {
 	NSFileHandle *result = nil;
 	
-	const char *path = [bsdPath fileSystemRepresentation];
+	__strong const char *path = [bsdPath fileSystemRepresentation];
 	fileDescriptor = open(path, flags);
 
 #ifdef AMSerialDebug
@@ -507,12 +507,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 }
 
 
-- (long)speed
+- (unsigned long)speed
 {
 	return cfgetospeed(options);	// we should support cfgetispeed too
 }
 
-- (BOOL)setSpeed:(long)speed
+- (BOOL)setSpeed:(unsigned long)speed
 {
 	BOOL result = YES;
 	// we should support setting input and output speed separately

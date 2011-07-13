@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2010 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //	- initialize buffer in readString
@@ -188,7 +188,7 @@
 	if (error) {
 		NSDictionary *userInfo = nil;
 		if (bytesWritten > 0) {
-			NSNumber* bytesWrittenNum = [NSNumber numberWithUnsignedLongLong:bytesWritten];
+			NSNumber* bytesWrittenNum = [NSNumber numberWithLongLong:bytesWritten];
 			userInfo = [NSDictionary dictionaryWithObject:bytesWrittenNum forKey:@"bytesWritten"];
 		}
 		*error = [NSError errorWithDomain:AMSerialErrorDomain code:errorCode userInfo:userInfo];
@@ -301,9 +301,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	AbsoluteTime uptime1 = UpTime();
 	Nanoseconds uptime2 = AbsoluteToNanoseconds(uptime1);
 	uint64_t uptime3 = (((uint64_t)uptime2.hi) << 32) + (uint64_t)uptime2.lo;
-	int64_t uptime4 = uptime3 / 1000;
+	uint64_t uptime4 = uptime3 / NSEC_PER_USEC;
 	
-	return uptime4;
+	return (int64_t)uptime4;
 }
 
 @implementation AMSerialPort (AMSerialPortAdditionsPrivate)
