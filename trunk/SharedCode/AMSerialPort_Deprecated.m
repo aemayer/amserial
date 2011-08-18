@@ -32,7 +32,7 @@
 // renamed to -dataBits
 - (int)getDataBits
 {
-	return [self dataBits];
+	return (int)[self dataBits];
 }
 
 // replaced by  -parity
