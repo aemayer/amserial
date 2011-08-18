@@ -53,11 +53,17 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
     @synchronized(self) {
         if (AMSerialPortListSingleton == nil) {
 #ifndef __OBJC_GC__
-			[[self alloc] init]; // assignment not done here
+			// -autorelease is overwritten to do nothing
+			// This placates the static analyzer.
+			[[[self alloc] init] autorelease]; // assignment not done here
 #else
 			// Singleton creation is easy in the GC case, just create it if it hasn't been created yet,
 			// it won't get collected since globals are strongly referenced.
-			AMSerialPortListSingleton = [[self alloc] init]; 
+			AMSerialPortListSingleton = [[self alloc] init];
+
+			// -release is overwritten to do nothing
+			// This placates the static analyzer.
+			[AMSerialPortListSingleton release];
 #endif
        }
     }
