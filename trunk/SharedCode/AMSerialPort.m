@@ -27,19 +27,11 @@
 //  2009-08-06 Sean McBride
 //  - no longer compare BOOL against YES (dangerous!)
 //  - renamed method to start with lowercase letter, as per Cocoa convention
+//  2011-10-14 Sean McBride
+//  - very minor cleanup
 
 #import "AMSDKCompatibility.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <paths.h>
-#include <termios.h>
-#include <sys/time.h>
-#include <sysexits.h>
-#include <sys/param.h>
 #include <sys/ioctl.h>
 
 #import "AMSerialPort.h"
@@ -55,6 +47,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 @implementation AMSerialPort
 
+// Designated initializer
 - (id)init:(NSString *)path withName:(NSString *)name type:(NSString *)type
 	// path is a bsdPath
 	// name is an IOKit service name

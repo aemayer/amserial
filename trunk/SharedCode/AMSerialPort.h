@@ -26,48 +26,13 @@
 //  2008-10-21 Sean McBride
 //  - Added an API to open a serial port for exclusive use
 //  - fixed some memory management issues
+//  2011-10-14 Sean McBride
+//  - very minor cleanup
 
-
-/*
- * Standard speeds defined in termios.h
- *
-#define B0	0
-#define B50	50
-#define B75	75
-#define B110	110
-#define B134	134
-#define B150	150
-#define B200	200
-#define B300	300
-#define B600	600
-#define B1200	1200
-#define	B1800	1800
-#define B2400	2400
-#define B4800	4800
-#define B7200	7200
-#define B9600	9600
-#define B14400	14400
-#define B19200	19200
-#define B28800	28800
-#define B38400	38400
-#define B57600	57600
-#define B76800	76800
-#define B115200	115200
-#define B230400	230400
- */
 
 #import "AMSDKCompatibility.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <paths.h>
 #include <termios.h>
-#include <sys/time.h>
-#include <sysexits.h>
-#include <sys/param.h>
 
 #import <Foundation/Foundation.h>
 
@@ -84,13 +49,13 @@
 // By default, debug code is preprocessed out.  If you would like to compile with debug code enabled,
 // "#define AMSerialDebug" before including any AMSerialPort headers, as in your prefix header
 
-typedef enum {	
+typedef enum {
 	kAMSerialParityNone = 0,
 	kAMSerialParityOdd = 1,
 	kAMSerialParityEven = 2
 } AMSerialParity;
 
-typedef enum {	
+typedef enum {
 	kAMSerialStopBitsOne = 1,
 	kAMSerialStopBitsTwo = 2
 } AMSerialStopBits;
@@ -139,6 +104,7 @@ extern NSString *const AMSerialErrorDomain;
 }
 
 - (id)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType;
+// Designated initializer
 // initializes port
 // path is a bsdPath
 // name is an IOKit service name
@@ -205,6 +171,7 @@ extern NSString *const AMSerialErrorDomain;
 // AMSerialOptionServiceName HAS to match! You may NOT switch ports using this
 // method.
 
+// Use the speeds defined in termios.h
 // reading and setting parameters is only useful if the serial port is already open
 - (unsigned long)speed;
 - (BOOL)setSpeed:(unsigned long)speed;

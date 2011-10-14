@@ -2,7 +2,7 @@
 //  AMSerialPortList.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2010 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
 //
 //  2002-09-09 Andreas Mayer
 //  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
@@ -22,7 +22,10 @@
 //  - fixed some memory management issues
 //  2010-01-04 Sean McBride
 //  - fixed some memory management issues
-
+//  2011-08-18 Andreas Mayer
+//  - minor edits to placate the clang static analyzer
+//  2011-10-14 Sean McBride
+//  - removed one NSRunLoop method in favour of CFRunLoop
 
 #import "AMSDKCompatibility.h"
 
@@ -53,17 +56,13 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
     @synchronized(self) {
         if (AMSerialPortListSingleton == nil) {
 #ifndef __OBJC_GC__
-			// -autorelease is overwritten to do nothing
+			// -autorelease is overridden to do nothing
 			// This placates the static analyzer.
 			[[[self alloc] init] autorelease]; // assignment not done here
 #else
 			// Singleton creation is easy in the GC case, just create it if it hasn't been created yet,
 			// it won't get collected since globals are strongly referenced.
 			AMSerialPortListSingleton = [[self alloc] init];
-
-			// -release is overwritten to do nothing
-			// This placates the static analyzer.
-			[AMSerialPortListSingleton release];
 #endif
        }
     }
@@ -228,7 +227,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 
 - (void)registerForSerialPortChangeNotifications
 {
-	IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault); 
+	IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
 	if (notificationPort) {
 		CFRunLoopSourceRef notificationSource = IONotificationPortGetRunLoopSource(notificationPort);
 		if (notificationSource) {
@@ -238,9 +237,9 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 				CFDictionarySetValue(classesToMatch1, CFSTR(kIOSerialBSDTypeKey), CFSTR(kIOSerialBSDAllTypes));
 				
 				// Copy classesToMatch1 now, while it has a non-zero ref count.
-				CFMutableDictionaryRef classesToMatch2 = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, classesToMatch1);			
+				CFMutableDictionaryRef classesToMatch2 = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, classesToMatch1);
 				// Add to the runloop
-				CFRunLoopAddSource([[NSRunLoop currentRunLoop] getCFRunLoop], notificationSource, kCFRunLoopCommonModes);
+				CFRunLoopAddSource(CFRunLoopGetCurrent(), notificationSource, kCFRunLoopCommonModes);
 				
 				// Set up notification for ports being added.
 				io_iterator_t unused;
@@ -252,7 +251,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 				} else {
 					while (IOIteratorNext(unused)) {}	// arm the notification
 				}
-					
+				
 				if (classesToMatch2) {
 					// Set up notification for ports being removed.
 					kernResult = IOServiceAddMatchingNotification(notificationPort, kIOTerminatedNotification, classesToMatch2, AMSerialPortWasRemovedNotification, NULL, &unused); // consumes a reference to classesToMatch2
@@ -270,13 +269,13 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 #endif
 			}
 		}
-		// Note that IONotificationPortDestroy(notificationPort) is deliberately not called here because if it were our port change notifications would never fire.  This minor leak is pretty irrelevent since this object is a singleton that lives for the life of the application anyway.
+		// Note that IONotificationPortDestroy(notificationPort) is deliberately not called here because if it were our port change notifications would never fire.  This minor leak is pretty irrelevant since this object is a singleton that lives for the life of the application anyway.
 	}
 }
 
 - (void)addAllSerialPortsToArray:(NSMutableArray *)array
 {
-	kern_return_t kernResult; 
+	kern_return_t kernResult;
 	CFMutableDictionaryRef classesToMatch;
 	io_iterator_t serialPortIterator;
 	AMSerialPort* serialPort;
@@ -287,8 +286,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 		CFDictionarySetValue(classesToMatch, CFSTR(kIOSerialBSDTypeKey), CFSTR(kIOSerialBSDAllTypes));
 
 		// This function decrements the refcount of the dictionary passed it
-		kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &serialPortIterator);    
-		if (kernResult == KERN_SUCCESS) {			
+		kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &serialPortIterator);
+		if (kernResult == KERN_SUCCESS) {
 			while ((serialPort = [self getNextSerialPort:serialPortIterator]) != nil) {
 				[array addObject:serialPort];
 			}
