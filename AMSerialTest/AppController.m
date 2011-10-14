@@ -159,6 +159,18 @@
 	}
 }
 
+- (IBAction)sendSerialBreak:(id)sender
+{
+	(void)sender;
+	
+	if(!port) {
+		// open a new port if we don't already have one
+		[self initPort];
+	}
 
+	if([port isOpen]) { // in case an error occured while opening the port
+		[port sendBreak];
+	}
+}
 
 @end
