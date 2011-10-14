@@ -280,23 +280,18 @@
 		E13F800D0863426A00EC3999 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_OBJC_GC = NO;
-				GCC_VERSION = 4.0;
 			};
 			name = Development;
 		};
 		E13F800E0863426A00EC3999 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_OBJC_GC = NO;
-				GCC_VERSION = 4.0;
 			};
 			name = Deployment;
 		};
 		E13F800F0863426A00EC3999 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_VERSION = 4.0;
 			};
 			name = Default;
 		};
