@@ -19,8 +19,9 @@
 	[inputTextField setStringValue: @"ati"]; // will ask for modem type
 
 	// register for port add/remove notification
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAddPorts:) name:AMSerialPortListDidAddPortsNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRemovePorts:) name:AMSerialPortListDidRemovePortsNotification object:nil];
+	NSNotificationCenter* defaultCenter = [NSNotificationCenter defaultCenter];
+	[defaultCenter addObserver:self selector:@selector(didAddPorts:) name:AMSerialPortListDidAddPortsNotification object:nil];
+	[defaultCenter addObserver:self selector:@selector(didRemovePorts:) name:AMSerialPortListDidRemovePortsNotification object:nil];
 	[AMSerialPortList sharedPortList]; // initialize port list to arm notifications
 }
 
@@ -119,10 +120,12 @@
 
 - (IBAction)listDevices:(id)sender
 {
+	(void)sender;
+	
 	// get an port enumerator
 	NSEnumerator *enumerator = [AMSerialPortList portEnumerator];
 	AMSerialPort *aPort;
-	while (aPort = [enumerator nextObject]) {
+	while ((aPort = [enumerator nextObject])) {
 		// print port name
 		[outputTextView insertText:[aPort name]];
 		[outputTextView insertText:@":"];
@@ -134,12 +137,16 @@
 
 - (IBAction)chooseDevice:(id)sender
 {
+	(void)sender;
+	
 	// new device selected
 	[self initPort];
 }
 
 - (IBAction)send:(id)sender
 {
+	(void)sender;
+	
 	NSString *sendString = [[inputTextField stringValue] stringByAppendingString:@"\r"];
 
 	if(!port) {
