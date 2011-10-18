@@ -31,6 +31,8 @@
 //  - fixed some memory management issues
 //  - the timeout feature (for reading) was broken, now fixed
 //  - don't rely on system clock for measuring elapsed time (because the user can change the clock)
+//	2011-10-18 Andreas Mayer
+//	- added ARC compatibility
 
 
 #import "AMSDKCompatibility.h"
@@ -77,6 +79,9 @@
 		res = select(fileDescriptor+1, readfds, nil, nil, &timeout);
 		if (res >= 1) {
 			NSString *readStr = [self readStringUsingEncoding:NSUTF8StringEncoding error:NULL];
+			// ARC will complain because the selector is unknown at this point; this is correct.
+			// We might replace -waitForInput:selector: with a block based method in the future
+			// and thus avoid this problem.
 			[[self am_readTarget] performSelector:am_readSelector withObject:readStr];
 			[self am_setReadTarget:nil];
 		} else {
@@ -123,7 +128,11 @@
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:NO bytes:0 stopAtChar:NO stopChar:0 error:error];
 	if (data) {
+#if __has_feature(objc_arc)
+		result = [[NSString alloc] initWithData:data encoding:encoding];
+#else
 		result = [[[NSString alloc] initWithData:data encoding:encoding] autorelease];
+#endif
 	}
 	return result;
 }
@@ -133,7 +142,11 @@
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:YES bytes:bytes stopAtChar:NO stopChar:0 error:error];
 	if (data) {
+#if __has_feature(objc_arc)
+		result = [[NSString alloc] initWithData:data encoding:encoding];
+#else
 		result = [[[NSString alloc] initWithData:data encoding:encoding] autorelease];
+#endif
 	}
 	return result;
 }
@@ -144,7 +157,11 @@
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:NO bytes:0 stopAtChar:YES stopChar:stopChar error:error];
 	if (data) {
+#if __has_feature(objc_arc)
+		result = [[NSString alloc] initWithData:data encoding:encoding];
+#else
 		result = [[[NSString alloc] initWithData:data encoding:encoding] autorelease];
+#endif
 	}
 	return result;
 }
@@ -154,7 +171,11 @@
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:YES bytes:bytes stopAtChar:YES stopChar:stopChar error:error];
 	if (data) {
+#if __has_feature(objc_arc)
+		result = [[NSString alloc] initWithData:data encoding:encoding];
+#else
 		result = [[[NSString alloc] initWithData:data encoding:encoding] autorelease];
+#endif
 	}
 	return result;
 }
@@ -329,7 +350,12 @@ static int64_t AMMicrosecondsSinceBoot (void)
 
 	localBuffer = malloc(AMSER_MAXBUFSIZE);
 	stopReadInBackground = NO;
+#if __has_feature(objc_arc)
+	@autoreleasepool
+#else
 	NSAutoreleasePool *localAutoreleasePool = [[NSAutoreleasePool alloc] init];
+#endif
+	{
 	[closeLock lock];
 	if ((fileDescriptor >= 0) && (!stopReadInBackground)) {
 		//NSLog(@"readDataInBackgroundThread - [closeLock lock]");
@@ -347,7 +373,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	} else {
 		[closeLock unlock];
 	}
+	}
+#if !__has_feature(objc_arc)
 	[localAutoreleasePool drain];
+#endif
 	free(localReadFDs);
 	free(localBuffer);
 
@@ -440,9 +469,14 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	long estimatedTime;
 	BOOL error = NO;
 	
+#if __has_feature(objc_arc)
+	@autoreleasepool
+#else
 	NSAutoreleasePool *localAutoreleasePool = [[NSAutoreleasePool alloc] init];
 
 	[data retain];
+#endif
+	{
 	localBuffer = malloc(AMSER_MAXBUFSIZE);
 	stopWriteInBackground = NO;
 	[writeLock lock];	// write in sequence
@@ -483,8 +517,11 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	countWriteInBackgroundThreads--;
 	
 	free(localBuffer);
+	}
+#if !__has_feature(objc_arc)
 	[data release];
 	[localAutoreleasePool drain];
+#endif
 }
 
 - (id)am_readTarget
@@ -495,8 +532,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 - (void)am_setReadTarget:(id)newReadTarget
 {
 	if (am_readTarget != newReadTarget) {
+#if !__has_feature(objc_arc)
 		[newReadTarget retain];
 		[am_readTarget release];
+#endif
 		am_readTarget = newReadTarget;
 	}
 }

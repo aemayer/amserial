@@ -6,6 +6,8 @@
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
+//	2011-10-18 Andreas Mayer
+//	- added ARC compatibility
 
 #import "AMSDKCompatibility.h"
 
@@ -19,7 +21,11 @@
 {
 	self = [super init];
 	if (self) {
+#if __has_feature(objc_arc)
+		collection = theCollection;
+#else
 		collection = [theCollection retain];
+#endif
 		countSelector = theCountSelector;
 		count = (CountMethod)[collection methodForSelector:countSelector];
 		nextObjectSelector = theObjectSelector;
@@ -30,6 +36,7 @@
 }
 
 #ifndef __OBJC_GC__
+#if !__has_feature(objc_arc)
 
 - (void)dealloc
 {
@@ -37,6 +44,7 @@
 	[super dealloc];
 }
 
+#endif
 #endif
 
 - (id)nextObject
@@ -49,7 +57,11 @@
 
 - (NSArray *)allObjects
 {
+#if __has_feature(objc_arc)
+	NSMutableArray *result = [[NSMutableArray alloc] init];
+#else
 	NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+#endif
 	id object;
 	while ((object = [self nextObject]) != nil)
 		[result addObject:object];
