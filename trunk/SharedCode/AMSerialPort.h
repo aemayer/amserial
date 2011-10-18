@@ -28,6 +28,9 @@
 //  - fixed some memory management issues
 //  2011-10-14 Sean McBride
 //  - very minor cleanup
+//	2011-10-18 Andreas Mayer
+//	- added ARC compatibility
+//	- added accessors for ISIG, ECHOE, XON/XOFF as well as Start and Stop characters
 
 
 #import "AMSDKCompatibility.h"
@@ -43,8 +46,15 @@
 #define	AMSerialOptionStopBits @"AMSerialOptionStopBits"
 #define	AMSerialOptionInputFlowControl @"AMSerialOptionInputFlowControl"
 #define	AMSerialOptionOutputFlowControl @"AMSerialOptionOutputFlowControl"
-#define	AMSerialOptionEcho @"AMSerialOptionEcho"
+#define	AMSerialOptionSignals @"AMSerialOptionSignals"
 #define	AMSerialOptionCanonicalMode @"AMSerialOptionCanonicalMode"
+#define	AMSerialOptionEcho @"AMSerialOptionEcho"
+#define	AMSerialOptionEchoErase @"AMSerialOptionEchoErase"
+#define	AMSerialOptionSoftwareFlowControl @"AMSerialOptionSoftwareFlowControl"
+#define	AMSerialOptionRemoteEcho @"AMSerialOptionRemoteEcho"
+#define	AMSerialOptionEndOfLineCharacter @"AMSerialOptionEndOfLineCharacter"
+#define	AMSerialOptionStartCharacter @"AMSerialOptionStartCharacter"
+#define	AMSerialOptionStopCharacter @"AMSerialOptionStopCharacter"
 
 // By default, debug code is preprocessed out.  If you would like to compile with debug code enabled,
 // "#define AMSerialDebug" before including any AMSerialPort headers, as in your prefix header
@@ -77,16 +87,23 @@ extern NSString *const AMSerialErrorDomain;
 	NSString *serviceName;
 	NSString *serviceType;
 	int fileDescriptor;
+#if __has_feature(objc_arc)	
+	struct termios *options;
+	struct termios *originalOptions;
+	char *buffer;
+	fd_set *readfds;
+#else
 	struct termios * __strong options;
 	struct termios * __strong originalOptions;
+	char * __strong buffer;
+	fd_set * __strong readfds;
+#endif
 	NSMutableDictionary *optionsDictionary;
 	NSFileHandle *fileHandle;
 	BOOL gotError;
 	int	lastError;
 	id owner;
-	char * __strong buffer;
 	NSTimeInterval readTimeout; // for public blocking read methods and doRead
-	fd_set * __strong readfds;
 	id delegate;
 	BOOL delegateHandlesReadInBackground;
 	BOOL delegateHandlesWriteInBackground;
@@ -185,9 +202,6 @@ extern NSString *const AMSerialErrorDomain;
 - (AMSerialStopBits)stopBits;
 - (void)setStopBits:(AMSerialStopBits)numBits;
 
-- (BOOL)echoEnabled;
-- (void)setEchoEnabled:(BOOL)echo;
-
 - (BOOL)RTSInputFlowControl;
 - (void)setRTSInputFlowControl:(BOOL)rts;
 
@@ -209,11 +223,34 @@ extern NSString *const AMSerialErrorDomain;
 - (BOOL)localMode;
 - (void)setLocalMode:(BOOL)local;	// YES = ignore modem status lines
 
-- (BOOL)canonicalMode;
+- (BOOL)signalsEnabled;			// (ISIG)
+- (void)setSignalsEnabled:(BOOL)signals;
+
+- (BOOL)canonicalMode;			// (ICANON)
 - (void)setCanonicalMode:(BOOL)flag;
+
+- (BOOL)echoEnabled;			// (ECHO)
+- (void)setEchoEnabled:(BOOL)echoE;
+
+- (BOOL)echoEraseEnabled;		// echo erase character as BS-SP-BS (ECHOE)
+- (void)setEchoEraseEnabled:(BOOL)echo;
 
 - (char)endOfLineCharacter;
 - (void)setEndOfLineCharacter:(char)eol;
+
+- (char)startCharacter;	// XON character - normally DC1 (021)
+- (void)setStartCharacter:(char)start;
+
+- (char)stopCharacter;	// XOFF character - normally DC3 (023)
+- (void)setStopCharacter:(char)stop;
+
+- (BOOL)softwareFlowControl;	// YES = uses XON/XOFF software flow control
+- (void)setSoftwareFlowControl:(BOOL)xonxoff;	// sets or clears XON and XOFF
+
+// these are shortcuts for getting/setting the mentioned flags separately
+- (BOOL)remoteEchoEnabled;	// YES if ICANON and ECHO are set
+- (void)setRemoteEchoEnabled:(BOOL)remoteEcho;	//	YES: set ICANON, ECHO and ECHOE
+													//	NO: clear ICANON, ECHO, ECHOE and ISIG
 
 - (void)clearError;			// call this before changing any settings
 - (BOOL)commitChanges;	// call this after using any of the above set... functions

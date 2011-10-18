@@ -26,6 +26,8 @@
 //  - minor edits to placate the clang static analyzer
 //  2011-10-14 Sean McBride
 //  - removed one NSRunLoop method in favour of CFRunLoop
+//	2011-10-18 Andreas Mayer
+//	- added ARC compatibility
 
 #import "AMSDKCompatibility.h"
 
@@ -41,8 +43,6 @@
 #include <IOKit/serial/IOSerialKeys.h>
 #include <IOKit/IOBSD.h>
 
-static AMSerialPortList *AMSerialPortListSingleton = nil;
-
 NSString *const AMSerialPortListDidAddPortsNotification = @"AMSerialPortListDidAddPortsNotification";
 NSString *const AMSerialPortListDidRemovePortsNotification = @"AMSerialPortListDidRemovePortsNotification";
 NSString *const AMSerialPortListAddedPorts = @"AMSerialPortListAddedPorts";
@@ -50,6 +50,21 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 
 @implementation AMSerialPortList
+
+#if __has_feature(objc_arc)
+
++ (AMSerialPortList *)sharedPortList {
+	static dispatch_once_t pred = 0;
+	__strong static AMSerialPortList *_sharedPortList = nil;
+	dispatch_once(&pred, ^{
+		_sharedPortList = [[AMSerialPortList alloc] init];
+	});
+	return _sharedPortList;
+}
+
+#else
+
+static AMSerialPortList *AMSerialPortListSingleton = nil;
 
 + (AMSerialPortList *)sharedPortList
 {
@@ -63,6 +78,10 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 			// Singleton creation is easy in the GC case, just create it if it hasn't been created yet,
 			// it won't get collected since globals are strongly referenced.
 			AMSerialPortListSingleton = [[self alloc] init];
+
+			// -release is overridden to do nothing
+			// This placates the static analyzer.
+			[AMSerialPortListSingleton release];
 #endif
        }
     }
@@ -116,18 +135,27 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	[super dealloc];
 }
 
-#endif
+#endif	// #ifndef __OBJC_GC__
+#endif	// #if __has_feature(objc_arc)
 
 + (NSEnumerator *)portEnumerator
 {
+#if __has_feature(objc_arc)
+	return [[AMStandardEnumerator alloc] initWithCollection:[AMSerialPortList sharedPortList] countSelector:@selector(count) objectAtIndexSelector:@selector(objectAtIndex:)];
+#else
 	return [[[AMStandardEnumerator alloc] initWithCollection:[AMSerialPortList sharedPortList]
 		countSelector:@selector(count) objectAtIndexSelector:@selector(objectAtIndex:)] autorelease];
+#endif
 }
 
 + (NSEnumerator *)portEnumeratorForSerialPortsOfType:(NSString *)serialTypeKey
 {
+#if __has_feature(objc_arc)
+	return [[AMStandardEnumerator alloc] initWithCollection:[[AMSerialPortList sharedPortList] serialPortsOfType:serialTypeKey] countSelector:@selector(count) objectAtIndexSelector:@selector(objectAtIndex:)];
+#else
 	return [[[AMStandardEnumerator alloc] initWithCollection:[[AMSerialPortList sharedPortList]
 		serialPortsOfType:serialTypeKey] countSelector:@selector(count) objectAtIndexSelector:@selector(objectAtIndex:)] autorelease];
+#endif
 }
 
 - (AMSerialPort *)portByPath:(NSString *)bsdPath
@@ -157,10 +185,17 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 		CFStringRef serviceType = (CFStringRef)IORegistryEntryCreateCFProperty(serialService, CFSTR(kIOSerialBSDTypeKey), kCFAllocatorDefault, 0);
 		if (modemName && bsdPath) {
 			// If the port already exists in the list of ports, we want that one.  We only create a new one as a last resort.
+#if __has_feature(objc_arc)
+			serialPort = [self portByPath:(__bridge NSString*)bsdPath];
+			if (serialPort == nil) {
+				serialPort = [[AMSerialPort alloc] init:(__bridge NSString*)bsdPath withName:(__bridge NSString*)modemName type:(__bridge NSString*)serviceType];
+			}
+#else
 			serialPort = [self portByPath:(NSString*)bsdPath];
 			if (serialPort == nil) {
 				serialPort = [[[AMSerialPort alloc] init:(NSString*)bsdPath withName:(NSString*)modemName type:(NSString*)serviceType] autorelease];
 			}
+#endif
 		}
 		if (modemName) {
 			CFRelease(modemName);
@@ -307,7 +342,11 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 - (id)init
 {
 	if ((self = [super init])) {
+#if __has_feature(objc_arc)
+		portList = [NSMutableArray array];
+#else
 		portList = [[NSMutableArray array] retain];
+#endif
 	
 		[self addAllSerialPortsToArray:portList];
 		[self registerForSerialPortChangeNotifications];
@@ -342,7 +381,11 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 
 - (NSArray *)serialPorts
 {
+#if __has_feature(objc_arc)
+	return [portList copy];
+#else
 	return [[portList copy] autorelease];
+#endif
 }
 
 - (NSArray *)serialPortsOfType:(NSString *)serialTypeKey
