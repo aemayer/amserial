@@ -33,6 +33,9 @@
 //	- added ARC compatibility
 //	- added accessors for ISIG, ECHOE, XON/XOFF as well as Start and Stop characters
 //	- options dictionary will cover more settings; fixed handling of some flags
+//	2011-10-19 Sean McBride
+//	- code review of ARC changes
+//  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
 
 #import "AMSDKCompatibility.h"
 
@@ -60,23 +63,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		bsdPath = [path copy];
 		serviceName = [name copy];
 		serviceType = [type copy];
-#if __has_feature(objc_arc)
-		optionsDictionary = [NSMutableDictionary dictionaryWithCapacity:8];
-#else
-		optionsDictionary = [[NSMutableDictionary dictionaryWithCapacity:8] retain];
-#endif
+		optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:8];
 		
-#ifndef __OBJC_GC__
 		options = (struct termios *)malloc(sizeof(*options));
 		originalOptions = (struct termios *)malloc(sizeof(*originalOptions));
 		buffer = (char *)malloc(AMSER_MAXBUFSIZE);
 		readfds = (fd_set *)malloc(sizeof(*readfds));
-#else
-		options = (struct termios* __strong)NSAllocateCollectable(sizeof(*options), 0);
-		originalOptions = (struct termios* __strong)NSAllocateCollectable(sizeof(*originalOptions), 0);
-		buffer = (char* __strong)NSAllocateCollectable(AMSER_MAXBUFSIZE, 0);
-		readfds = (fd_set* __strong)NSAllocateCollectable(sizeof(*readfds), 0);
-#endif
 		fileDescriptor = -1;
 		
 		writeLock = [[NSLock alloc] init];
@@ -135,6 +127,10 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 #endif
 	assert (fileDescriptor == -1);
 
+	free(readfds); readfds = NULL;
+	free(buffer); buffer = NULL;
+	free(originalOptions); originalOptions = NULL;
+	free(options); options = NULL;
 	[super finalize];
 }
 
@@ -168,13 +164,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)setDelegate:(id)newDelegate
 {
 	if (newDelegate != delegate) {
-#if __has_feature(objc_arc)
+		// As per Cocoa conventions, delegates are not retained.
 		delegate = newDelegate;
-#else
-		id old = delegate;
-		delegate = [newDelegate retain];
-		[old release];
-#endif
 		delegateHandlesReadInBackground = [delegate respondsToSelector:@selector(serialPortReadData:)];
 		delegateHandlesWriteInBackground = [delegate respondsToSelector:@selector(serialPortWriteProgress:)];
 	}
