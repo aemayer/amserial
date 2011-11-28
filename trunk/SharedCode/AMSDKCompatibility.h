@@ -35,3 +35,8 @@
 #define _SUSECONDS_T
 typedef int suseconds_t;
 #endif
+
+// __has_feature in new in the 10.7 SDK, define it here if it's not yet defined.
+#ifndef __has_feature
+#define __has_feature(x) 0
+#endif
