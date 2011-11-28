@@ -2,12 +2,14 @@
 //  AMStandardEnumerator.m
 //
 //  Created by Andreas on Mon Aug 04 2003.
-//  Copyright (c) 2003-2009 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2003-2011 Andreas Mayer. All rights reserved.
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
 //	2011-10-18 Andreas Mayer
 //	- added ARC compatibility
+//	2011-10-19 Sean McBride
+//	- code review of ARC changes
 
 #import "AMSDKCompatibility.h"
 
@@ -21,10 +23,9 @@
 {
 	self = [super init];
 	if (self) {
-#if __has_feature(objc_arc)
 		collection = theCollection;
-#else
-		collection = [theCollection retain];
+#if !__has_feature(objc_arc)
+		[collection retain];
 #endif
 		countSelector = theCountSelector;
 		count = (CountMethod)[collection methodForSelector:countSelector];
@@ -57,11 +58,7 @@
 
 - (NSArray *)allObjects
 {
-#if __has_feature(objc_arc)
-	NSMutableArray *result = [[NSMutableArray alloc] init];
-#else
-	NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
-#endif
+	NSMutableArray *result = [NSMutableArray array];
 	id object;
 	while ((object = [self nextObject]) != nil)
 		[result addObject:object];

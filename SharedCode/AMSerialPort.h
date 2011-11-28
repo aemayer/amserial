@@ -31,6 +31,9 @@
 //	2011-10-18 Andreas Mayer
 //	- added ARC compatibility
 //	- added accessors for ISIG, ECHOE, XON/XOFF as well as Start and Stop characters
+//	2011-10-19 Sean McBride
+//	- code review of ARC changes
+//  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
 
 
 #import "AMSDKCompatibility.h"
@@ -87,23 +90,16 @@ extern NSString *const AMSerialErrorDomain;
 	NSString *serviceName;
 	NSString *serviceType;
 	int fileDescriptor;
-#if __has_feature(objc_arc)	
-	struct termios *options;
-	struct termios *originalOptions;
-	char *buffer;
-	fd_set *readfds;
-#else
-	struct termios * __strong options;
-	struct termios * __strong originalOptions;
-	char * __strong buffer;
-	fd_set * __strong readfds;
-#endif
+	struct termios * options;
+	struct termios * originalOptions;
 	NSMutableDictionary *optionsDictionary;
 	NSFileHandle *fileHandle;
 	BOOL gotError;
 	int	lastError;
 	id owner;
+	char * buffer;
 	NSTimeInterval readTimeout; // for public blocking read methods and doRead
+	fd_set * readfds;
 	id delegate;
 	BOOL delegateHandlesReadInBackground;
 	BOOL delegateHandlesWriteInBackground;
