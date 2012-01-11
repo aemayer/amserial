@@ -3,7 +3,7 @@
 //  AMSerialTest
 //
 //  Created by Andreas on 26.07.06.
-//  Copyright 2006-2009 Andreas Mayer. All rights reserved.
+//  Copyright 2006-2012 Andreas Mayer. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -12,7 +12,7 @@
 
 @interface AMSerialPort (Deprecated)
 
-- (id)init:(NSString *)path withName:(NSString *)name DEPRECATED_ATTRIBUTE;
+- (instancetype)init:(NSString *)path withName:(NSString *)name DEPRECATED_ATTRIBUTE;
 // replaced by  -init:withName:type:
 
 - (NSDictionary *)getOptions DEPRECATED_ATTRIBUTE;

@@ -2,7 +2,7 @@
 //  AMSerialPortList.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2012 Andreas Mayer. All rights reserved.
 //
 //  2002-09-09 Andreas Mayer
 //  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
@@ -271,7 +271,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 	}
 }
 
-- (id)init
+- (instancetype)init
 {
 	if ((self = [super init])) {
 		portList = [[NSMutableArray alloc] init];

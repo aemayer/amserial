@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2012 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -55,7 +55,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 @implementation AMSerialPort
 
 // Designated initializer
-- (id)init:(NSString *)path withName:(NSString *)name type:(NSString *)type
+- (instancetype)init:(NSString *)path withName:(NSString *)name type:(NSString *)type
 	// path is a bsdPath
 	// name is an IOKit service name
 {
