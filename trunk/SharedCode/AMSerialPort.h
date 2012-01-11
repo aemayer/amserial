@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2012 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -116,7 +116,7 @@ extern NSString *const AMSerialErrorDomain;
 	int countReadInBackgroundThreads;
 }
 
-- (id)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType;
+- (instancetype)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType;
 // Designated initializer
 // initializes port
 // path is a bsdPath
