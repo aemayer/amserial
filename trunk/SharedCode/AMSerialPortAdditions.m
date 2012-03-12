@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2011 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2012 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //	- initialize buffer in readString
@@ -35,6 +35,8 @@
 //	- added ARC compatibility
 //	2011-10-19 Sean McBride
 //	- code review of ARC changes
+//	2012-03-12 Sean McBride
+//	- replaced deprecated UpTime function with mach_absolute_time
 
 
 #import "AMSDKCompatibility.h"
@@ -317,12 +319,19 @@
 
 static int64_t AMMicrosecondsSinceBoot (void)
 {
-	AbsoluteTime uptime1 = UpTime();
-	Nanoseconds uptime2 = AbsoluteToNanoseconds(uptime1);
-	uint64_t uptime3 = (((uint64_t)uptime2.hi) << 32) + (uint64_t)uptime2.lo;
-	uint64_t uptime4 = uptime3 / NSEC_PER_USEC;
+	static mach_timebase_info_data_t machTimeBaseInfo;
 	
-	return (int64_t)uptime4;
+	// If this is the first time we've run, get the timebase.
+	if (machTimeBaseInfo.denom == 0)
+	{
+		mach_timebase_info(&machTimeBaseInfo);
+	}
+	
+	// Convert to microseconds.
+	uint64_t uptime = mach_absolute_time();
+	uint64_t uptimeMicro = uptime * machTimeBaseInfo.numer / machTimeBaseInfo.denom / NSEC_PER_USEC;
+	
+	return uptimeMicro;
 }
 
 @implementation AMSerialPort (AMSerialPortAdditionsPrivate)
