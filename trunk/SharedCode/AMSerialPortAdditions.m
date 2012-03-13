@@ -44,6 +44,7 @@
 #import <sys/ioctl.h>
 #import <sys/filio.h>
 #import <pthread.h>
+#import <mach/mach_time.h>
 
 #import "AMSerialPortAdditions.h"
 #import "AMSerialErrors.h"
