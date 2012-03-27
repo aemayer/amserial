@@ -85,7 +85,7 @@
 		[self setStopBits:kAMSerialStopBitsOne];
 	}
 }
-																	
+
 // renamed to -echoEnabled
 - (BOOL)testEchoEnabled
 {
@@ -137,7 +137,7 @@
 // renamed to -setLocalMode:
 - (void)setLocal:(BOOL)local
 {
-	return [self setLocalMode:local];
+	[self setLocalMode:local];
 }
 
 // renamed to -bytesAvailable
