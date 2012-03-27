@@ -31,6 +31,8 @@
 //	2011-10-19 Sean McBride
 //	- code review of ARC changes
 //  - greatly simplified the various singleton implementations
+//  2012-03-27
+//  - use instancetype for singleton return value
 
 #import "AMSDKCompatibility.h"
 
@@ -54,7 +56,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 @implementation AMSerialPortList
 
-+ (AMSerialPortList *)sharedPortList {
++ (instancetype)sharedPortList {
 	static AMSerialPortList *sharedPortList = nil;
 	@synchronized([AMSerialPortList class]) {
 		if (!sharedPortList) {
