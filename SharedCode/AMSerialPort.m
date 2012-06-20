@@ -36,6 +36,8 @@
 //	2011-10-19 Sean McBride
 //	- code review of ARC changes
 //  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
+//	2012-06-20 Sean McBride
+//	- fixed possible out of range exception and compiler warning
 
 #import "AMSDKCompatibility.h"
 
@@ -536,14 +538,20 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionSoftwareFlowControl];
 		[self setSoftwareFlowControl:(temp != nil && [temp isEqualToString:@"YES"])];
 
-		if ((temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionEndOfLineCharacter])) {
-			[self setEndOfLineCharacter:[temp characterAtIndex:0]]; // this assumes that the character in question is a single byte char
+		temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionEndOfLineCharacter];
+		if ([temp length] > 0) {
+			unichar character = [temp characterAtIndex:0];
+			[self setEndOfLineCharacter:(char)character]; // this assumes that the character in question is a single byte char
 		}
-		if ((temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionStartCharacter])) {
-			[self setStartCharacter:[temp characterAtIndex:0]]; // this assumes that the character in question is a single byte char
+		temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionStartCharacter];
+		if ([temp length] > 0) {
+			unichar character = [temp characterAtIndex:0];
+			[self setStartCharacter:(char)character]; // this assumes that the character in question is a single byte char
 		}
-		if ((temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionStopCharacter])) {
-			[self setStopCharacter:[temp characterAtIndex:0]]; // this assumes that the character in question is a single byte char
+		temp = (NSString *)[optionsDictionary objectForKey:AMSerialOptionStopCharacter];
+		if ([temp length] > 0) {
+			unichar character = [temp characterAtIndex:0];
+			[self setStopCharacter:(char)character]; // this assumes that the character in question is a single byte char
 		}
 		
 		[self commitChanges];
