@@ -431,7 +431,10 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 			[optionsDictionary setObject:@"Even" forKey:AMSerialOptionParity];
 			break;
 		}
-		default:;
+		case kAMSerialParityNone:
+		default: {
+			break;
+		}
 	}
 	
 	[optionsDictionary setObject:[NSString stringWithFormat:@"%d", [self stopBits]] forKey:AMSerialOptionStopBits];
