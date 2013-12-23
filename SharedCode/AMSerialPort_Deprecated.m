@@ -39,14 +39,14 @@
 - (BOOL)testParity
 {
 	// NO for "no parity"
-	return (options->c_cflag & PARENB);
+	return (options->c_cflag & PARENB) ? YES : NO;
 }
 
 // replaced by  -parity
 - (BOOL)testParityOdd
 {
 	// meaningful only if TestParity == YES
-	return (options->c_cflag & PARODD);
+	return (options->c_cflag & PARODD) ? YES : NO;
 }
 
 // replaced by  -setParity:
