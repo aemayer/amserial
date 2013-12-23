@@ -25,7 +25,7 @@
 // renamed to -dataBits
 
 - (BOOL)testParity DEPRECATED_ATTRIBUTE;			// NO for "no parity"
-- (BOOL)testParity DEPRECATED_ATTRIBUTE;		// meaningful only if TestParity == YES
+- (BOOL)testParityOdd DEPRECATED_ATTRIBUTE;		// meaningful only if TestParity == YES
 - (void)setParityNone DEPRECATED_ATTRIBUTE;
 - (void)setParityEven DEPRECATED_ATTRIBUTE;
 - (void)setParityOdd DEPRECATED_ATTRIBUTE;
