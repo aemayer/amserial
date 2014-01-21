@@ -33,6 +33,7 @@
 
 - (void)setPort:(AMSerialPort *)newPort
 {
+#if !__has_feature(objc_arc)
     id old = nil;
 
     if (newPort != port) {
@@ -40,6 +41,9 @@
         port = [newPort retain];
         [old release];
     }
+#else
+	port = newPort;
+#endif
 }
 
 
@@ -49,7 +53,11 @@
 	if (![deviceName isEqualToString:[port bsdPath]]) {
 		[port close];
 
-		[self setPort:[[[AMSerialPort alloc] init:deviceName withName:deviceName type:(NSString*)CFSTR(kIOSerialBSDModemType)] autorelease]];
+		AMSerialPort* newPort = [[AMSerialPort alloc] init:deviceName withName:deviceName type:(NSString*)CFSTR(kIOSerialBSDModemType)];
+#if !__has_feature(objc_arc)
+		[newPort autorelease];
+#endif
+		[self setPort:newPort];
 		
 		// register as self as delegate for port
 		[port setDelegate:self];
@@ -88,7 +96,9 @@
 	if ([data length] > 0) {
 		NSString *text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		[outputTextView insertText:text];
+#if !__has_feature(objc_arc)
 		[text release];
+#endif
 		// continue listening
 		[sendPort readDataInBackground];
 	} else { // port closed
