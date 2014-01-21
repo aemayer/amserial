@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2012 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //	- initialize buffer in readString
@@ -86,8 +86,19 @@
 			NSString *readStr = [self readStringUsingEncoding:NSUTF8StringEncoding error:NULL];
 			// ARC will complain because the selector is unknown at this point; this is correct.
 			// We might replace -waitForInput:selector: with a block based method in the future
-			// and thus avoid this problem.
+			// and thus avoid this problem. Until then, we disable the warning.
+#if defined(__clang__) && defined(__has_warning)
+	#if __has_warning("-Warc-performSelector-leaks")
+		#pragma clang diagnostic push
+		#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+	#endif
+#endif
 			[[self am_readTarget] performSelector:am_readSelector withObject:readStr];
+#if defined(__clang__) && defined(__has_warning)
+	#if __has_warning("-Warc-performSelector-leaks")
+		#pragma clang diagnostic pop
+	#endif
+#endif
 			[self am_setReadTarget:nil];
 		} else {
 			[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(doRead:) userInfo:self repeats:NO];
