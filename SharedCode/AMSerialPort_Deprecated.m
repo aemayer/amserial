@@ -3,7 +3,7 @@
 //  AMSerialTest
 //
 //  Created by Andreas on 26.07.06.
-//  Copyright 2006-2012 Andreas Mayer. All rights reserved.
+//  Copyright 2006-2014 Andreas Mayer. All rights reserved.
 //
 
 #import "AMSerialPort_Deprecated.h"
@@ -24,7 +24,7 @@
 }
 
 // renamed to -speed
-- (long)getSpeed
+- (unsigned long)getSpeed
 {
 	return [self speed];
 }
