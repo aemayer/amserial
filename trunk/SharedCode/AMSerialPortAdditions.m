@@ -486,8 +486,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	ssize_t written;
 	NSDate *nextNotificationDate;
 	BOOL notificationSent = NO;
-	long speed;
-	long estimatedTime;
+	unsigned long speed;
+	unsigned long estimatedTime;
 	BOOL error = NO;
 	
 #if __has_feature(objc_arc)

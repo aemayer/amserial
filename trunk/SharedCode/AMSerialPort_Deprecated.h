@@ -3,7 +3,7 @@
 //  AMSerialTest
 //
 //  Created by Andreas on 26.07.06.
-//  Copyright 2006-2012 Andreas Mayer. All rights reserved.
+//  Copyright 2006-2014 Andreas Mayer. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -18,7 +18,7 @@
 - (NSDictionary *)getOptions DEPRECATED_ATTRIBUTE;
 // renamed to -options
 
-- (long)getSpeed DEPRECATED_ATTRIBUTE;
+- (unsigned long)getSpeed DEPRECATED_ATTRIBUTE;
 // renamed to -speed
 
 - (int)getDataBits DEPRECATED_ATTRIBUTE;
