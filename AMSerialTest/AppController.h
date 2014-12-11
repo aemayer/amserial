@@ -2,6 +2,8 @@
 //  AppController.h
 //  AMSerialTest
 //
+//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//
 
 #import <Cocoa/Cocoa.h>
 #import "AMSerialPort.h"
@@ -11,7 +13,7 @@
 	IBOutlet NSTextField *inputTextField;
 	IBOutlet NSTextField *deviceTextField;
 	IBOutlet NSTextView *outputTextView;
-	AMSerialPort *port;
+	AMSerialPort *_port;
 }
 
 - (AMSerialPort *)port;

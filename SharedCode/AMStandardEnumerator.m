@@ -2,7 +2,7 @@
 //  AMStandardEnumerator.m
 //
 //  Created by Andreas on Mon Aug 04 2003.
-//  Copyright (c) 2003-2012 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2003-2014 Andreas Mayer. All rights reserved.
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
@@ -23,15 +23,15 @@
 {
 	self = [super init];
 	if (self) {
-		collection = theCollection;
+		_collection = theCollection;
 #if !__has_feature(objc_arc)
-		[collection retain];
+		[_collection retain];
 #endif
-		countSelector = theCountSelector;
-		count = (CountMethod)[collection methodForSelector:countSelector];
-		nextObjectSelector = theObjectSelector;
-		nextObject = (NextObjectMethod)[collection methodForSelector:nextObjectSelector];
-		position = 0;
+		_countSelector = theCountSelector;
+		_count = (CountMethod)[_collection methodForSelector:_countSelector];
+		_nextObjectSelector = theObjectSelector;
+		_nextObject = (NextObjectMethod)[_collection methodForSelector:_nextObjectSelector];
+		_position = 0;
 	}
 	return self;
 }
@@ -41,7 +41,7 @@
 
 - (void)dealloc
 {
-	[collection release]; collection = nil;
+	[_collection release]; _collection = nil;
 	[super dealloc];
 }
 
@@ -50,10 +50,10 @@
 
 - (id)nextObject
 {
-	if (position >= count(collection, countSelector))
+	if (_position >= _count(_collection, _countSelector))
 		return nil;
 
-	return (nextObject(collection, nextObjectSelector, position++));
+	return (_nextObject(_collection, _nextObjectSelector, _position++));
 }
 
 - (NSArray *)allObjects

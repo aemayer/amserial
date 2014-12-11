@@ -77,11 +77,11 @@
 #endif
 	int res;
 	struct timeval timeout;
-	if (fileDescriptor >= 0) {
-		FD_ZERO(readfds);
-		FD_SET(fileDescriptor, readfds);
+	if (_fileDescriptor >= 0) {
+		FD_ZERO(_readfds);
+		FD_SET(_fileDescriptor, _readfds);
 		[self readTimeoutAsTimeval:&timeout];
-		res = select(fileDescriptor+1, readfds, nil, nil, &timeout);
+		res = select(_fileDescriptor+1, _readfds, nil, nil, &timeout);
 		if (res >= 1) {
 			NSString *readStr = [self readStringUsingEncoding:NSUTF8StringEncoding error:NULL];
 			// ARC will complain because the selector is unknown at this point; this is correct.
@@ -93,7 +93,7 @@
 		#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 	#endif
 #endif
-			[[self am_readTarget] performSelector:am_readSelector withObject:readStr];
+			[[self am_readTarget] performSelector:_am_readSelector withObject:readStr];
 #if defined(__clang__) && defined(__has_warning)
 	#if __has_warning("-Warc-performSelector-leaks")
 		#pragma clang diagnostic pop
@@ -207,7 +207,7 @@
 	ssize_t bytesWritten = 0;
 	int errorCode = kAMSerialErrorNone;
 	if (dataBytes && (dataLen > 0)) {
-		bytesWritten = write(fileDescriptor, dataBytes, dataLen);
+		bytesWritten = write(_fileDescriptor, dataBytes, dataLen);
 		if (bytesWritten < 0) {
 			errorCode = kAMSerialErrorFatal;
 		} else if ((NSUInteger)bytesWritten == dataLen) {
@@ -256,7 +256,7 @@
 	// yes, that cast is correct.  ioctl() is declared to take a char* but should be void* as really it
 	// depends on the 2nd parameter.  Ahhh, I love crappy old UNIX APIs :)
 	int result = 0;
-	int err = ioctl(fileDescriptor, FIONREAD, (char *)&result);
+	int err = ioctl(_fileDescriptor, FIONREAD, (char *)&result);
 	if (err != 0) {
 		result = -1;
 	}
@@ -270,7 +270,7 @@
 	NSLog(@"waitForInput");
 #endif
 	[self am_setReadTarget:target];
-	am_readSelector = selector;
+	_am_readSelector = selector;
 	[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(doRead:) userInfo:self repeats:NO];
 }
 
@@ -284,8 +284,8 @@
 #ifdef AMSerialDebug
 	NSLog(@"readDataInBackground");
 #endif
-	if (delegateHandlesReadInBackground) {
-		countReadInBackgroundThreads++;
+	if (_delegateHandlesReadInBackground) {
+		_countReadInBackgroundThreads++;
 		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread) toTarget:self withObject:nil];
 	} else {
 		// ... throw exception?
@@ -297,7 +297,7 @@
 #ifdef AMSerialDebug
 	NSLog(@"stopReadInBackground");
 #endif
-	stopReadInBackground = YES;
+	_stopReadInBackground = YES;
 }
 
 - (void)writeDataInBackground:(NSData *)data
@@ -305,8 +305,8 @@
 #ifdef AMSerialDebug
 	NSLog(@"writeDataInBackground");
 #endif
-	if (delegateHandlesWriteInBackground) {
-		countWriteInBackgroundThreads++;
+	if (_delegateHandlesWriteInBackground) {
+		_countWriteInBackgroundThreads++;
 		[NSThread detachNewThreadSelector:@selector(writeDataInBackgroundThread:) toTarget:self withObject:data];
 	} else {
 		// ... throw exception?
@@ -318,12 +318,12 @@
 #ifdef AMSerialDebug
 	NSLog(@"stopWriteInBackground");
 #endif
-	stopWriteInBackground = YES;
+	_stopWriteInBackground = YES;
 }
 
 - (int)numberOfWriteInBackgroundThreads
 {
-	return countWriteInBackgroundThreads;
+	return _countWriteInBackgroundThreads;
 }
 
 
@@ -366,33 +366,33 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	ssize_t bytesRead = 0;
 	fd_set *localReadFDs = NULL;
 
-	[readLock lock];	// read in sequence
+	[_readLock lock];	// read in sequence
 	//NSLog(@"readDataInBackgroundThread - [readLock lock]");
 
 	localBuffer = malloc(AMSER_MAXBUFSIZE);
-	stopReadInBackground = NO;
+	_stopReadInBackground = NO;
 #if __has_feature(objc_arc)
 	@autoreleasepool
 #else
 	NSAutoreleasePool *localAutoreleasePool = [[NSAutoreleasePool alloc] init];
 #endif
 	{
-	[closeLock lock];
-	if ((fileDescriptor >= 0) && (!stopReadInBackground)) {
+	[_closeLock lock];
+	if ((_fileDescriptor >= 0) && (!_stopReadInBackground)) {
 		//NSLog(@"readDataInBackgroundThread - [closeLock lock]");
 		localReadFDs = (fd_set*)malloc(sizeof(fd_set));
 		FD_ZERO(localReadFDs);
-		FD_SET(fileDescriptor, localReadFDs);
-		[closeLock unlock];
+		FD_SET(_fileDescriptor, localReadFDs);
+		[_closeLock unlock];
 		//NSLog(@"readDataInBackgroundThread - [closeLock unlock]");
-		int res = select(fileDescriptor+1, localReadFDs, nil, nil, nil); // timeout);
-		if ((res >= 1) && (fileDescriptor >= 0)) {
-			bytesRead = read(fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
+		int res = select(_fileDescriptor+1, localReadFDs, nil, nil, nil); // timeout);
+		if ((res >= 1) && (_fileDescriptor >= 0)) {
+			bytesRead = read(_fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
 		}
 		data = [NSData dataWithBytes:localBuffer length:bytesRead];
-		[delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
+		[_delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
 	} else {
-		[closeLock unlock];
+		[_closeLock unlock];
 	}
 	}
 #if !__has_feature(objc_arc)
@@ -401,9 +401,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	free(localReadFDs);
 	free(localBuffer);
 
-	countReadInBackgroundThreads--;
+	_countReadInBackgroundThreads--;
 
-	[readLock unlock];
+	[_readLock unlock];
 	//NSLog(@"readDataInBackgroundThread - [readLock unlock]");
 
 }
@@ -499,8 +499,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 #endif
 	{
 	localBuffer = malloc(AMSER_MAXBUFSIZE);
-	stopWriteInBackground = NO;
-	[writeLock lock];	// write in sequence
+	_stopWriteInBackground = NO;
+	[_writeLock lock];	// write in sequence
 	pos = 0;
 	dataLen = [data length];
 	speed = [self speed];
@@ -512,11 +512,11 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	} else {
 		nextNotificationDate = [NSDate dateWithTimeIntervalSinceNow:2.0];
 	}
-	while (!stopWriteInBackground && (pos < dataLen) && !error) {
+	while (!_stopWriteInBackground && (pos < dataLen) && !error) {
 		bufferLen = MIN(AMSER_MAXBUFSIZE, dataLen-pos);
 
 		[data getBytes:localBuffer range:NSMakeRange(pos, bufferLen)];
-		written = write(fileDescriptor, localBuffer, bufferLen);
+		written = write(_fileDescriptor, localBuffer, bufferLen);
 		error = (written == 0); // error condition
 		if (error)
 			break;
@@ -533,9 +533,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	if (notificationSent) {
 		[self reportProgress:pos dataLen:dataLen];
 	}
-	stopWriteInBackground = NO;
-	[writeLock unlock];
-	countWriteInBackgroundThreads--;
+	_stopWriteInBackground = NO;
+	[_writeLock unlock];
+	_countWriteInBackgroundThreads--;
 	
 	free(localBuffer);
 	}
@@ -547,17 +547,17 @@ static int64_t AMMicrosecondsSinceBoot (void)
 
 - (id)am_readTarget
 {
-	return am_readTarget; 
+	return _am_readTarget; 
 }
 
 - (void)am_setReadTarget:(id)newReadTarget
 {
-	if (am_readTarget != newReadTarget) {
+	if (_am_readTarget != newReadTarget) {
 #if !__has_feature(objc_arc)
 		[newReadTarget retain];
-		[am_readTarget release];
+		[_am_readTarget release];
 #endif
-		am_readTarget = newReadTarget;
+		_am_readTarget = newReadTarget;
 	}
 }
 
@@ -606,9 +606,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			if ((timeout.tv_sec == 0) && (timeout.tv_usec == 0)) {
 				timeout.tv_usec = 1;
 			}
-			FD_ZERO(readfds);
-			FD_SET(fileDescriptor, readfds);
-			int selectResult = select(fileDescriptor+1, readfds, NULL, NULL, &timeout);
+			FD_ZERO(_readfds);
+			FD_SET(_fileDescriptor, _readfds);
+			int selectResult = select(_fileDescriptor+1, _readfds, NULL, NULL, &timeout);
 			if (selectResult == -1) {
 				errorCode = kAMSerialErrorFatal;
 				break;
@@ -622,7 +622,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 				} else {
 					sizeToRead = AMSER_MAXBUFSIZE-bytesRead;
 				}
-				ssize_t	readResult = read(fileDescriptor, buffer+bytesRead, sizeToRead);
+				ssize_t	readResult = read(_fileDescriptor, _buffer+bytesRead, sizeToRead);
 				if (readResult > 0) {
 					bytesRead += readResult;
 					if (stopAfterBytes) {
@@ -634,7 +634,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 							break;
 						}
 					}
-					if (stopAtChar && (buffer[bytesRead-1] == stopChar)) {
+					if (stopAtChar && (_buffer[bytesRead-1] == stopChar)) {
 						endCode = kAMSerialStopCharReached;
 						break;
 					}
@@ -675,7 +675,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 		*error = [NSError errorWithDomain:AMSerialErrorDomain code:errorCode userInfo:userInfo];
 	}
 	if ((bytesRead > 0) && (errorCode != kAMSerialErrorFatal)) {
-		result = [NSData dataWithBytes:buffer length:bytesRead];
+		result = [NSData dataWithBytes:_buffer length:bytesRead];
 	}
 	
 #ifdef AMSerialDebug
@@ -690,7 +690,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 #ifdef AMSerialDebug
 	NSLog(@"send AMSerialWriteInBackgroundProgressMessage");
 #endif
-	[delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:
+	[_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:
 		[NSDictionary dictionaryWithObjectsAndKeys:
 			self, @"serialPort",
 			[NSNumber numberWithUnsignedLongLong:progress], @"value",

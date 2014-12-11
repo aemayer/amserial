@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2012 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -86,34 +86,34 @@ extern NSString *const AMSerialErrorDomain;
 @interface AMSerialPort : NSObject
 {
 @private
-	NSString *bsdPath;
-	NSString *serviceName;
-	NSString *serviceType;
-	int fileDescriptor;
-	struct termios * options;
-	struct termios * originalOptions;
-	NSMutableDictionary *optionsDictionary;
-	NSFileHandle *fileHandle;
-	BOOL gotError;
-	int	lastError;
-	id owner;
-	char * buffer;
-	NSTimeInterval readTimeout; // for public blocking read methods and doRead
-	fd_set * readfds;
-	id delegate;
-	BOOL delegateHandlesReadInBackground;
-	BOOL delegateHandlesWriteInBackground;
-	NSLock *writeLock;
-	NSLock *readLock;
-	NSLock *closeLock;
+	NSString *_bsdPath;
+	NSString *_serviceName;
+	NSString *_serviceType;
+	int _fileDescriptor;
+	struct termios * _options;
+	struct termios * _originalOptions;
+	NSMutableDictionary *_optionsDictionary;
+	NSFileHandle *_fileHandle;
+	BOOL _gotError;
+	int	_lastError;
+	id _owner;
+	char * _buffer;
+	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
+	fd_set * _readfds;
+	id _delegate;
+	BOOL _delegateHandlesReadInBackground;
+	BOOL _delegateHandlesWriteInBackground;
+	NSLock *_writeLock;
+	NSLock *_readLock;
+	NSLock *_closeLock;
 	
 	// used by AMSerialPortAdditions only:
-	id am_readTarget;
-	SEL am_readSelector;
-	BOOL stopWriteInBackground;
-	int countWriteInBackgroundThreads;
-	BOOL stopReadInBackground;
-	int countReadInBackgroundThreads;
+	id _am_readTarget;
+	SEL _am_readSelector;
+	BOOL _stopWriteInBackground;
+	int _countWriteInBackgroundThreads;
+	BOOL _stopReadInBackground;
+	int _countReadInBackgroundThreads;
 }
 
 - (instancetype)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType;

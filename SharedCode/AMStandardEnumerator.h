@@ -2,7 +2,7 @@
 //  AMStandardEnumerator.h
 //
 //  Created by Andreas on Mon Aug 04 2003.
-//  Copyright (c) 2003-2012 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2003-2014 Andreas Mayer. All rights reserved.
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
@@ -17,12 +17,12 @@ typedef id (*NextObjectMethod)(id, SEL, NSUInteger);
 @interface AMStandardEnumerator : NSEnumerator
 {
 @private
-	id collection;
-	SEL countSelector;
-	SEL nextObjectSelector;
-	CountMethod count;
-	NextObjectMethod nextObject;
-	NSUInteger position;
+	id _collection;
+	SEL _countSelector;
+	SEL _nextObjectSelector;
+	CountMethod _count;
+	NextObjectMethod _nextObject;
+	NSUInteger _position;
 }
 
 // Designated initializer
