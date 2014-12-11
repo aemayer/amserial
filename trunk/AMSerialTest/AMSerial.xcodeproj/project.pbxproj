@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A5CB9211A3A5E410084190F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A5CB91F1A3A5E410084190F /* MainMenu.xib */; };
 		E15800010C58DE2E00B8171B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		E15800020C58DE2E00B8171B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B6E09E02D03CD90100010A /* IOKit.framework */; };
 		E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B6E09402D03AB10100010A /* AppController.h */; };
@@ -17,7 +18,6 @@
 		E158FFF10C58DE2E00B8171B /* AMSerialPortAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */; };
 		E158FFF20C58DE2E00B8171B /* AMSerialPortList_Deprecated.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */; };
 		E158FFF30C58DE2E00B8171B /* AMSerialPortList.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */; };
-		E158FFF50C58DE2E00B8171B /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		E158FFF80C58DE2E00B8171B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		E158FFF90C58DE2E00B8171B /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6E09502D03AB10100010A /* AppController.m */; };
@@ -34,9 +34,9 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		5A5CB9201A3A5E410084190F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMStandardEnumerator.h; path = ../SharedCode/AMStandardEnumerator.h; sourceTree = SOURCE_ROOT; };
 		E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMStandardEnumerator.m; path = ../SharedCode/AMStandardEnumerator.m; sourceTree = SOURCE_ROOT; };
 		E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-AMSerialTest.plist"; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				5A5CB91F1A3A5E410084190F /* MainMenu.xib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				E1CC710C106E6C2B00F7D688 /* BSD License.txt */,
 			);
@@ -207,8 +207,6 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			attributes = {
-			};
 			buildConfigurationList = E13F800C0863426A00EC3999 /* Build configuration list for PBXProject "AMSerial" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -234,7 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E158FFF50C58DE2E00B8171B /* MainMenu.nib in Resources */,
+				5A5CB9211A3A5E410084190F /* MainMenu.xib in Resources */,
 				E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,12 +266,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+		5A5CB91F1A3A5E410084190F /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				29B97319FDCFA39411CA2CEA /* English */,
+				5A5CB9201A3A5E410084190F /* English */,
 			);
-			name = MainMenu.nib;
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
