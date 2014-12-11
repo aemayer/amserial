@@ -2,8 +2,10 @@
 //  AppController.m
 //  AMSerialTest
 //
-//		2009-09-09		Andreas Mayer
-//		- fixed memory leak in -serialPortReadData:
+//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//
+//	2009-09-09		Andreas Mayer
+//	- fixed memory leak in -serialPortReadData:
 
 
 #import "AppController.h"
@@ -28,7 +30,7 @@
 
 - (AMSerialPort *)port
 {
-    return port;
+    return _port;
 }
 
 - (void)setPort:(AMSerialPort *)newPort
@@ -36,9 +38,9 @@
 #if !__has_feature(objc_arc)
     id old = nil;
 
-    if (newPort != port) {
-        old = port;
-        port = [newPort retain];
+    if (newPort != _port) {
+        old = _port;
+        _port = [newPort retain];
         [old release];
     }
 #else
@@ -50,8 +52,8 @@
 - (void)initPort
 {
 	NSString *deviceName = [deviceTextField stringValue];
-	if (![deviceName isEqualToString:[port bsdPath]]) {
-		[port close];
+	if (![deviceName isEqualToString:[_port bsdPath]]) {
+		[_port close];
 
 		AMSerialPort* newPort = [[AMSerialPort alloc] init:deviceName withName:deviceName type:(NSString*)CFSTR(kIOSerialBSDModemType)];
 #if !__has_feature(objc_arc)
@@ -60,21 +62,21 @@
 		[self setPort:newPort];
 		
 		// register as self as delegate for port
-		[port setDelegate:self];
+		[_port setDelegate:self];
 		
 		[outputTextView insertText:@"attempting to open port\r"];
 		[outputTextView setNeedsDisplay:YES];
 		[outputTextView displayIfNeeded];
 		
 		// open port - may take a few seconds ...
-		if ([port open]) {
+		if ([_port open]) {
 			
 			[outputTextView insertText:@"port opened\r"];
 			[outputTextView setNeedsDisplay:YES];
 			[outputTextView displayIfNeeded];
 
 			// listen for data in a separate thread
-			[port readDataInBackground];
+			[_port readDataInBackground];
 			
 		} else { // an error occured while creating port
 			[outputTextView insertText:@"couldn't open port for device "];
@@ -159,13 +161,13 @@
 	
 	NSString *sendString = [[inputTextField stringValue] stringByAppendingString:@"\r"];
 
-	if(!port) {
+	if(!_port) {
 		// open a new port if we don't already have one
 		[self initPort];
 	}
 
-	if([port isOpen]) { // in case an error occured while opening the port
-		[port writeString:sendString usingEncoding:NSUTF8StringEncoding error:NULL];
+	if([_port isOpen]) { // in case an error occured while opening the port
+		[_port writeString:sendString usingEncoding:NSUTF8StringEncoding error:NULL];
 	}
 }
 
@@ -173,13 +175,13 @@
 {
 	(void)sender;
 	
-	if(!port) {
+	if(!_port) {
 		// open a new port if we don't already have one
 		[self initPort];
 	}
 
-	if([port isOpen]) { // in case an error occured while opening the port
-		[port sendBreak];
+	if([_port isOpen]) { // in case an error occured while opening the port
+		[_port sendBreak];
 	}
 }
 

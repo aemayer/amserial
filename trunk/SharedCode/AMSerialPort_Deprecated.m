@@ -39,34 +39,34 @@
 - (BOOL)testParity
 {
 	// NO for "no parity"
-	return (options->c_cflag & PARENB) ? YES : NO;
+	return (_options->c_cflag & PARENB) ? YES : NO;
 }
 
 // replaced by  -parity
 - (BOOL)testParityOdd
 {
 	// meaningful only if TestParity == YES
-	return (options->c_cflag & PARODD) ? YES : NO;
+	return (_options->c_cflag & PARODD) ? YES : NO;
 }
 
 // replaced by  -setParity:
 - (void)setParityNone
 {
-	options->c_cflag &= ~PARENB;
+	_options->c_cflag &= ~PARENB;
 }
 
 // replaced by  -setParity:
 - (void)setParityEven
 {
-	options->c_cflag |= PARENB;
-	options->c_cflag &= ~PARODD;
+	_options->c_cflag |= PARENB;
+	_options->c_cflag &= ~PARODD;
 }
 
 // replaced by  -setParity:
 - (void)setParityOdd
 {
-	options->c_cflag |= PARENB;
-	options->c_cflag |= PARODD;
+	_options->c_cflag |= PARENB;
+	_options->c_cflag |= PARODD;
 }
 
 // renamed to -stopBits;
