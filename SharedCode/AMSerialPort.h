@@ -78,7 +78,8 @@ typedef enum {
 
 extern NSString *const AMSerialErrorDomain;
 
-@interface NSObject (AMSerialDelegate)
+@protocol AMSerialDelegate <NSObject>
+@optional
 - (void)serialPortReadData:(NSDictionary *)dataDictionary;
 - (void)serialPortWriteProgress:(NSDictionary *)dataDictionary;
 @end
@@ -100,7 +101,7 @@ extern NSString *const AMSerialErrorDomain;
 	char * _buffer;
 	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
 	fd_set * _readfds;
-	id _delegate;
+	id<AMSerialDelegate> _delegate;
 	BOOL _delegateHandlesReadInBackground;
 	BOOL _delegateHandlesWriteInBackground;
 	NSLock *_writeLock;
@@ -252,10 +253,8 @@ extern NSString *const AMSerialErrorDomain;
 - (BOOL)commitChanges;	// call this after using any of the above set... functions
 - (int)errorCode;				// if -commitChanges returns NO, look here for further info
 
-// setting the delegate (for background reading/writing)
-
-- (id)delegate;
-- (void)setDelegate:(id)newDelegate;
+// the delegate (for background reading/writing)
+@property(readwrite, assign) id<AMSerialDelegate> delegate;
 
 // time out for blocking reads in seconds
 - (NSTimeInterval)readTimeout;
