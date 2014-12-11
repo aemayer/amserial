@@ -129,10 +129,10 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 #endif
 	assert (fileDescriptor == -1);
 
-	free(readfds); readfds = NULL;
-	free(buffer); buffer = NULL;
-	free(originalOptions); originalOptions = NULL;
-	free(options); options = NULL;
+	free(_readfds); _readfds = NULL;
+	free(_buffer); _buffer = NULL;
+	free(_originalOptions); _originalOptions = NULL;
+	free(_options); _options = NULL;
 	[super finalize];
 }
 
@@ -274,7 +274,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	NSFileHandle *result = nil;
 	
 #ifdef __OBJC_GC__
-	__strong const char *path = [bsdPath fileSystemRepresentation];
+	__strong const char *path = [_bsdPath fileSystemRepresentation];
 #else
 	const char *path = [_bsdPath fileSystemRepresentation];
 #endif
