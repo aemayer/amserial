@@ -158,12 +158,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 }
 
 
-- (id)delegate
+- (id<AMSerialDelegate>)delegate
 {
 	return _delegate;
 }
 
-- (void)setDelegate:(id)newDelegate
+- (void)setDelegate:(id<AMSerialDelegate>)newDelegate
 {
 	if (newDelegate != _delegate) {
 		// As per Cocoa conventions, delegates are not retained.
@@ -932,8 +932,6 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 {
     _readTimeout = aReadTimeout;
 }
-
-// private methods
 
 - (void)readTimeoutAsTimeval:(struct timeval*)timeout
 {

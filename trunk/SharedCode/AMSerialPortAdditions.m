@@ -390,7 +390,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			bytesRead = read(_fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
 		}
 		data = [NSData dataWithBytes:localBuffer length:bytesRead];
-		[_delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
+		[(id)_delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
 	} else {
 		[_closeLock unlock];
 	}
@@ -690,7 +690,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 #ifdef AMSerialDebug
 	NSLog(@"send AMSerialWriteInBackgroundProgressMessage");
 #endif
-	[_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:
+	[(id)_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:
 		[NSDictionary dictionaryWithObjectsAndKeys:
 			self, @"serialPort",
 			[NSNumber numberWithUnsignedLongLong:progress], @"value",
