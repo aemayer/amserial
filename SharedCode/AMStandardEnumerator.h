@@ -26,7 +26,7 @@ typedef id (*NextObjectMethod)(id, SEL, NSUInteger);
 }
 
 // Designated initializer
-- (instancetype)initWithCollection:(id)theCollection countSelector:(SEL)theCountSelector objectAtIndexSelector:(SEL)theObjectSelector;
+- (instancetype)initWithCollection:(id)theCollection countSelector:(SEL)theCountSelector objectAtIndexSelector:(SEL)theObjectSelector NS_DESIGNATED_INITIALIZER;
 
 
 @end

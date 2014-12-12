@@ -117,7 +117,7 @@ extern NSString *const AMSerialErrorDomain;
 	int _countReadInBackgroundThreads;
 }
 
-- (instancetype)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType;
+- (instancetype)init:(NSString *)path withName:(NSString *)name type:(NSString *)serialType NS_DESIGNATED_INITIALIZER;
 // Designated initializer
 // initializes port
 // path is a bsdPath
