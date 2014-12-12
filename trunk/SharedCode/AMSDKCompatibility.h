@@ -2,7 +2,7 @@
 //  AMSDKCompatibility.h
 //
 //  Created by Nick Zitzmann on 2007-10-22.
-//  Copyright (c) 2007-2012 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2007-2014 Andreas Mayer. All rights reserved.
 //
 
 // AMSerialPort uses types that were introduced with the 10.5 SDK.
@@ -45,4 +45,9 @@
 // instancetype is new in clang. id is a good replacement elsewhere.
 #if !__has_feature(objc_instancetype) && !defined(instancetype)
 	#define instancetype id
+#endif
+
+// The 10.10 SDK added NS_DESIGNATED_INITIALIZER, to tag a designated initializer for additional compiler checking.
+#ifndef NS_DESIGNATED_INITIALIZER
+	#define NS_DESIGNATED_INITIALIZER
 #endif
