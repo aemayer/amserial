@@ -78,7 +78,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		_closeLock = [[NSLock alloc] init];
 		
 		// By default blocking read attempts will timeout after 1 second
-		[self setReadTimeout:1.0];
+		_readTimeout = 1.0;
 		
 		// These are used by the AMSerialPortAdditions category only; pretend to use them here to silence warnings by the clang static analyzer.
 		(void)_am_readTarget;
@@ -127,7 +127,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	if (fileDescriptor != -1)
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
 #endif
-	assert (fileDescriptor == -1);
+	assert (_fileDescriptor == -1);
 
 	free(_readfds); _readfds = NULL;
 	free(_buffer); _buffer = NULL;
@@ -923,15 +923,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return _lastError;
 }
 
-- (NSTimeInterval)readTimeout
-{
-    return _readTimeout;
-}
-
-- (void)setReadTimeout:(NSTimeInterval)aReadTimeout
-{
-    _readTimeout = aReadTimeout;
-}
+@synthesize readTimeout = _readTimeout;
 
 - (void)readTimeoutAsTimeval:(struct timeval*)timeout
 {
