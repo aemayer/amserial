@@ -257,8 +257,7 @@ extern NSString *const AMSerialErrorDomain;
 @property(readwrite, assign) id<AMSerialDelegate> delegate;
 
 // time out for blocking reads in seconds
-- (NSTimeInterval)readTimeout;
-- (void)setReadTimeout:(NSTimeInterval)aReadTimeout;
+@property(readwrite, atomic) NSTimeInterval readTimeout;
 
 - (void)readTimeoutAsTimeval:(struct timeval*)timeout;
 
