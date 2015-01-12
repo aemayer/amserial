@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //	- initialize buffer in readString
@@ -49,6 +49,12 @@
 #import "AMSerialPortAdditions.h"
 #import "AMSerialErrors.h"
 
+// Workaround for <rdar://14095332>.  The 10.10 SDK and older have a minor undefined behaviour where "1 << 31" may be performed.  It's actually illegal to left-shift a 1 into the sign bit.  So I just copy-pasted the macro and changed "1" to "1U".
+#if (MAC_OS_X_VERSION_MAX_ALLOWED <= 101000)
+	#define	AM_FD_SET(n, p)	do { int __fd = (n); ((p)->fds_bits[(unsigned long)__fd/__DARWIN_NFDBITS] |= ((__int32_t)(1U<<((unsigned long)__fd % __DARWIN_NFDBITS)))); } while(0)
+#else
+	#define	AM_FD_SET(n, p) FD_SET(n, p)
+#endif
 
 @interface AMSerialPort (AMSerialPortAdditionsPrivate)
 - (void)readDataInBackgroundThread;
@@ -79,7 +85,7 @@
 	struct timeval timeout;
 	if (_fileDescriptor >= 0) {
 		FD_ZERO(_readfds);
-		FD_SET(_fileDescriptor, _readfds);
+		AM_FD_SET(_fileDescriptor, _readfds);
 		[self readTimeoutAsTimeval:&timeout];
 		res = select(_fileDescriptor+1, _readfds, nil, nil, &timeout);
 		if (res >= 1) {
@@ -382,7 +388,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 		//NSLog(@"readDataInBackgroundThread - [closeLock lock]");
 		localReadFDs = (fd_set*)malloc(sizeof(fd_set));
 		FD_ZERO(localReadFDs);
-		FD_SET(_fileDescriptor, localReadFDs);
+		AM_FD_SET(_fileDescriptor, localReadFDs);
 		[_closeLock unlock];
 		//NSLog(@"readDataInBackgroundThread - [closeLock unlock]");
 		int res = select(_fileDescriptor+1, localReadFDs, nil, nil, nil); // timeout);
@@ -434,7 +440,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 		NSAutoreleasePool *localAutoreleasePool = [[NSAutoreleasePool alloc] init];
 		localReadFDs = malloc(sizeof(*localReadFDs));
 		FD_ZERO(localReadFDs);
-		FD_SET(fileDescriptor, localReadFDs);
+		AM_FD_SET(fileDescriptor, localReadFDs);
 		int res = select(fileDescriptor+1, localReadFDs, nil, nil, nil); // timeout);
 		if (res >= 1) {
 #ifdef AMSerialDebug
@@ -607,7 +613,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 				timeout.tv_usec = 1;
 			}
 			FD_ZERO(_readfds);
-			FD_SET(_fileDescriptor, _readfds);
+			AM_FD_SET(_fileDescriptor, _readfds);
 			int selectResult = select(_fileDescriptor+1, _readfds, NULL, NULL, &timeout);
 			if (selectResult == -1) {
 				errorCode = kAMSerialErrorFatal;
