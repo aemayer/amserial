@@ -78,7 +78,7 @@
 			// listen for data in a separate thread
 			[_port readDataInBackground];
 			
-		} else { // an error occured while creating port
+		} else { // an error occurred while creating port
 			[outputTextView insertText:@"couldn't open port for device "];
 			[outputTextView insertText:deviceName];
 			[outputTextView insertText:@"\r"];
@@ -166,7 +166,7 @@
 		[self initPort];
 	}
 
-	if([_port isOpen]) { // in case an error occured while opening the port
+	if([_port isOpen]) { // in case an error occurred while opening the port
 		[_port writeString:sendString usingEncoding:NSUTF8StringEncoding error:NULL];
 	}
 }
@@ -180,7 +180,7 @@
 		[self initPort];
 	}
 
-	if([_port isOpen]) { // in case an error occured while opening the port
+	if([_port isOpen]) { // in case an error occurred while opening the port
 		[_port sendBreak];
 	}
 }

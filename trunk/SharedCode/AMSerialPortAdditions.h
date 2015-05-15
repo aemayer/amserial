@@ -64,7 +64,7 @@
 
 - (NSString *)readBytes:(NSUInteger)bytes upToChar:(char)stopChar usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
 
-// write to the serial port; NO if an error occured
+// write to the serial port; NO if an error occurred
 - (BOOL)writeData:(NSData *)data error:(NSError **)error;
 
 - (BOOL)writeString:(NSString *)string usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;

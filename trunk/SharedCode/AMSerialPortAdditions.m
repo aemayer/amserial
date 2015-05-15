@@ -199,7 +199,7 @@
 }
 
 
-// write to the serial port; NO if an error occured
+// write to the serial port; NO if an error occurred
 - (BOOL)writeData:(NSData *)data error:(NSError **)error
 {
 #ifdef AMSerialDebug
@@ -574,7 +574,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 //  - if stopAtChar is YES, when 'stopChar' is found at the end of the read buffer
 //  - a fatal error occurs
 //
-// Upon return: as long as some data was actually read, and no serious error occured, an autoreleased NSData
+// Upon return: as long as some data was actually read, and no serious error occurred, an autoreleased NSData
 // object with that data is created and returned, otherwise nil is.
 - (NSData *)readAndStopAfterBytes:(BOOL)stopAfterBytes bytes:(NSUInteger)bytesToRead stopAtChar:(BOOL)stopAtChar stopChar:(char)stopChar error:(NSError **)error
 {
@@ -666,7 +666,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	}
 	
 #ifdef AMSerialDebug
-	NSLog(@"timeout remaining at end: %qd us (negative means timeout occured!)", remainingTimeout);
+	NSLog(@"timeout remaining at end: %qd us (negative means timeout occurred!)", remainingTimeout);
 #endif
 	
 	if (error) {
