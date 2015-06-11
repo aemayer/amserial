@@ -2,7 +2,7 @@
 //  AMStandardEnumerator.m
 //
 //  Created by Andreas on Mon Aug 04 2003.
-//  Copyright (c) 2003-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2003-2015 Andreas Mayer. All rights reserved.
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
@@ -17,6 +17,13 @@
 
 
 @implementation AMStandardEnumerator
+
+// Cover the superclass' designated initializer
+- (instancetype)init NS_UNAVAILABLE
+{
+	assert(0);
+	return nil;
+}
 
 // Designated initializer
 - (instancetype)initWithCollection:(id)theCollection countSelector:(SEL)theCountSelector objectAtIndexSelector:(SEL)theObjectSelector
