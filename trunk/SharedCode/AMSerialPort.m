@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -55,6 +55,13 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 
 @implementation AMSerialPort
+
+// Cover the superclass' designated initializer
+- (instancetype)init NS_UNAVAILABLE
+{
+	assert(0);
+	return nil;
+}
 
 // Designated initializer
 - (instancetype)init:(NSString *)path withName:(NSString *)name type:(NSString *)type
