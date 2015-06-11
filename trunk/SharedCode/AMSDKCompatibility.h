@@ -2,13 +2,18 @@
 //  AMSDKCompatibility.h
 //
 //  Created by Nick Zitzmann on 2007-10-22.
-//  Copyright (c) 2007-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2007-2015 Andreas Mayer. All rights reserved.
 //
 
 // AMSerialPort uses types that were introduced with the 10.5 SDK.
 // This allows older SDKs to be used.
 
 #import <Foundation/Foundation.h>
+
+// We don't support SDKs older than 10.7.
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+	#error You must use the 10.7 SDK or newer.
+#endif
 
 #ifndef NSINTEGER_DEFINED
 	#ifdef NS_BUILD_32_LIKE_64
@@ -35,11 +40,6 @@
 #ifndef _SUSECONDS_T
 	#define _SUSECONDS_T
 	typedef int suseconds_t;
-#endif
-
-// __has_feature is new in the 10.7 SDK, define it here if it's not yet defined.
-#ifndef __has_feature
-	#define __has_feature(x) 0
 #endif
 
 // instancetype is new in clang. id is a good replacement elsewhere.
