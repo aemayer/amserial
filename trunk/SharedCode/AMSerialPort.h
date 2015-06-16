@@ -38,7 +38,7 @@
 
 #import "AMSDKCompatibility.h"
 
-#include <termios.h>
+#import <termios.h>
 
 #import <Foundation/Foundation.h>
 

@@ -41,7 +41,7 @@
 
 #import "AMSDKCompatibility.h"
 
-#include <sys/ioctl.h>
+#import <sys/ioctl.h>
 
 #import "AMSerialPort.h"
 #import "AMSerialErrors.h"
