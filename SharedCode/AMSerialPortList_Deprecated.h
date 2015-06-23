@@ -3,7 +3,7 @@
 //  AMSerialTest
 //
 //  Created by Andreas on 14.08.06.
-//  Copyright 2006 Andreas Mayer. All rights reserved.
+//  Copyright 2006-2015 Andreas Mayer. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -12,7 +12,7 @@
 
 @interface AMSerialPortList (Deprecated)
 
-- (NSArray *)getPortList;
+- (NSArray *)getPortList DEPRECATED_ATTRIBUTE;
 // replaced by  -serialPorts;
 
 
