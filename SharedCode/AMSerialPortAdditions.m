@@ -89,7 +89,7 @@
 		[self readTimeoutAsTimeval:&timeout];
 		res = select(_fileDescriptor+1, _readfds, nil, nil, &timeout);
 		if (res >= 1) {
-			NSString *readStr = [self readStringUsingEncoding:NSUTF8StringEncoding error:NULL];
+			NSString *readStr = [self readStringUsingEncoding:NSUTF8StringEncoding error:nil];
 			// ARC will complain because the selector is unknown at this point; this is correct.
 			// We might replace -waitForInput:selector: with a block based method in the future
 			// and thus avoid this problem. Until then, we disable the warning.

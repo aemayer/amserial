@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -141,7 +141,7 @@ extern NSString *const AMSerialErrorDomain;
 // YES if port is open
 
 - (AMSerialPort *)obtainBy:(id)sender;
-// get this port exclusively; NULL if it's not free
+// get this port exclusively; nil if it's not free
 
 - (void)free;
 // give it back (and close the port if still open)

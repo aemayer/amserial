@@ -246,7 +246,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (AMSerialPort *)obtainBy:(id)sender
 {
-	// get this port exclusively; NULL if it's not free
+	// get this port exclusively; nil if it's not free
 	if (_owner == nil) {
 		_owner = sender;
 		return self;
