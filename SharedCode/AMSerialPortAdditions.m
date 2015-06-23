@@ -396,7 +396,11 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			bytesRead = read(_fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
 		}
 		data = [NSData dataWithBytes:localBuffer length:bytesRead];
-		[(id)_delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
+		NSDictionary* tmp = [NSDictionary dictionaryWithObjectsAndKeys:
+							 self, @"serialPort",
+							 data, @"data",
+							 nil];
+		[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:tmp waitUntilDone:NO];
 	} else {
 		[_closeLock unlock];
 	}
@@ -411,70 +415,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 
 	[_readLock unlock];
 	//NSLog(@"readDataInBackgroundThread - [readLock unlock]");
-
 }
-
-/* new version - does not work yet
-- (void)readDataInBackgroundThread
-{
-	NSData *data = nil;
-	void *localBuffer;
-	int bytesRead = 0;
-	fd_set *localReadFDs;
-
-#ifdef AMSerialDebug
-	NSLog(@"readDataInBackgroundThread: %@", [NSThread currentThread]);
-#endif
-	localBuffer = malloc(AMSER_MAXBUFSIZE);
-	[stopReadInBackgroundLock lock];
-	stopReadInBackground = NO;
-	//NSLog(@"stopReadInBackground set to NO: %@", [NSThread currentThread]);
-	[stopReadInBackgroundLock unlock];
-	//NSLog(@"attempt readLock: %@", [NSThread currentThread]);
-	[readLock lock];	// write in sequence
-	//NSLog(@"readLock locked: %@", [NSThread currentThread]);
-	//NSLog(@"attempt closeLock: %@", [NSThread currentThread]);
-	[closeLock lock];
-	//NSLog(@"closeLock locked: %@", [NSThread currentThread]);
-	if (!stopReadInBackground && (fileDescriptor >= 0)) {
-		NSAutoreleasePool *localAutoreleasePool = [[NSAutoreleasePool alloc] init];
-		localReadFDs = malloc(sizeof(*localReadFDs));
-		FD_ZERO(localReadFDs);
-		AM_FD_SET(fileDescriptor, localReadFDs);
-		int res = select(fileDescriptor+1, localReadFDs, nil, nil, nil); // timeout);
-		if (res >= 1) {
-#ifdef AMSerialDebug
-			NSLog(@"attempt read: %@", [NSThread currentThread]);
-#endif
-			bytesRead = read(fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
-		}
-#ifdef AMSerialDebug
-		NSLog(@"data read: %@", [NSThread currentThread]);
-#endif
-		data = [NSData dataWithBytes:localBuffer length:bytesRead];
-#ifdef AMSerialDebug
-		NSLog(@"send AMSerialReadInBackgroundDataMessage");
-#endif
-		[delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:[NSDictionary dictionaryWithObjectsAndKeys: self, @"serialPort", data, @"data", nil] waitUntilDone:NO];
-		free(localReadFDs);
-		[localAutoreleasePool drain];
-	} else {
-#ifdef AMSerialDebug
-		NSLog(@"read stopped: %@", [NSThread currentThread]);
-#endif
-	}
-
-	[closeLock unlock];
-	//NSLog(@"closeLock unlocked: %@", [NSThread currentThread]);
-	[readLock unlock];
-	//NSLog(@"readLock unlocked: %@", [NSThread currentThread]);
-	[countReadInBackgroundThreadsLock lock];
-	countReadInBackgroundThreads--;
-	[countReadInBackgroundThreadsLock unlock];
-	
-	free(localBuffer);
-}
-*/
 
 - (void)writeDataInBackgroundThread:(NSData *)data
 {
@@ -696,12 +637,12 @@ static int64_t AMMicrosecondsSinceBoot (void)
 #ifdef AMSerialDebug
 	NSLog(@"send AMSerialWriteInBackgroundProgressMessage");
 #endif
-	[(id)_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:
-		[NSDictionary dictionaryWithObjectsAndKeys:
-			self, @"serialPort",
-			[NSNumber numberWithUnsignedLongLong:progress], @"value",
-			[NSNumber numberWithUnsignedLongLong:dataLen], @"total", nil]
-		waitUntilDone:NO];
+	NSDictionary* tmp = [NSDictionary dictionaryWithObjectsAndKeys:
+						 self, @"serialPort",
+						 [NSNumber numberWithUnsignedLongLong:progress], @"value",
+						 [NSNumber numberWithUnsignedLongLong:dataLen], @"total",
+						 nil];
+	[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:tmp waitUntilDone:NO];
 }
 
 @end
