@@ -167,7 +167,7 @@
 	}
 
 	if([_port isOpen]) { // in case an error occurred while opening the port
-		[_port writeString:sendString usingEncoding:NSUTF8StringEncoding error:NULL];
+		[_port writeString:sendString usingEncoding:NSUTF8StringEncoding error:nil];
 	}
 }
 
