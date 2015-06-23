@@ -2,7 +2,7 @@
 //  AMSerialPortList.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
 //
 //  2002-09-09 Andreas Mayer
 //  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
@@ -26,9 +26,8 @@
 
 // For constants clients will want to pass to methods that want a 'serialTypeKey'
 #import <IOKit/serial/IOSerialKeys.h>
-// note: the constants are C strings, so use '@' or CFSTR to convert, for example:
+// note: the constants are C strings, so use '@' to convert, for example:
 // NSArray *ports = [[AMSerialPort sharedPortList] serialPortsOfType:@kIOSerialBSDModemType];
-// NSArray *ports = [[AMSerialPort sharedPortList] serialPortsOfType:(NSString*)CFSTR(kIOSerialBSDModemType)];
 
 @class AMSerialPort;
 
