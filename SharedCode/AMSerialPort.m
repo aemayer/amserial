@@ -47,9 +47,7 @@
 #import "AMSerialErrors.h"
 
 #import <IOKit/serial/IOSerialKeys.h>
-#if defined(MAC_OS_X_VERSION_10_4) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4)
-	#import <IOKit/serial/ioss.h>
-#endif
+#import <IOKit/serial/ioss.h>
 
 NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
@@ -587,7 +585,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 // ***NOTE***: This code does not seem to work.  It was taken from Apple's sample code:
 // <http://developer.apple.com/samplecode/SerialPortSample/listing2.html>
 // and that code does not work either.  select() times out regularly if this code path is taken.
-#if 0 && defined(MAC_OS_X_VERSION_10_4) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4)
+#if 0
 	// Starting with Tiger, the IOSSIOSPEED ioctl can be used to set arbitrary baud rates
 	// other than those specified by POSIX. The driver for the underlying serial hardware
 	// ultimately determines which baud rates can be used. This ioctl sets both the input
