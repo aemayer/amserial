@@ -2,7 +2,7 @@
 //  AppController.m
 //  AMSerialTest
 //
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
 //
 //	2009-09-09		Andreas Mayer
 //	- fixed memory leak in -serialPortReadData:
@@ -55,7 +55,7 @@
 	if (![deviceName isEqualToString:[_port bsdPath]]) {
 		[_port close];
 
-		AMSerialPort* newPort = [[AMSerialPort alloc] init:deviceName withName:deviceName type:(NSString*)CFSTR(kIOSerialBSDModemType)];
+		AMSerialPort* newPort = [[AMSerialPort alloc] init:deviceName withName:deviceName type:@kIOSerialBSDModemType];
 #if !__has_feature(objc_arc)
 		[newPort autorelease];
 #endif
