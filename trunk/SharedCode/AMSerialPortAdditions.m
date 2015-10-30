@@ -49,8 +49,8 @@
 #import "AMSerialPortAdditions.h"
 #import "AMSerialErrors.h"
 
-// Workaround for <rdar://14095332>.  The 10.10.3 SDK and older have a minor undefined behaviour where "1 << 31" may be performed.  It's actually undefined to left-shift a 1 into the sign bit.  So I just copy-pasted the macro and changed "1" to "1U".
-#if (MAC_OS_X_VERSION_MAX_ALLOWED <= 101003)
+// Workaround for <rdar://14095332>.  The 10.11 SDK and older have a minor undefined behaviour where "1 << 31" may be performed.  (It's actually undefined to left-shift a 1 into the sign bit.)  So I just copy-pasted the macro and changed "1" to "1U".  When/if this is fixed, it can be conditionalized to only older SDKs.
+#if 1 // (MAC_OS_X_VERSION_MAX_ALLOWED <= 101100)
 	#define	AM_FD_SET(n, p)	do { int __fd = (n); ((p)->fds_bits[(unsigned long)__fd/__DARWIN_NFDBITS] |= ((__int32_t)(1U<<((unsigned long)__fd % __DARWIN_NFDBITS)))); } while(0)
 #else
 	#define	AM_FD_SET(n, p) FD_SET(n, p)
