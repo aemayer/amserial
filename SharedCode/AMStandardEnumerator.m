@@ -17,6 +17,21 @@
 
 #import "AMStandardEnumerator.h"
 
+typedef NSUInteger (*AMCountMethod)(id, SEL);
+typedef __nullable id (*AMNextObjectMethod)(id, SEL, NSUInteger);
+
+// Private Interface
+@interface AMStandardEnumerator()
+{
+@private
+	id _collection;
+	SEL _countSelector;
+	SEL _nextObjectSelector;
+	AMCountMethod _count;
+	AMNextObjectMethod _nextObject;
+	NSUInteger _position;
+}
+@end
 
 @implementation AMStandardEnumerator
 
@@ -43,9 +58,9 @@
 		[_collection retain];
 #endif
 		_countSelector = theCountSelector;
-		_count = (CountMethod)[_collection methodForSelector:_countSelector];
+		_count = (AMCountMethod)[_collection methodForSelector:_countSelector];
 		_nextObjectSelector = theObjectSelector;
-		_nextObject = (NextObjectMethod)[_collection methodForSelector:_nextObjectSelector];
+		_nextObject = (AMNextObjectMethod)[_collection methodForSelector:_nextObjectSelector];
 		_position = 0;
 	}
 	return self;

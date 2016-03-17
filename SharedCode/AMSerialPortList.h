@@ -17,7 +17,7 @@
 //  - added notifications for when serial ports are added/removed
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
-//  2012-03-27
+//  2012-03-27 Sean McBride
 //  - use instancetype for singleton return value
 //	2016-03-17 Sean McBride
 //	- added nullability support
@@ -41,10 +41,6 @@ extern NSString * const AMSerialPortListAddedPorts;
 extern NSString * const AMSerialPortListRemovedPorts;
 
 @interface AMSerialPortList : NSObject
-{
-@private
-	NSMutableArray *_portList;
-}
 
 + (instancetype)sharedPortList;
 

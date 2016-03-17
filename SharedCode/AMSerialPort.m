@@ -53,6 +53,23 @@
 
 NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
+// Private Interface
+@interface AMSerialPort()
+{
+@private
+	NSString *_bsdPath;
+	NSString *_serviceName;
+	NSString *_serviceType;
+	struct termios * _options;
+	struct termios * _originalOptions;
+	NSMutableDictionary *_optionsDictionary;
+	NSFileHandle *_fileHandle;
+	BOOL _gotError;
+	int	_lastError;
+	id _owner;
+	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
+}
+@end
 
 @implementation AMSerialPort
 
@@ -72,7 +89,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	assert(name);
 	assert(type);
 	
-	if ((self = [super init])) {
+	self = [super init];
+	if (self) {
 		_bsdPath = [path copy];
 		_serviceName = [name copy];
 		_serviceType = [type copy];
@@ -110,6 +128,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	if (fileDescriptor != -1)
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
 #endif
+	assert (_fileDescriptor == -1);
 
 	free(_readfds); _readfds = NULL;
 	free(_buffer); _buffer = NULL;

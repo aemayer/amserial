@@ -31,7 +31,7 @@
 //	2011-10-19 Sean McBride
 //	- code review of ARC changes
 //  - greatly simplified the various singleton implementations
-//  2012-03-27
+//  2012-03-27 Sean McBride
 //  - use instancetype for singleton return value
 //	2016-03-17 Sean McBride
 //	- added nullability support
@@ -54,6 +54,15 @@ NSString *const AMSerialPortListDidAddPortsNotification = @"AMSerialPortListDidA
 NSString *const AMSerialPortListDidRemovePortsNotification = @"AMSerialPortListDidRemovePortsNotification";
 NSString *const AMSerialPortListAddedPorts = @"AMSerialPortListAddedPorts";
 NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
+
+
+// Private Interface
+@interface AMSerialPortList()
+{
+@private
+	NSMutableArray *_portList;
+}
+@end
 
 
 @implementation AMSerialPortList
@@ -295,7 +304,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 
 - (instancetype)init
 {
-	if ((self = [super init])) {
+	self = [super init];
+	if (self) {
 		_portList = [[NSMutableArray alloc] init];
 		
 		[self addAllSerialPortsToArray:_portList];
