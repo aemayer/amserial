@@ -68,12 +68,11 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 @implementation AMSerialPortList
 
 + (instancetype)sharedPortList {
-	static AMSerialPortList *sharedPortList = nil;
-	@synchronized([AMSerialPortList class]) {
-		if (!sharedPortList) {
-			sharedPortList = [[self alloc] init];
-		}
-	}
+	static id sharedPortList = nil;
+	
+	static dispatch_once_t predicate = 0;
+	dispatch_once(&predicate, ^{ sharedPortList = [[self alloc] init]; });
+	
 	return sharedPortList;
 }
 
