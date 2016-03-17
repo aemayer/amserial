@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //	- initialize buffer in readString
@@ -308,6 +308,8 @@
 
 - (void)writeDataInBackground:(NSData *)data
 {
+	assert(data);
+	
 #ifdef AMSerialDebug
 	NSLog(@"writeDataInBackground");
 #endif
@@ -419,6 +421,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 
 - (void)writeDataInBackgroundThread:(NSData *)data
 {
+	assert(data);
+	
 #if (MAC_OS_X_VERSION_MIN_REQUIRED >= 1060)
 	(void)pthread_setname_np ("de.harmless.AMSerialPort.writeDataInBackgroundThread");
 #endif

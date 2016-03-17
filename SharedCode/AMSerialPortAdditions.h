@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.h
 //
 //  Created by Andreas on Thu May 02 2002.
-//  Copyright (c) 2001-2009 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-10-04 Andreas Mayer
 //  - readDataInBackgroundWithTarget:selector: and writeDataInBackground: added
@@ -64,9 +64,10 @@
 
 - (NSString *)readBytes:(NSUInteger)bytes upToChar:(char)stopChar usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
 
-// write to the serial port; NO if an error occurred
+// write to the serial port. Returns NO if an error occurred or if data is nil or empty.
 - (BOOL)writeData:(NSData *)data error:(NSError **)error;
 
+// converts string to data of the given encoding, then invokes writeData:error:.
 - (BOOL)writeString:(NSString *)string usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
 
 - (BOOL)writeBytes:(const void *)bytes length:(NSUInteger)length error:(NSError **)error;

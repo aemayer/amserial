@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -66,6 +66,10 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	// path is a bsdPath
 	// name is an IOKit service name
 {
+	assert(path);
+	assert(name);
+	assert(type);
+	
 	if ((self = [super init])) {
 		_bsdPath = [path copy];
 		_serviceName = [name copy];
@@ -496,6 +500,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setOptions:(NSDictionary *)newOptions
 {
+	assert(newOptions);
+	
 	// AMSerialOptionServiceName HAS to match! You may NOT switch ports using this
 	// method.
 	NSString *temp;
@@ -932,6 +938,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)readTimeoutAsTimeval:(struct timeval*)timeout
 {
+	assert(timeout);
+	
 	NSTimeInterval timeoutInterval = [self readTimeout];
 	double numSecs = trunc(timeoutInterval);
 	double numUSecs = (timeoutInterval-numSecs)*1000000.0;

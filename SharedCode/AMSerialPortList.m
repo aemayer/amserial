@@ -2,7 +2,7 @@
 //  AMSerialPortList.m
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-09-09 Andreas Mayer
 //  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
@@ -76,11 +76,14 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	[enumerator autorelease];
 #endif
 	
+	assert(enumerator);
 	return enumerator;
 }
 
 + (NSEnumerator *)portEnumeratorForSerialPortsOfType:(NSString *)serialTypeKey
 {
+	assert(serialTypeKey);
+	
 	id ports = [[AMSerialPortList sharedPortList] serialPortsOfType:serialTypeKey];
 	NSEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:ports
 																  countSelector:@selector(count)
@@ -89,11 +92,14 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	[enumerator autorelease];
 #endif
 	
+	assert(enumerator);
 	return enumerator;
 }
 
 - (AMSerialPort *)portByPath:(NSString *)bsdPath
 {
+	assert(bsdPath);
+	
 	AMSerialPort *result = nil;
 	AMSerialPort *port;
 	NSEnumerator *enumerator;
@@ -110,6 +116,8 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 - (AMSerialPort *)getNextSerialPort:(io_iterator_t)serialPortIterator
 {
+	assert(serialPortIterator);
+	
 	AMSerialPort	*serialPort = nil;
 
 	io_object_t serialService = IOIteratorNext(serialPortIterator);
@@ -150,6 +158,8 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 - (void)portsWereAdded:(io_iterator_t)iterator
 {
+	assert(iterator);
+	
 	AMSerialPort *serialPort;
 	NSMutableArray *addedPorts = [NSMutableArray array];
 	
@@ -165,6 +175,8 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 - (void)portsWereRemoved:(io_iterator_t)iterator
 {
+	assert(iterator);
+	
 	AMSerialPort *serialPort;
 	NSMutableArray *removedPorts = [NSMutableArray array];
 	
@@ -184,13 +196,17 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 static void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterator)
 {
+	assert(iterator);
 	(void)refcon;
+	
 	[[AMSerialPortList sharedPortList] portsWereAdded:iterator];
 }
 
 static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator)
 {
+	assert(iterator);
 	(void)refcon;
+	
 	[[AMSerialPortList sharedPortList] portsWereRemoved:iterator];
 }
 
@@ -244,6 +260,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 
 - (void)addAllSerialPortsToArray:(NSMutableArray *)array
 {
+	assert(array);
+	
 	kern_return_t kernResult;
 	CFMutableDictionaryRef classesToMatch;
 	io_iterator_t serialPortIterator;
@@ -297,6 +315,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 
 - (AMSerialPort *)objectWithName:(NSString *)name
 {
+	assert(name);
+	
 	AMSerialPort *result = nil;
 	NSEnumerator *enumerator = [_portList objectEnumerator];
 	AMSerialPort *port;
@@ -320,6 +340,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 
 - (NSArray *)serialPortsOfType:(NSString *)serialTypeKey
 {
+	assert(serialTypeKey);
+	
 	NSMutableArray *result = [NSMutableArray array];
 	NSEnumerator *enumerator = [_portList objectEnumerator];
 	AMSerialPort *port;
