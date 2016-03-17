@@ -78,8 +78,8 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 + (NSEnumerator *)portEnumerator
 {
-	id ports = [AMSerialPortList sharedPortList];
-	NSEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:ports
+	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
+	NSEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:sharedPortList
 																  countSelector:@selector(count)
 														  objectAtIndexSelector:@selector(objectAtIndex:)];
 #if !__has_feature(objc_arc)
@@ -94,7 +94,8 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 {
 	assert(serialTypeKey);
 	
-	id ports = [[AMSerialPortList sharedPortList] serialPortsOfType:serialTypeKey];
+	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
+	NSArray * ports = [sharedPortList serialPortsOfType:serialTypeKey];
 	NSEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:ports
 																  countSelector:@selector(count)
 														  objectAtIndexSelector:@selector(objectAtIndex:)];
@@ -209,7 +210,8 @@ static void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterato
 	assert(iterator);
 	(void)refcon;
 	
-	[[AMSerialPortList sharedPortList] portsWereAdded:iterator];
+	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
+	[sharedPortList portsWereAdded:iterator];
 }
 
 static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator)
@@ -217,7 +219,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 	assert(iterator);
 	(void)refcon;
 	
-	[[AMSerialPortList sharedPortList] portsWereRemoved:iterator];
+	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
+	[sharedPortList portsWereRemoved:iterator];
 }
 
 - (void)registerForSerialPortChangeNotifications

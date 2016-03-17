@@ -2,7 +2,7 @@
 //  AppController.m
 //  AMSerialTest
 //
-//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //	2009-09-09		Andreas Mayer
 //	- fixed memory leak in -serialPortReadData:
@@ -22,9 +22,17 @@
 
 	// register for port add/remove notification
 	NSNotificationCenter* defaultCenter = [NSNotificationCenter defaultCenter];
-	[defaultCenter addObserver:self selector:@selector(didAddPorts:) name:AMSerialPortListDidAddPortsNotification object:nil];
-	[defaultCenter addObserver:self selector:@selector(didRemovePorts:) name:AMSerialPortListDidRemovePortsNotification object:nil];
-	[AMSerialPortList sharedPortList]; // initialize port list to arm notifications
+	[defaultCenter addObserver:self
+					  selector:@selector(didAddPorts:)
+						  name:AMSerialPortListDidAddPortsNotification
+						object:nil];
+	[defaultCenter addObserver:self
+					  selector:@selector(didRemovePorts:)
+						  name:AMSerialPortListDidRemovePortsNotification
+						object:nil];
+	
+	// initialize port list to arm notifications
+	(void)[AMSerialPortList sharedPortList];
 }
 
 
