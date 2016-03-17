@@ -13,19 +13,15 @@
 		E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B6E09402D03AB10100010A /* AppController.h */; };
 		E158FFED0C58DE2E00B8171B /* AMStandardEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */; };
 		E158FFEE0C58DE2E00B8171B /* AMSerialErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF910C58DDAB00B8171B /* AMSerialErrors.h */; };
-		E158FFEF0C58DE2E00B8171B /* AMSerialPort_Deprecated.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF920C58DDAB00B8171B /* AMSerialPort_Deprecated.h */; };
 		E158FFF00C58DE2E00B8171B /* AMSerialPort.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF940C58DDAB00B8171B /* AMSerialPort.h */; };
 		E158FFF10C58DE2E00B8171B /* AMSerialPortAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */; };
-		E158FFF20C58DE2E00B8171B /* AMSerialPortList_Deprecated.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */; };
 		E158FFF30C58DE2E00B8171B /* AMSerialPortList.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */; };
 		E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		E158FFF80C58DE2E00B8171B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		E158FFF90C58DE2E00B8171B /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6E09502D03AB10100010A /* AppController.m */; };
 		E158FFFA0C58DE2E00B8171B /* AMStandardEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */; };
-		E158FFFB0C58DE2E00B8171B /* AMSerialPort_Deprecated.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF930C58DDAB00B8171B /* AMSerialPort_Deprecated.m */; };
 		E158FFFC0C58DE2E00B8171B /* AMSerialPort.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF950C58DDAB00B8171B /* AMSerialPort.m */; };
 		E158FFFD0C58DE2E00B8171B /* AMSerialPortAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */; };
-		E158FFFE0C58DE2E00B8171B /* AMSerialPortList_Deprecated.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF990C58DDAB00B8171B /* AMSerialPortList_Deprecated.m */; };
 		E158FFFF0C58DE2E00B8171B /* AMSerialPortList.m in Sources */ = {isa = PBXBuildFile; fileRef = E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */; };
 		E1D8DC0D0CE0F11400306A0A /* AMSDKCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */; };
 /* End PBXBuildFile section */
@@ -42,14 +38,10 @@
 		E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-AMSerialTest.plist"; sourceTree = "<group>"; };
 		E15800080C58DE2F00B8171B /* AMSerialTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AMSerialTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E158FF910C58DDAB00B8171B /* AMSerialErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialErrors.h; path = ../SharedCode/AMSerialErrors.h; sourceTree = SOURCE_ROOT; };
-		E158FF920C58DDAB00B8171B /* AMSerialPort_Deprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPort_Deprecated.h; path = ../SharedCode/AMSerialPort_Deprecated.h; sourceTree = SOURCE_ROOT; };
-		E158FF930C58DDAB00B8171B /* AMSerialPort_Deprecated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPort_Deprecated.m; path = ../SharedCode/AMSerialPort_Deprecated.m; sourceTree = SOURCE_ROOT; };
 		E158FF940C58DDAB00B8171B /* AMSerialPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPort.h; path = ../SharedCode/AMSerialPort.h; sourceTree = SOURCE_ROOT; };
 		E158FF950C58DDAB00B8171B /* AMSerialPort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPort.m; path = ../SharedCode/AMSerialPort.m; sourceTree = SOURCE_ROOT; };
 		E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortAdditions.h; path = ../SharedCode/AMSerialPortAdditions.h; sourceTree = SOURCE_ROOT; };
 		E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortAdditions.m; path = ../SharedCode/AMSerialPortAdditions.m; sourceTree = SOURCE_ROOT; };
-		E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortList_Deprecated.h; path = ../SharedCode/AMSerialPortList_Deprecated.h; sourceTree = SOURCE_ROOT; };
-		E158FF990C58DDAB00B8171B /* AMSerialPortList_Deprecated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortList_Deprecated.m; path = ../SharedCode/AMSerialPortList_Deprecated.m; sourceTree = SOURCE_ROOT; };
 		E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortList.h; path = ../SharedCode/AMSerialPortList.h; sourceTree = SOURCE_ROOT; };
 		E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortList.m; path = ../SharedCode/AMSerialPortList.m; sourceTree = SOURCE_ROOT; };
 		E1CC710C106E6C2B00F7D688 /* BSD License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "BSD License.txt"; sourceTree = "<group>"; };
@@ -76,14 +68,10 @@
 			isa = PBXGroup;
 			children = (
 				E158FF910C58DDAB00B8171B /* AMSerialErrors.h */,
-				E158FF920C58DDAB00B8171B /* AMSerialPort_Deprecated.h */,
-				E158FF930C58DDAB00B8171B /* AMSerialPort_Deprecated.m */,
 				E158FF940C58DDAB00B8171B /* AMSerialPort.h */,
 				E158FF950C58DDAB00B8171B /* AMSerialPort.m */,
 				E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */,
 				E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */,
-				E158FF980C58DDAB00B8171B /* AMSerialPortList_Deprecated.h */,
-				E158FF990C58DDAB00B8171B /* AMSerialPortList_Deprecated.m */,
 				E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */,
 				E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */,
 				E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */,
@@ -171,10 +159,8 @@
 				E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */,
 				E158FFED0C58DE2E00B8171B /* AMStandardEnumerator.h in Headers */,
 				E158FFEE0C58DE2E00B8171B /* AMSerialErrors.h in Headers */,
-				E158FFEF0C58DE2E00B8171B /* AMSerialPort_Deprecated.h in Headers */,
 				E158FFF00C58DE2E00B8171B /* AMSerialPort.h in Headers */,
 				E158FFF10C58DE2E00B8171B /* AMSerialPortAdditions.h in Headers */,
-				E158FFF20C58DE2E00B8171B /* AMSerialPortList_Deprecated.h in Headers */,
 				E158FFF30C58DE2E00B8171B /* AMSerialPortList.h in Headers */,
 				E1D8DC0D0CE0F11400306A0A /* AMSDKCompatibility.h in Headers */,
 			);
@@ -247,10 +233,8 @@
 				E158FFF80C58DE2E00B8171B /* main.m in Sources */,
 				E158FFF90C58DE2E00B8171B /* AppController.m in Sources */,
 				E158FFFA0C58DE2E00B8171B /* AMStandardEnumerator.m in Sources */,
-				E158FFFB0C58DE2E00B8171B /* AMSerialPort_Deprecated.m in Sources */,
 				E158FFFC0C58DE2E00B8171B /* AMSerialPort.m in Sources */,
 				E158FFFD0C58DE2E00B8171B /* AMSerialPortAdditions.m in Sources */,
-				E158FFFE0C58DE2E00B8171B /* AMSerialPortList_Deprecated.m in Sources */,
 				E158FFFF0C58DE2E00B8171B /* AMSerialPortList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
