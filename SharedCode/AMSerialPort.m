@@ -38,6 +38,8 @@
 //  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
 //	2012-06-20 Sean McBride
 //	- fixed possible out of range exception and compiler warning
+//	2016-03-17 Sean McBride
+//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 
@@ -161,18 +163,20 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)isEqual:(id)otherObject
 {
+	assert(otherObject);
+	
 	if ([otherObject isKindOfClass:[AMSerialPort class]])
 		return [[self bsdPath] isEqualToString:[otherObject bsdPath]];
 	return NO;
 }
 
 
-- (id<AMSerialDelegate>)delegate
+- (nullable id<AMSerialDelegate>)delegate
 {
 	return _delegate;
 }
 
-- (void)setDelegate:(id<AMSerialDelegate>)newDelegate
+- (void)setDelegate:(nullable id<AMSerialDelegate>)newDelegate
 {
 	if (newDelegate != _delegate) {
 		// As per Cocoa conventions, delegates are not retained.
@@ -198,7 +202,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return _serviceType;
 }
 
-- (NSDictionary *)properties
+- (nullable NSDictionary *)properties
 {
 	NSDictionary *result = nil;
 	kern_return_t kernResult; 
@@ -248,7 +252,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return (_fileDescriptor >= 0);
 }
 
-- (AMSerialPort *)obtainBy:(id)sender
+- (nullable AMSerialPort *)obtainBy:(id)sender
 {
 	// get this port exclusively; nil if it's not free
 	if (_owner == nil) {
@@ -271,14 +275,14 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return (_owner == nil);
 }
 
-- (id)owner
+- (nullable id)owner
 {
 	// who obtained the port?
 	return _owner;
 }
 
 // Private
-- (NSFileHandle *)openWithFlags:(int)flags // use returned file handle to read and write
+- (nullable NSFileHandle *)openWithFlags:(int)flags // use returned file handle to read and write
 {
 	NSFileHandle *result = nil;
 	
@@ -331,13 +335,13 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 // TODO: Sean: why is O_NONBLOCK commented?  Do we want it or not?
 
 // use returned file handle to read and write
-- (NSFileHandle *)open
+- (nullable NSFileHandle *)open
 {
 	return [self openWithFlags:(O_RDWR | O_NOCTTY)]; // | O_NONBLOCK);
 }
 
 // use returned file handle to read and write
-- (NSFileHandle *)openExclusively
+- (nullable NSFileHandle *)openExclusively
 {
 	return [self openWithFlags:(O_RDWR | O_NOCTTY | O_EXLOCK | O_NONBLOCK)]; // | O_NONBLOCK);
 }

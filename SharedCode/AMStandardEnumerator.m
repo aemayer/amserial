@@ -10,6 +10,8 @@
 //	- added ARC compatibility
 //	2011-10-19 Sean McBride
 //	- code review of ARC changes
+//	2016-03-17 Sean McBride
+//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 
@@ -26,7 +28,9 @@
 }
 
 // Designated initializer
-- (instancetype)initWithCollection:(id)theCollection countSelector:(SEL)theCountSelector objectAtIndexSelector:(SEL)theObjectSelector
+- (instancetype)initWithCollection:(id)theCollection
+					 countSelector:(SEL)theCountSelector
+			 objectAtIndexSelector:(SEL)theObjectSelector
 {
 	assert(theCollection);
 	assert(theCountSelector);
@@ -59,7 +63,7 @@
 #endif
 #endif
 
-- (id)nextObject
+- (nullable id)nextObject
 {
 	if (_position >= _count(_collection, _countSelector))
 		return nil;
@@ -73,6 +77,8 @@
 	id object;
 	while ((object = [self nextObject]) != nil)
 		[result addObject:object];
+	
+	assert(result);
 	return result;
 }
 

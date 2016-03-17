@@ -29,3 +29,21 @@
 #ifndef NS_DESIGNATED_INITIALIZER
 	#define NS_DESIGNATED_INITIALIZER
 #endif
+
+// Newer compilers and the 10.11 SDK added nullability support, which we just stub to nothing for older cases.
+#if __has_feature(nullability)
+	#define _amnonnull __nonnull
+#else
+	#define _amnonnull
+	
+	#define __nullable
+	#define nullable
+#endif
+
+#ifndef NS_ASSUME_NONNULL_BEGIN
+	#define NS_ASSUME_NONNULL_BEGIN
+#endif
+
+#ifndef NS_ASSUME_NONNULL_END
+	#define NS_ASSUME_NONNULL_END
+#endif

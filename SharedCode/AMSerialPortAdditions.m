@@ -37,7 +37,8 @@
 //	- code review of ARC changes
 //	2012-03-12 Sean McBride
 //	- replaced deprecated UpTime function with mach_absolute_time
-
+//	2016-03-17 Sean McBride
+//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 
@@ -59,9 +60,9 @@
 @interface AMSerialPort (AMSerialPortAdditionsPrivate)
 - (void)readDataInBackgroundThread;
 - (void)writeDataInBackgroundThread:(NSData *)data;
-- (id)am_readTarget;
-- (void)am_setReadTarget:(id)newReadTarget;
-- (NSData *)readAndStopAfterBytes:(BOOL)stopAfterBytes bytes:(NSUInteger)bytes stopAtChar:(BOOL)stopAtChar stopChar:(char)stopChar error:(NSError **)error;
+- (nullable id)am_readTarget;
+- (void)am_setReadTarget:(nullable id)newReadTarget;
+- (nullable NSData *)readAndStopAfterBytes:(BOOL)stopAfterBytes bytes:(NSUInteger)bytes stopAtChar:(BOOL)stopAtChar stopChar:(char)stopChar error:(NSError **)error;
 - (void)reportProgress:(NSUInteger)progress dataLen:(NSUInteger)dataLen;
 @end
 
@@ -76,7 +77,7 @@
 
 - (void)doRead:(NSTimer *)timer
 {
-	(void)timer;
+	assert(timer); (void)timer;
 	
 #ifdef AMSerialDebug
 	NSLog(@"doRead");
@@ -116,28 +117,32 @@
 }
 
 // all blocking reads returns after [self readTimout] seconds elapse, at the latest
-- (NSData *)readAndReturnError:(NSError **)error
+- (nullable NSData *)readAndReturnError:(NSError **)error
 {
 	NSData *result = [self readAndStopAfterBytes:NO bytes:0 stopAtChar:NO stopChar:0 error:error];
 	return result;
 }
 
 // returns after 'bytes' bytes are read
-- (NSData *)readBytes:(NSUInteger)bytes error:(NSError **)error
+- (nullable NSData *)readBytes:(NSUInteger)bytes
+						 error:(NSError **)error
 {
 	NSData *result = [self readAndStopAfterBytes:YES bytes:bytes stopAtChar:NO stopChar:0 error:error];
 	return result;
 }
 
 // returns when 'stopChar' is encountered
-- (NSData *)readUpToChar:(char)stopChar error:(NSError **)error
+- (nullable NSData *)readUpToChar:(char)stopChar
+							error:(NSError **)error
 {
 	NSData *result = [self readAndStopAfterBytes:NO bytes:0 stopAtChar:YES stopChar:stopChar error:error];
 	return result;
 }
 
 // returns after 'bytes' bytes are read or if 'stopChar' is encountered, whatever comes first
-- (NSData *)readBytes:(NSUInteger)bytes upToChar:(char)stopChar error:(NSError **)error
+- (nullable NSData *)readBytes:(NSUInteger)bytes
+					  upToChar:(char)stopChar
+						 error:(NSError **)error
 {
 	NSData *result = [self readAndStopAfterBytes:YES bytes:bytes stopAtChar:YES stopChar:stopChar error:error];
 	return result;
@@ -145,7 +150,8 @@
 
 // data read will be converted into an NSString, using the given encoding
 // NOTE: encodings that take up more than one byte per character may fail if only a part of the final string was received
-- (NSString *)readStringUsingEncoding:(NSStringEncoding)encoding error:(NSError **)error
+- (nullable NSString *)readStringUsingEncoding:(NSStringEncoding)encoding
+										 error:(NSError **)error
 {
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:NO bytes:0 stopAtChar:NO stopChar:0 error:error];
@@ -158,7 +164,9 @@
 	return result;
 }
 
-- (NSString *)readBytes:(NSUInteger)bytes usingEncoding:(NSStringEncoding)encoding error:(NSError **)error
+- (nullable NSString *)readBytes:(NSUInteger)bytes
+				   usingEncoding:(NSStringEncoding)encoding
+						   error:(NSError **)error
 {
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:YES bytes:bytes stopAtChar:NO stopChar:0 error:error];
@@ -172,7 +180,9 @@
 }
 
 // NOTE: 'stopChar' has to be a byte value, using the given encoding; you can not wait for an arbitrary character from a multi-byte encoding
-- (NSString *)readUpToChar:(char)stopChar usingEncoding:(NSStringEncoding)encoding error:(NSError **)error
+- (nullable NSString *)readUpToChar:(char)stopChar
+					  usingEncoding:(NSStringEncoding)encoding
+							  error:(NSError **)error
 {
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:NO bytes:0 stopAtChar:YES stopChar:stopChar error:error];
@@ -185,7 +195,10 @@
 	return result;
 }
 
-- (NSString *)readBytes:(NSUInteger)bytes upToChar:(char)stopChar usingEncoding:(NSStringEncoding)encoding error:(NSError **)error
+- (nullable NSString *)readBytes:(NSUInteger)bytes
+						upToChar:(char)stopChar
+				   usingEncoding:(NSStringEncoding)encoding
+						   error:(NSError **)error
 {
 	NSString *result = nil;
 	NSData *data = [self readAndStopAfterBytes:YES bytes:bytes stopAtChar:YES stopChar:stopChar error:error];
@@ -200,7 +213,8 @@
 
 
 // write to the serial port; NO if an error occurred
-- (BOOL)writeData:(NSData *)data error:(NSError **)error
+- (BOOL)writeData:(nullable NSData *)data
+			error:(NSError **)error
 {
 #ifdef AMSerialDebug
 	NSLog(@"•wrote: %@ • %@", data, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
@@ -241,13 +255,17 @@
 	return result;
 }
 
-- (BOOL)writeString:(NSString *)string usingEncoding:(NSStringEncoding)encoding error:(NSError **)error
+- (BOOL)writeString:(nullable NSString *)string
+	  usingEncoding:(NSStringEncoding)encoding
+			  error:(NSError **)error
 {
 	NSData *data = [string dataUsingEncoding:encoding];
 	return [self writeData:data error:error];
 }
 
-- (BOOL)writeBytes:(const void *)bytes length:(NSUInteger)length error:(NSError **)error
+- (BOOL)writeBytes:(nullable const void *)bytes
+			length:(NSUInteger)length
+			 error:(NSError **)error
 {
 	NSData *data = [NSData dataWithBytes:bytes length:length];
 	return [self writeData:data error:error];
@@ -277,7 +295,11 @@
 #endif
 	[self am_setReadTarget:target];
 	_am_readSelector = selector;
-	[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(doRead:) userInfo:self repeats:NO];
+	[NSTimer scheduledTimerWithTimeInterval:0.1
+									 target:self
+								   selector:@selector(doRead:)
+								   userInfo:self
+									repeats:NO];
 }
 
 // ============================================================
@@ -292,7 +314,9 @@
 #endif
 	if (_delegateHandlesReadInBackground) {
 		_countReadInBackgroundThreads++;
-		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread) toTarget:self withObject:nil];
+		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread)
+								 toTarget:self
+							   withObject:nil];
 	} else {
 		// ... throw exception?
 	}
@@ -315,7 +339,9 @@
 #endif
 	if (_delegateHandlesWriteInBackground) {
 		_countWriteInBackgroundThreads++;
-		[NSThread detachNewThreadSelector:@selector(writeDataInBackgroundThread:) toTarget:self withObject:data];
+		[NSThread detachNewThreadSelector:@selector(writeDataInBackgroundThread:)
+								 toTarget:self
+							   withObject:data];
 	} else {
 		// ... throw exception?
 	}
@@ -402,7 +428,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 							 self, @"serialPort",
 							 data, @"data",
 							 nil];
-		[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortReadData:) withObject:tmp waitUntilDone:NO];
+		[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortReadData:)
+											   withObject:tmp
+											waitUntilDone:NO];
 	} else {
 		[_closeLock unlock];
 	}
@@ -496,12 +524,12 @@ static int64_t AMMicrosecondsSinceBoot (void)
 #endif
 }
 
-- (id)am_readTarget
+- (nullable id)am_readTarget
 {
 	return _am_readTarget; 
 }
 
-- (void)am_setReadTarget:(id)newReadTarget
+- (void)am_setReadTarget:(nullable id)newReadTarget
 {
 	if (_am_readTarget != newReadTarget) {
 #if !__has_feature(objc_arc)
@@ -521,7 +549,11 @@ static int64_t AMMicrosecondsSinceBoot (void)
 //
 // Upon return: as long as some data was actually read, and no serious error occurred, an autoreleased NSData
 // object with that data is created and returned, otherwise nil is.
-- (NSData *)readAndStopAfterBytes:(BOOL)stopAfterBytes bytes:(NSUInteger)bytesToRead stopAtChar:(BOOL)stopAtChar stopChar:(char)stopChar error:(NSError **)error
+- (nullable NSData *)readAndStopAfterBytes:(BOOL)stopAfterBytes
+									 bytes:(NSUInteger)bytesToRead
+								stopAtChar:(BOOL)stopAtChar
+								  stopChar:(char)stopChar
+									 error:(NSError **)error
 {
 	NSData *result = nil;
 	
@@ -646,7 +678,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 						 [NSNumber numberWithUnsignedLongLong:progress], @"value",
 						 [NSNumber numberWithUnsignedLongLong:dataLen], @"total",
 						 nil];
-	[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:) withObject:tmp waitUntilDone:NO];
+	[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:)
+										   withObject:tmp
+										waitUntilDone:NO];
 }
 
 @end

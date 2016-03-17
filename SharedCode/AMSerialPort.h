@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas on 2002-04-24.
-//  Copyright (c) 2001-2015 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -34,6 +34,8 @@
 //	2011-10-19 Sean McBride
 //	- code review of ARC changes
 //  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
+//	2016-03-17 Sean McBride
+//	- added nullability support
 
 
 #import "AMSDKCompatibility.h"
@@ -41,6 +43,8 @@
 #import <termios.h>
 
 #import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 #define	AMSerialOptionServiceName @"AMSerialOptionServiceName"
 #define	AMSerialOptionSpeed @"AMSerialOptionSpeed"
@@ -133,14 +137,14 @@ extern NSString *const AMSerialErrorDomain;
 - (NSString *)type;
 // IOKit service type (e.g. kIOSerialBSDRS232Type)
 
-- (NSDictionary *)properties;
+- (nullable NSDictionary *)properties;
 // IORegistry entry properties - see IORegistryEntryCreateCFProperties()
 
 
 - (BOOL)isOpen;
 // YES if port is open
 
-- (AMSerialPort *)obtainBy:(id)sender;
+- (nullable AMSerialPort *)obtainBy:(id)sender;
 // get this port exclusively; nil if it's not free
 
 - (void)free;
@@ -149,16 +153,16 @@ extern NSString *const AMSerialErrorDomain;
 - (BOOL)available;
 // check if port is free and can be obtained
 
-- (id)owner;
+- (nullable id)owner;
 // who obtained the port?
 
 
-- (NSFileHandle *)open;
+- (nullable NSFileHandle *)open;
 // opens port for read and write operations, allow shared access of port
 // to actually read or write data use the methods provided by NSFileHandle
 // (alternatively you may use those from AMSerialPortAdditions)
 
-- (NSFileHandle *)openExclusively;
+- (nullable NSFileHandle *)openExclusively;
 // opens port for read and write operations, insist on exclusive access to port
 // to actually read or write data use the methods provided by NSFileHandle
 // (alternatively you may use those from AMSerialPortAdditions)
@@ -254,7 +258,7 @@ extern NSString *const AMSerialErrorDomain;
 - (int)errorCode;				// if -commitChanges returns NO, look here for further info
 
 // the delegate (for background reading/writing)
-@property(readwrite, assign) id<AMSerialDelegate> delegate;
+@property(readwrite, assign, nullable) id<AMSerialDelegate> delegate;
 
 // time out for blocking reads in seconds
 @property(readwrite, atomic) NSTimeInterval readTimeout;
@@ -263,3 +267,5 @@ extern NSString *const AMSerialErrorDomain;
 
 
 @end
+
+NS_ASSUME_NONNULL_END

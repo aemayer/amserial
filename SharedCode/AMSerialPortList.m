@@ -33,6 +33,8 @@
 //  - greatly simplified the various singleton implementations
 //  2012-03-27
 //  - use instancetype for singleton return value
+//	2016-03-17 Sean McBride
+//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 
@@ -96,7 +98,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	return enumerator;
 }
 
-- (AMSerialPort *)portByPath:(NSString *)bsdPath
+- (nullable AMSerialPort *)portByPath:(NSString *)bsdPath
 {
 	assert(bsdPath);
 	
@@ -114,7 +116,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	return result;
 }
 
-- (AMSerialPort *)getNextSerialPort:(io_iterator_t)serialPortIterator
+- (nullable AMSerialPort *)getNextSerialPort:(io_iterator_t)serialPortIterator
 {
 	assert(serialPortIterator);
 	
@@ -313,7 +315,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 	return [_portList objectAtIndex:idx];
 }
 
-- (AMSerialPort *)objectWithName:(NSString *)name
+- (nullable AMSerialPort *)objectWithName:(NSString *)name
 {
 	assert(name);
 	
@@ -335,6 +337,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 #if !__has_feature(objc_arc)
 	[ports autorelease];
 #endif
+
+	assert(ports);
 	return ports;
 }
 
@@ -350,6 +354,8 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 			[result addObject:port];
 		}
 	}
+
+	assert(result);
 	return result;
 }
 

@@ -25,12 +25,15 @@
 //  - made code 64 bit and garbage collection clean
 //  2009-05-08 Sean McBride
 //  - added writeBytes:length:error: method
+//	2016-03-17 Sean McBride
+//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 
 #import <Foundation/Foundation.h>
 #import "AMSerialPort.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface AMSerialPort (AMSerialPortAdditions)
 
@@ -42,35 +45,52 @@
 
 
 // all blocking reads returns after [self readTimout] seconds elapse, at the latest
-- (NSData *)readAndReturnError:(NSError **)error;
+- (nullable NSData *)readAndReturnError:(NSError **)error;
 
 // returns after 'bytes' bytes are read
-- (NSData *)readBytes:(NSUInteger)bytes error:(NSError **)error;
+- (nullable NSData *)readBytes:(NSUInteger)bytes
+						 error:(NSError **)error;
 
 // returns when 'stopChar' is encountered
-- (NSData *)readUpToChar:(char)stopChar error:(NSError **)error;
+- (nullable NSData *)readUpToChar:(char)stopChar
+							error:(NSError **)error;
 
 // returns after 'bytes' bytes are read or if 'stopChar' is encountered, whatever comes first
-- (NSData *)readBytes:(NSUInteger)bytes upToChar:(char)stopChar error:(NSError **)error;
+- (nullable NSData *)readBytes:(NSUInteger)bytes
+					  upToChar:(char)stopChar
+						 error:(NSError **)error;
 
 // data read will be converted into an NSString, using the given encoding
 // NOTE: encodings that take up more than one byte per character may fail if only a part of the final string was received
-- (NSString *)readStringUsingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
+- (nullable NSString *)readStringUsingEncoding:(NSStringEncoding)encoding
+										 error:(NSError **)error;
 
-- (NSString *)readBytes:(NSUInteger)bytes usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
+- (nullable NSString *)readBytes:(NSUInteger)bytes
+				   usingEncoding:(NSStringEncoding)encoding
+						   error:(NSError **)error;
 
 // NOTE: 'stopChar' has to be a byte value, using the given encoding; you can not wait for an arbitrary character from a multi-byte encoding
-- (NSString *)readUpToChar:(char)stopChar usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
+- (nullable NSString *)readUpToChar:(char)stopChar
+					  usingEncoding:(NSStringEncoding)encoding
+							  error:(NSError **)error;
 
-- (NSString *)readBytes:(NSUInteger)bytes upToChar:(char)stopChar usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
+- (nullable NSString *)readBytes:(NSUInteger)bytes
+						upToChar:(char)stopChar
+				   usingEncoding:(NSStringEncoding)encoding
+						   error:(NSError **)error;
 
 // write to the serial port. Returns NO if an error occurred or if data is nil or empty.
-- (BOOL)writeData:(NSData *)data error:(NSError **)error;
+- (BOOL)writeData:(nullable NSData *)data
+			error:(NSError **)error;
 
 // converts string to data of the given encoding, then invokes writeData:error:.
-- (BOOL)writeString:(NSString *)string usingEncoding:(NSStringEncoding)encoding error:(NSError **)error;
+- (BOOL)writeString:(nullable NSString *)string
+	  usingEncoding:(NSStringEncoding)encoding
+			  error:(NSError **)error;
 
-- (BOOL)writeBytes:(const void *)bytes length:(NSUInteger)length error:(NSError **)error;
+- (BOOL)writeBytes:(nullable const void *)bytes
+			length:(NSUInteger)length
+			 error:(NSError **)error;
 
 
 - (void)readDataInBackground;
@@ -95,5 +115,6 @@
 
 - (int)numberOfWriteInBackgroundThreads;
 
-
 @end
+
+NS_ASSUME_NONNULL_END
