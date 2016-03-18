@@ -125,8 +125,9 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)dealloc
 {
 #ifdef AMSerialDebug
-	if (fileDescriptor != -1)
+	if (fileDescriptor != -1) {
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
+	}
 #endif
 	assert (_fileDescriptor == -1);
 
@@ -154,8 +155,9 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)finalize
 {
 #ifdef AMSerialDebug
-	if (fileDescriptor != -1)
+	if (fileDescriptor != -1) {
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
+	}
 #endif
 	assert (_fileDescriptor == -1);
 
@@ -184,8 +186,9 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 {
 	assert(otherObject);
 	
-	if ([otherObject isKindOfClass:[AMSerialPort class]])
+	if ([otherObject isKindOfClass:[AMSerialPort class]]) {
 		return [[self bsdPath] isEqualToString:[otherObject bsdPath]];
+	}
 	return NO;
 }
 
@@ -275,10 +278,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 {
 	// get this port exclusively; nil if it's not free
 	if (_owner == nil) {
+		// Don't retain, like delegates.
 		_owner = sender;
 		return self;
-	} else
+	} else {
 		return nil;
+	}
 }
 
 - (void)free
@@ -416,12 +421,15 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (BOOL)flushInput:(BOOL)fIn output:(BOOL)fOut	// (fIn or fOut) must be YES
 {
 	int mode = 0;
-	if (fIn)
+	if (fIn) {
 		mode = TCIFLUSH;
-	if (fOut)
+	}
+	if (fOut) {
 		mode = TCOFLUSH;
-	if (fIn && fOut)
+	}
+	if (fIn && fOut) {
 		mode = TCIOFLUSH;
+	}
 	
 	BOOL result = (tcflush(_fileDescriptor, mode) != -1);
 	return result;
@@ -471,40 +479,54 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	
 	[_optionsDictionary setObject:[NSString stringWithFormat:@"%d", [self stopBits]] forKey:AMSerialOptionStopBits];
 	[_optionsDictionary setObject:@"None" forKey:AMSerialOptionInputFlowControl];
-	if ([self RTSInputFlowControl])
+	if ([self RTSInputFlowControl]) {
 		[_optionsDictionary setObject:@"RTS" forKey:AMSerialOptionInputFlowControl];
-	if ([self DTRInputFlowControl])
+	}
+	if ([self DTRInputFlowControl]) {
 		[_optionsDictionary setObject:@"DTR" forKey:AMSerialOptionInputFlowControl];
+	}
 	
 	[_optionsDictionary setObject:@"None" forKey:AMSerialOptionOutputFlowControl];
-	if ([self CTSOutputFlowControl])
+	if ([self CTSOutputFlowControl]) {
 		[_optionsDictionary setObject:@"CTS" forKey:AMSerialOptionOutputFlowControl];
-	if ([self DSROutputFlowControl])
+	}
+	if ([self DSROutputFlowControl]) {
 		[_optionsDictionary setObject:@"DSR" forKey:AMSerialOptionOutputFlowControl];
-	if ([self CAROutputFlowControl])
+	}
+	if ([self CAROutputFlowControl]) {
 		[_optionsDictionary setObject:@"CAR" forKey:AMSerialOptionOutputFlowControl];
+	}
 	
-	if ([self softwareFlowControl])
+	if ([self softwareFlowControl]) {
 		[_optionsDictionary setObject:@"YES" forKey:AMSerialOptionSoftwareFlowControl];
+	}
 	
-	if ([self signalsEnabled])
+	if ([self signalsEnabled]) {
 		[_optionsDictionary setObject:@"YES" forKey:AMSerialOptionSignals];
+	}
 	
-	if ([self canonicalMode])
+	if ([self canonicalMode]) {
 		[_optionsDictionary setObject:@"YES" forKey:AMSerialOptionCanonicalMode];
+	}
 	
-	if ([self echoEnabled])
+	if ([self echoEnabled]) {
 		[_optionsDictionary setObject:@"YES" forKey:AMSerialOptionEcho];
+	}
 	
-	if ([self echoEraseEnabled])
+	if ([self echoEraseEnabled]) {
 		[_optionsDictionary setObject:@"YES" forKey:AMSerialOptionEchoErase];
+	}
 	
-	if ([self softwareFlowControl])
+	if ([self softwareFlowControl]) {
 		[_optionsDictionary setObject:@"YES" forKey:AMSerialOptionSoftwareFlowControl];
+	}
 
-	[_optionsDictionary setObject:[NSString stringWithFormat:@"%c", [self endOfLineCharacter]] forKey:AMSerialOptionEndOfLineCharacter];
-	[_optionsDictionary setObject:[NSString stringWithFormat:@"%c", [self startCharacter]] forKey:AMSerialOptionStartCharacter];
-	[_optionsDictionary setObject:[NSString stringWithFormat:@"%c", [self stopCharacter]] forKey:AMSerialOptionStopCharacter];
+	[_optionsDictionary setObject:[NSString stringWithFormat:@"%c", [self endOfLineCharacter]]
+						   forKey:AMSerialOptionEndOfLineCharacter];
+	[_optionsDictionary setObject:[NSString stringWithFormat:@"%c", [self startCharacter]]
+						   forKey:AMSerialOptionStartCharacter];
+	[_optionsDictionary setObject:[NSString stringWithFormat:@"%c", [self stopCharacter]]
+						   forKey:AMSerialOptionStopCharacter];
 }
 
 
@@ -540,12 +562,15 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		[self setDataBits:[temp intValue]];
 		
 		temp = (NSString *)[_optionsDictionary objectForKey:AMSerialOptionParity];
-		if (temp == nil || [temp isEqualToString:@"None"])
+		if (temp == nil || [temp isEqualToString:@"None"]) {
 			[self setParity:kAMSerialParityNone];
-		else if ([temp isEqualToString:@"Odd"])
+		}
+		else if ([temp isEqualToString:@"Odd"]) {
 			[self setParity:kAMSerialParityOdd];
-		else
+		}
+		else {
 			[self setParity:kAMSerialParityEven];
+		}
 		
 		temp = (NSString *)[_optionsDictionary objectForKey:AMSerialOptionStopBits];
 		int numStopBits = [temp intValue];
@@ -702,18 +727,22 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (AMSerialStopBits)stopBits
 {
-	if (_options->c_cflag & CSTOPB)
+	if (_options->c_cflag & CSTOPB) {
 		return kAMSerialStopBitsTwo;
-	else
+	}
+	else {
 		return kAMSerialStopBitsOne;
+	}
 }
 
 - (void)setStopBits:(AMSerialStopBits)numBits
 {
-	if (numBits == kAMSerialStopBitsOne)
+	if (numBits == kAMSerialStopBitsOne) {
 		_options->c_cflag &= ~CSTOPB;
-	else if (numBits == kAMSerialStopBitsTwo)
+	}
+	else if (numBits == kAMSerialStopBitsTwo) {
 		_options->c_cflag |= CSTOPB;
+	}
 }
 
 
@@ -724,10 +753,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setRTSInputFlowControl:(BOOL)rts
 {
-	if (rts)
+	if (rts) {
 		_options->c_cflag |= CRTS_IFLOW;
-	else
+	}
+	else {
 		_options->c_cflag &= ~CRTS_IFLOW;
+	}
 }
 
 
@@ -738,10 +769,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setDTRInputFlowControl:(BOOL)dtr
 {
-	if (dtr)
+	if (dtr) {
 		_options->c_cflag |= CDTR_IFLOW;
-	else
+	}
+	else {
 		_options->c_cflag &= ~CDTR_IFLOW;
+	}
 }
 
 
@@ -752,10 +785,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setCTSOutputFlowControl:(BOOL)cts
 {
-	if (cts)
+	if (cts) {
 		_options->c_cflag |= CCTS_OFLOW;
-	else
+	}
+	else {
 		_options->c_cflag &= ~CCTS_OFLOW;
+	}
 }
 
 
@@ -780,10 +815,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setCAROutputFlowControl:(BOOL)car
 {
-	if (car)
+	if (car) {
 		_options->c_cflag |= CCAR_OFLOW;
-	else
+	}
+	else {
 		_options->c_cflag &= ~CCAR_OFLOW;
+	}
 }
 
 
@@ -794,10 +831,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setHangupOnClose:(BOOL)hangup
 {
-	if (hangup)
+	if (hangup) {
 		_options->c_cflag |= HUPCL;
-	else
+	}
+	else {
 		_options->c_cflag &= ~HUPCL;
+	}
 }
 
 - (BOOL)localMode
@@ -808,10 +847,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)setLocalMode:(BOOL)local
 {
 	// YES = ignore modem status lines
-	if (local)
+	if (local) {
 		_options->c_cflag |= CLOCAL;
-	else
+	}
+	else {
 		_options->c_cflag &= ~CLOCAL;
+	}
 }
 
 - (BOOL)signalsEnabled
@@ -821,10 +862,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setSignalsEnabled:(BOOL)signals
 {
-	if (signals)
+	if (signals) {
 		_options->c_lflag |= ISIG;
-	else
+	}
+	else {
 		_options->c_lflag &= ~ISIG;
+	}
 }
 
 - (BOOL)canonicalMode
@@ -834,10 +877,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setCanonicalMode:(BOOL)flag
 {
-	if (flag)
+	if (flag) {
 		_options->c_lflag |= ICANON;
-	else
+	}
+	else {
 		_options->c_lflag &= ~ICANON;
+	}
 }
 
 - (BOOL)echoEnabled
@@ -860,10 +905,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setEchoEraseEnabled:(BOOL)echoE
 {
-	if (echoE)
+	if (echoE) {
 		_options->c_lflag |= ECHOE;
-	else
+	}
+	else {
 		_options->c_lflag &= ~ECHOE;
+	}
 }
 
 - (char)endOfLineCharacter
@@ -937,8 +984,9 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (BOOL)commitChanges
 {
 	// call this after using any of the setters above
-	if (_gotError)
+	if (_gotError) {
 		return NO;
+	}
 	
 	if (tcsetattr(_fileDescriptor, TCSANOW, _options) == -1) {
 		// something went wrong
@@ -969,6 +1017,5 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	timeout->tv_sec = (time_t)lrint(numSecs);
 	timeout->tv_usec = (suseconds_t)lrint(numUSecs);
 }
-
 
 @end

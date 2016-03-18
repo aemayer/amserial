@@ -80,8 +80,9 @@ typedef __nullable id (*AMNextObjectMethod)(id, SEL, NSUInteger);
 
 - (nullable id)nextObject
 {
-	if (_position >= _count(_collection, _countSelector))
+	if (_position >= _count(_collection, _countSelector)) {
 		return nil;
+	}
 
 	return (_nextObject(_collection, _nextObjectSelector, _position++));
 }
@@ -90,8 +91,9 @@ typedef __nullable id (*AMNextObjectMethod)(id, SEL, NSUInteger);
 {
 	NSMutableArray *result = [NSMutableArray array];
 	id object;
-	while ((object = [self nextObject]) != nil)
+	while ((object = [self nextObject]) != nil) {
 		[result addObject:object];
+	}
 	
 	assert(result);
 	return result;

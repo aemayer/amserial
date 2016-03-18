@@ -83,11 +83,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)writeData:(nullable NSData *)data
 			error:(NSError **)error;
 
-// converts string to data of the given encoding, then invokes writeData:error:.
+// converts string to data of the given encoding (giving nil on failure), then invokes writeData:error:.
 - (BOOL)writeString:(nullable NSString *)string
 	  usingEncoding:(NSStringEncoding)encoding
 			  error:(NSError **)error;
 
+// wraps the given buffer as NSData, then invokes writeData:error:.
 - (BOOL)writeBytes:(nullable const void *)bytes
 			length:(NSUInteger)length
 			 error:(NSError **)error;

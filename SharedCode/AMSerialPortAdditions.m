@@ -108,7 +108,11 @@
 #endif
 			[self am_setReadTarget:nil];
 		} else {
-			[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(doRead:) userInfo:self repeats:NO];
+			[NSTimer scheduledTimerWithTimeInterval:0.1
+											 target:self
+										   selector:@selector(doRead:)
+										   userInfo:self
+											repeats:NO];
 		}
 	} else {
 		// file already closed

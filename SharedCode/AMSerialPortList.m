@@ -78,10 +78,10 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 + (NSEnumerator *)portEnumerator
 {
-	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
-	NSEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:sharedPortList
-																  countSelector:@selector(count)
-														  objectAtIndexSelector:@selector(objectAtIndex:)];
+	AMSerialPortList *sharedPortList = [AMSerialPortList sharedPortList];
+	AMStandardEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:sharedPortList
+																		  countSelector:@selector(count)
+																  objectAtIndexSelector:@selector(objectAtIndex:)];
 #if !__has_feature(objc_arc)
 	[enumerator autorelease];
 #endif
@@ -94,11 +94,11 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 {
 	assert(serialTypeKey);
 	
-	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
-	NSArray * ports = [sharedPortList serialPortsOfType:serialTypeKey];
-	NSEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:ports
-																  countSelector:@selector(count)
-														  objectAtIndexSelector:@selector(objectAtIndex:)];
+	AMSerialPortList *sharedPortList = [AMSerialPortList sharedPortList];
+	NSArray *ports = [sharedPortList serialPortsOfType:serialTypeKey];
+	AMStandardEnumerator *enumerator = [[AMStandardEnumerator alloc] initWithCollection:ports
+																		  countSelector:@selector(count)
+																  objectAtIndexSelector:@selector(objectAtIndex:)];
 #if !__has_feature(objc_arc)
 	[enumerator autorelease];
 #endif
@@ -180,8 +180,11 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	}
 	
 	NSNotificationCenter* notifCenter = [NSNotificationCenter defaultCenter];
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:addedPorts forKey:AMSerialPortListAddedPorts];
-	[notifCenter postNotificationName:AMSerialPortListDidAddPortsNotification object:self userInfo:userInfo];
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:addedPorts
+														 forKey:AMSerialPortListAddedPorts];
+	[notifCenter postNotificationName:AMSerialPortListDidAddPortsNotification
+							   object:self
+							 userInfo:userInfo];
 }
 
 - (void)portsWereRemoved:(io_iterator_t)iterator
@@ -193,7 +196,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	
 	while ((serialPort = [self getNextSerialPort:iterator]) != nil) {
 		// Since the port was removed, one should obviously not attempt to use it anymore -- so 'close' it.
-		// -close does nothing if the port was never opened.
+		// -close does nothing if the port was never opened or already closed.
 		[serialPort close];
 		
 		[removedPorts addObject:serialPort];
@@ -201,8 +204,11 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	}
 
 	NSNotificationCenter* notifCenter = [NSNotificationCenter defaultCenter];
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:removedPorts forKey:AMSerialPortListRemovedPorts];
-	[notifCenter postNotificationName:AMSerialPortListDidRemovePortsNotification object:self userInfo:userInfo];
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:removedPorts
+														 forKey:AMSerialPortListRemovedPorts];
+	[notifCenter postNotificationName:AMSerialPortListDidRemovePortsNotification
+							   object:self
+							 userInfo:userInfo];
 }
 
 static void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterator)
