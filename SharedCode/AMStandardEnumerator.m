@@ -12,6 +12,8 @@
 //  - code review of ARC changes
 //  2016-03-17 Sean McBride
 //  - added nullability support
+//  2016-03-18 Sean McBride
+//  - this class is now deprecated, use fast enumeration on AMSerialPortList itself instead
 
 #import "AMSDKCompatibility.h"
 

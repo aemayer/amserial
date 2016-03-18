@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Designated initializer
 - (instancetype)initWithCollection:(id)theCollection
 					 countSelector:(SEL)theCountSelector
-			 objectAtIndexSelector:(SEL)theObjectSelector NS_DESIGNATED_INITIALIZER;
+			 objectAtIndexSelector:(SEL)theObjectSelector NS_DESIGNATED_INITIALIZER DEPRECATED_ATTRIBUTE;
 
 @end
 

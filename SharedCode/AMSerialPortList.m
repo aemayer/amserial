@@ -40,6 +40,8 @@
 //  - use instancetype for singleton return value
 //  2016-03-17 Sean McBride
 //  - added nullability support
+//  2016-03-18 Sean McBride
+//  - added NSFastEnumeration and deprecated NSEnumerator-based APIs
 
 #import "AMSDKCompatibility.h"
 
@@ -117,11 +119,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 	assert(bsdPath);
 	
 	AMSerialPort *result = nil;
-	AMSerialPort *port;
-	NSEnumerator *enumerator;
-	
-	enumerator = [_portList objectEnumerator];
-	while ((port = [enumerator nextObject]) != nil) {
+	for (AMSerialPort *port in _portList) {
 		if ([[port bsdPath] isEqualToString:bsdPath]) {
 			result = port;
 			break;
@@ -216,7 +214,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 							 userInfo:userInfo];
 }
 
-static void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterator)
+static void AMSerialPortWasAddedCallback(void *refcon, io_iterator_t iterator)
 {
 	assert(iterator);
 	(void)refcon;
@@ -225,7 +223,7 @@ static void AMSerialPortWasAddedNotification(void *refcon, io_iterator_t iterato
 	[sharedPortList portsWereAdded:iterator];
 }
 
-static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t iterator)
+static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 {
 	assert(iterator);
 	(void)refcon;
@@ -252,7 +250,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 				
 				// Set up notification for ports being added.
 				io_iterator_t unused;
-				kern_return_t kernResult = IOServiceAddMatchingNotification(notificationPort, kIOPublishNotification, classesToMatch1, AMSerialPortWasAddedNotification, NULL, &unused); // consumes a reference to classesToMatch1
+				kern_return_t kernResult = IOServiceAddMatchingNotification(notificationPort, kIOPublishNotification, classesToMatch1, AMSerialPortWasAddedCallback, NULL, &unused); // consumes a reference to classesToMatch1
 				if (kernResult != KERN_SUCCESS) {
 #ifdef AMSerialDebug
 					NSLog(@"Error %d when setting up add notifications!", kernResult);
@@ -263,7 +261,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 				
 				if (classesToMatch2) {
 					// Set up notification for ports being removed.
-					kernResult = IOServiceAddMatchingNotification(notificationPort, kIOTerminatedNotification, classesToMatch2, AMSerialPortWasRemovedNotification, NULL, &unused); // consumes a reference to classesToMatch2
+					kernResult = IOServiceAddMatchingNotification(notificationPort, kIOTerminatedNotification, classesToMatch2, AMSerialPortWasRemovedCallback, NULL, &unused); // consumes a reference to classesToMatch2
 					if (kernResult != KERN_SUCCESS) {
 #ifdef AMSerialDebug
 						NSLog(@"Error %d when setting up add notifications!", kernResult);
@@ -338,14 +336,26 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 	return [_portList objectAtIndex:idx];
 }
 
+// NSFastEnumeration conformance
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+								  objects:(id __unsafe_unretained [])buffer
+									count:(NSUInteger)len
+{
+	assert(state);
+	assert(buffer);
+	
+	// Just forward to the array.
+	return [_portList countByEnumeratingWithState:state
+										  objects:buffer
+											count:len];
+}
+
 - (nullable AMSerialPort *)objectWithName:(NSString *)name
 {
 	assert(name);
 	
 	AMSerialPort *result = nil;
-	NSEnumerator *enumerator = [_portList objectEnumerator];
-	AMSerialPort *port;
-	while ((port = [enumerator nextObject]) != nil) {
+	for (AMSerialPort *port in _portList) {
 		if ([[port name] isEqualToString:name]) {
 			result = port;
 			break;
@@ -370,9 +380,7 @@ static void AMSerialPortWasRemovedNotification(void *refcon, io_iterator_t itera
 	assert(serialTypeKey);
 	
 	NSMutableArray *result = [NSMutableArray array];
-	NSEnumerator *enumerator = [_portList objectEnumerator];
-	AMSerialPort *port;
-	while ((port = [enumerator nextObject]) != nil) {
+	for (AMSerialPort *port in _portList) {
 		if ([[port type] isEqualToString:serialTypeKey]) {
 			[result addObject:port];
 		}

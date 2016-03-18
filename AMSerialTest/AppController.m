@@ -131,9 +131,8 @@
 	(void)sender;
 	
 	// get an port enumerator
-	NSEnumerator *enumerator = [AMSerialPortList portEnumerator];
-	AMSerialPort *aPort;
-	while ((aPort = [enumerator nextObject])) {
+	AMSerialPortList *sharedPortList = [AMSerialPortList sharedPortList];
+	for (AMSerialPort *aPort in sharedPortList) {
 		// print port name
 		[outputTextView insertText:[aPort name]];
 		[outputTextView insertText:@":"];

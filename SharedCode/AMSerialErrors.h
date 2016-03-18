@@ -26,8 +26,8 @@ typedef NS_ENUM(int, AMSerialEndCode) {
 	kAMSerialEndCodeStopLengthExceeded = 3,
 	
 	// old names, deprecated
-	kAMSerialEndOfStream DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeEndOfStream") = kAMSerialEndCodeEndOfStream,
-	kAMSerialStopCharReached DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeStopCharReached") = kAMSerialEndCodeStopCharReached,
-	kAMSerialStopLengthReached DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeStopLengthReached") = kAMSerialEndCodeStopLengthReached,
-	kAMSerialStopLengthExceeded DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeStopLengthExceeded") = kAMSerialEndCodeStopLengthExceeded,
+	kAMSerialEndOfStream DEPRECATED_ATTRIBUTE = kAMSerialEndCodeEndOfStream,
+	kAMSerialStopCharReached DEPRECATED_ATTRIBUTE = kAMSerialEndCodeStopCharReached,
+	kAMSerialStopLengthReached DEPRECATED_ATTRIBUTE = kAMSerialEndCodeStopLengthReached,
+	kAMSerialStopLengthExceeded DEPRECATED_ATTRIBUTE = kAMSerialEndCodeStopLengthExceeded,
 };
