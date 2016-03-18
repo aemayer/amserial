@@ -180,8 +180,8 @@ extern NSString *const AMSerialErrorDomain;
 
 // Use the speeds defined in termios.h
 // reading and setting parameters is only useful if the serial port is already open
-- (unsigned long)speed;
-- (BOOL)setSpeed:(unsigned long)speed;
+- (speed_t)speed;
+- (BOOL)setSpeed:(speed_t)speed;
 
 - (unsigned long)dataBits;
 - (void)setDataBits:(unsigned long)bits;	// 5 to 8 (5 may not work)

@@ -461,7 +461,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	ssize_t written;
 	NSDate *nextNotificationDate;
 	BOOL notificationSent = NO;
-	unsigned long speed;
+	speed_t speed;
 	unsigned long estimatedTime;
 	BOOL error = NO;
 	

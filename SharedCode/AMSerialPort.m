@@ -600,12 +600,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 }
 
 
-- (unsigned long)speed
+- (speed_t)speed
 {
 	return cfgetospeed(_options);	// we should support cfgetispeed too
 }
 
-- (BOOL)setSpeed:(unsigned long)speed
+- (BOOL)setSpeed:(speed_t)speed
 {
 	BOOL result = YES;
 	// we should support setting input and output speed separately
