@@ -53,6 +53,8 @@
 //  - fixed possible out of range exception and compiler warning
 //  2016-03-17 Sean McBride
 //  - added nullability support
+//  2016-03-18 Sean McBride
+//  - setDelegate: no longer caches respondsToSelector: results of delegate, insteads checks before messaging it
 
 #import "AMSDKCompatibility.h"
 
@@ -213,12 +215,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (void)setDelegate:(nullable id<AMSerialDelegate>)newDelegate
 {
-	if (newDelegate != _delegate) {
-		// As per Cocoa conventions, delegates are not retained.
-		_delegate = newDelegate;
-		_delegateHandlesReadInBackground = [_delegate respondsToSelector:@selector(serialPortReadData:)];
-		_delegateHandlesWriteInBackground = [_delegate respondsToSelector:@selector(serialPortWriteProgress:)];
-	}
+	// As per Cocoa conventions, delegates are not retained.
+	_delegate = newDelegate;
 }
 
 

@@ -323,7 +323,7 @@
 #ifdef AMSerialDebug
 	NSLog(@"readDataInBackground");
 #endif
-	if (_delegateHandlesReadInBackground) {
+	if ([_delegate respondsToSelector:@selector(serialPortReadData:)]) {
 		_countReadInBackgroundThreads++;
 		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread)
 								 toTarget:self
@@ -348,7 +348,7 @@
 #ifdef AMSerialDebug
 	NSLog(@"writeDataInBackground");
 #endif
-	if (_delegateHandlesWriteInBackground) {
+	if ([_delegate respondsToSelector:@selector(serialPortWriteProgress:)]) {
 		_countWriteInBackgroundThreads++;
 		[NSThread detachNewThreadSelector:@selector(writeDataInBackgroundThread:)
 								 toTarget:self

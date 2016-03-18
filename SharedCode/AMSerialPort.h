@@ -62,8 +62,6 @@ extern NSString *const AMSerialErrorDomain;
 	char * _buffer;
 	fd_set * _readfds;
 	id<AMSerialDelegate> _delegate;
-	BOOL _delegateHandlesReadInBackground;
-	BOOL _delegateHandlesWriteInBackground;
 	NSLock *_writeLock;
 	NSLock *_readLock;
 	NSLock *_closeLock;
