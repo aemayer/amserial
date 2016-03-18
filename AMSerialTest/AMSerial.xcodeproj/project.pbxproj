@@ -193,6 +193,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
 			buildConfigurationList = E13F800C0863426A00EC3999 /* Build configuration list for PBXProject "AMSerial" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -264,6 +267,7 @@
 		E13F800D0863426A00EC3999 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
@@ -291,6 +295,7 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -341,6 +346,7 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
