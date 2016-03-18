@@ -1,10 +1,9 @@
-/*
- *  AMSerialErrors.h
- *
- *  Created by Andreas on 27.07.06.
- *  Copyright 2006 Andreas Mayer. All rights reserved.
- *
- */
+//
+//  AMSerialErrors.h
+//
+//  Created by Andreas Mayer on 2006-07-27.
+//  Copyright (c) 2006-2016 Andreas Mayer. All rights reserved.
+//
 
 
 enum {

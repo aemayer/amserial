@@ -1,7 +1,7 @@
 //
 //  AMSerialPortAdditions.m
 //
-//  Created by Andreas on Thu May 02 2002.
+//  Created by Andreas Mayer on 2002-05-02.
 //  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer

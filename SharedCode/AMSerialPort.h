@@ -1,7 +1,7 @@
 //
 //  AMSerialPort.h
 //
-//  Created by Andreas on 2002-04-24.
+//  Created by Andreas Mayer on 2002-04-24.
 //  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer

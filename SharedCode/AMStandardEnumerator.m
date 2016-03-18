@@ -1,7 +1,7 @@
 //
 //  AMStandardEnumerator.m
 //
-//  Created by Andreas on Mon Aug 04 2003.
+//  Created by Andreas Mayer on 2003-08-04.
 //  Copyright (c) 2003-2016 Andreas Mayer. All rights reserved.
 //
 //  2007-10-26 Sean McBride

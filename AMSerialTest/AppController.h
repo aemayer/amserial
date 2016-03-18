@@ -2,7 +2,7 @@
 //  AppController.h
 //  AMSerialTest
 //
-//  Copyright (c) 2001-2014 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
