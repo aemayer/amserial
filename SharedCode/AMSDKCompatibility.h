@@ -30,6 +30,11 @@
 	#define NS_DESIGNATED_INITIALIZER
 #endif
 
+// The 10.8 SDK added NS_ENUM, reproduce it if not defined.
+#ifndef NS_ENUM
+    #define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
+#endif
+
 // Newer compilers and the 10.11 SDK added nullability support, which we just stub to nothing for older cases.
 #if __has_feature(nullability)
 	#define _amnonnull __nonnull

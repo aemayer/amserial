@@ -236,7 +236,7 @@
 	const char *dataBytes = (const char*)[data bytes];
 	NSUInteger dataLen = [data length];
 	ssize_t bytesWritten = 0;
-	int errorCode = kAMSerialErrorNone;
+	AMSerialError errorCode = kAMSerialErrorNone;
 	if (dataBytes && (dataLen > 0)) {
 		bytesWritten = write(_fileDescriptor, dataBytes, dataLen);
 		if (bytesWritten < 0) {
@@ -566,8 +566,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	
 	struct timeval timeout;
 	NSUInteger bytesRead = 0;
-	int errorCode = kAMSerialErrorNone;
-	int endCode = kAMSerialEndOfStream;
+	AMSerialError errorCode = kAMSerialErrorNone;
+	AMSerialEndCode endCode = kAMSerialEndCodeEndOfStream;
 	NSError *underlyingError = nil;
 	
 	// How long, in total, in microseconds, do we block before timing out?
@@ -617,15 +617,15 @@ static int64_t AMMicrosecondsSinceBoot (void)
 					bytesRead += readResult;
 					if (stopAfterBytes) {
 						if (bytesRead == bytesToRead) {
-							endCode = kAMSerialStopLengthReached;
+							endCode = kAMSerialEndCodeStopLengthReached;
 							break;
 						} else if (bytesRead > bytesToRead) {
-							endCode = kAMSerialStopLengthExceeded;
+							endCode = kAMSerialEndCodeStopLengthExceeded;
 							break;
 						}
 					}
 					if (stopAtChar && (_buffer[bytesRead-1] == stopChar)) {
-						endCode = kAMSerialStopCharReached;
+						endCode = kAMSerialEndCodeStopCharReached;
 						break;
 					}
 					if (bytesRead >= AMSER_MAXBUFSIZE) {

@@ -5,8 +5,7 @@
 //  Copyright (c) 2006-2016 Andreas Mayer. All rights reserved.
 //
 
-
-enum {
+typedef NS_ENUM(NSInteger, AMSerialError) {
 	kAMSerialErrorNone = 0,
 	kAMSerialErrorFatal = 99,
 	
@@ -19,10 +18,16 @@ enum {
 	kAMSerialErrorOnlySomeDataWritten = 201,
 };
 
-enum {
+typedef NS_ENUM(int, AMSerialEndCode) {
 	// reading only
-	kAMSerialEndOfStream = 0,
-	kAMSerialStopCharReached = 1,
-	kAMSerialStopLengthReached = 2,
-	kAMSerialStopLengthExceeded = 3,
+	kAMSerialEndCodeEndOfStream = 0,
+	kAMSerialEndCodeStopCharReached = 1,
+	kAMSerialEndCodeStopLengthReached = 2,
+	kAMSerialEndCodeStopLengthExceeded = 3,
+	
+	// old names, deprecated
+	kAMSerialEndOfStream DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeEndOfStream") = kAMSerialEndCodeEndOfStream,
+	kAMSerialStopCharReached DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeStopCharReached") = kAMSerialEndCodeStopCharReached,
+	kAMSerialStopLengthReached DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeStopLengthReached") = kAMSerialEndCodeStopLengthReached,
+	kAMSerialStopLengthExceeded DEPRECATED_MSG_ATTRIBUTE("Use kAMSerialEndCodeStopLengthExceeded") = kAMSerialEndCodeStopLengthExceeded,
 };

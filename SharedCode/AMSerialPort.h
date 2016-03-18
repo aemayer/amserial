@@ -33,16 +33,16 @@ NS_ASSUME_NONNULL_BEGIN
 // By default, debug code is preprocessed out.  If you would like to compile with debug code enabled,
 // "#define AMSerialDebug" before including any AMSerialPort headers, as in your prefix header
 
-typedef enum {
+typedef NS_ENUM(int, AMSerialParity) {
 	kAMSerialParityNone = 0,
 	kAMSerialParityOdd = 1,
 	kAMSerialParityEven = 2
-} AMSerialParity;
+};
 
-typedef enum {
+typedef NS_ENUM(int, AMSerialStopBits) {
 	kAMSerialStopBitsOne = 1,
 	kAMSerialStopBitsTwo = 2
-} AMSerialStopBits;
+};
 
 // Private constant
 #define AMSER_MAXBUFSIZE  4096UL
