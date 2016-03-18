@@ -4,29 +4,6 @@
 //  Created by Andreas Mayer on 2002-05-02.
 //  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
-//  2002-10-04 Andreas Mayer
-//  - readDataInBackgroundWithTarget:selector: and writeDataInBackground: added
-//  2002-10-10 Andreas Mayer
-//	- stopWriteInBackground added
-//  2002-10-17 Andreas Mayer
-//	- numberOfWriteInBackgroundThreads added
-//  2002-10-25 Andreas Mayer
-//	- readDataInBackground and stopReadInBackground added
-//  2004-02-10 Andreas Mayer
-//    - replaced notifications for background reading/writing with direct messages to delegate
-//      see informal protocol
-//  2004-08-18 Andreas Mayer
-//	- readStringOfLength: added (suggested by Michael Beck)
-//  2006-08-16 Andreas Mayer / Sean McBride
-//	- changed interface for blocking read/write access significantly
-//	- fixed -checkRead and renamed it to -bytesAvailable
-//	- see AMSerialPort_Deprecated for old interfaces
-//  2007-10-26 Sean McBride
-//  - made code 64 bit and garbage collection clean
-//  2009-05-08 Sean McBride
-//  - added writeBytes:length:error: method
-//	2016-03-17 Sean McBride
-//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 

@@ -4,39 +4,6 @@
 //  Created by Andreas Mayer on 2002-04-24.
 //  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
-//  2002-09-18 Andreas Mayer
-//  - added available & owner
-//  2002-10-17 Andreas Mayer
-//	- countWriteInBackgroundThreads and countWriteInBackgroundThreadsLock added
-//  2002-10-25 Andreas Mayer
-//	- more additional instance variables for reading and writing in background
-//  2004-02-10 Andreas Mayer
-//    - added delegate for background reading/writing
-//  2005-04-04 Andreas Mayer
-//	- added setDTR and clearDTR
-//  2006-07-28 Andreas Mayer
-//	- added -canonicalMode, -endOfLineCharacter and friends
-//	  (code contributed by Randy Bradley)
-//	- cleaned up accessor methods; moved deprecated methods to "Deprecated" category
-//	- -setSpeed: does support arbitrary values on 10.4 and later; returns YES on success, NO otherwiese
-//  2006-08-16 Andreas Mayer
-//	- cleaned up the code and removed some (presumably) unnecessary locks
-//  2007-10-26 Sean McBride
-//  - made code 64 bit and garbage collection clean
-//  2008-10-21 Sean McBride
-//  - Added an API to open a serial port for exclusive use
-//  - fixed some memory management issues
-//  2011-10-14 Sean McBride
-//  - very minor cleanup
-//	2011-10-18 Andreas Mayer
-//	- added ARC compatibility
-//	- added accessors for ISIG, ECHOE, XON/XOFF as well as Start and Stop characters
-//	2011-10-19 Sean McBride
-//	- code review of ARC changes
-//  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
-//	2016-03-17 Sean McBride
-//	- added nullability support
-
 
 #import "AMSDKCompatibility.h"
 

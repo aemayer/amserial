@@ -6,12 +6,12 @@
 //
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
-//	2011-10-18 Andreas Mayer
-//	- added ARC compatibility
-//	2011-10-19 Sean McBride
-//	- code review of ARC changes
-//	2016-03-17 Sean McBride
-//	- added nullability support
+//  2011-10-18 Andreas Mayer
+//  - added ARC compatibility
+//  2011-10-19 Sean McBride
+//  - code review of ARC changes
+//  2016-03-17 Sean McBride
+//  - added nullability support
 
 #import "AMSDKCompatibility.h"
 

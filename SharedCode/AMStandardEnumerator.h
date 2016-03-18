@@ -4,10 +4,6 @@
 //  Created by Andreas Mayer on 2003-08-04.
 //  Copyright (c) 2003-2016 Andreas Mayer. All rights reserved.
 //
-//  2007-10-26 Sean McBride
-//  - made code 64 bit and garbage collection clean
-//	2016-03-17 Sean McBride
-//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 

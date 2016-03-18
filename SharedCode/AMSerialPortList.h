@@ -4,23 +4,6 @@
 //  Created by Andreas Mayer on 2002-04-24.
 //  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
-//  2002-09-09 Andreas Mayer
-//  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
-//  2002-09-30 Andreas Mayer
-//  - added +sharedPortList
-//  2004-02-10 Andreas Mayer
-//  - added +portEnumerator
-//  2006-08-16 Andreas Mayer
-//  - added methods dealing with ports of a certain serial type
-//  - renamed -getSerialPorts to -serialPorts - moved old declaration to Deprecated category
-//  2007-05-22 Nick Zitzmann
-//  - added notifications for when serial ports are added/removed
-//  2007-10-26 Sean McBride
-//  - made code 64 bit and garbage collection clean
-//  2012-03-27 Sean McBride
-//  - use instancetype for singleton return value
-//	2016-03-17 Sean McBride
-//	- added nullability support
 
 #import "AMSDKCompatibility.h"
 

@@ -5,23 +5,30 @@
 //  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
-//	- initialize buffer in readString
+//  - initialize buffer in readString
 //  2002-10-04 Andreas Mayer
 //  - readDataInBackgroundWithTarget:selector: and writeDataInBackground: added
 //  2002-10-10 Andreas Mayer
-//	- stopWriteInBackground added
-//	- send notifications about sent data through distributed notification center
+//  - stopWriteInBackground added
+//  - send notifications about sent data through distributed notification center
 //  2002-10-17 Andreas Mayer
-//	- numberOfWriteInBackgroundThreads added
-//	- if total write time will exceed 3 seconds, send
-//		CommXWriteInBackgroundProgressNotification without delay
+//  - numberOfWriteInBackgroundThreads added
+//  - if total write time will exceed 3 seconds, send
+//    CommXWriteInBackgroundProgressNotification without delay
 //  2002-10-25 Andreas Mayer
-//	- readDataInBackground and stopReadInBackground added
+//  - readDataInBackground and stopReadInBackground added
+//  2004-02-10 Andreas Mayer
+//    - replaced notifications for background reading/writing with direct messages to delegate
+//      see informal protocol
 //  2004-08-18 Andreas Mayer
-//	- readStringOfLength: added (suggested by Michael Beck)
+//  - readStringOfLength: added (suggested by Michael Beck)
 //  2005-04-11 Andreas Mayer
-//	-  attempt at a fix for readDataInBackgroundThread - fileDescriptor could already be closed
-//		(thanks to David Bainbridge for the bug report) does not work as of yet
+//  -  attempt at a fix for readDataInBackgroundThread - fileDescriptor could already be closed
+//     (thanks to David Bainbridge for the bug report) does not work as of yet
+//  2006-08-16 Andreas Mayer / Sean McBride
+//  - changed interface for blocking read/write access significantly
+//  - fixed -checkRead and renamed it to -bytesAvailable
+//  - see AMSerialPort_Deprecated for old interfaces
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
 //  2009-05-08 Sean McBride
@@ -31,14 +38,14 @@
 //  - fixed some memory management issues
 //  - the timeout feature (for reading) was broken, now fixed
 //  - don't rely on system clock for measuring elapsed time (because the user can change the clock)
-//	2011-10-18 Andreas Mayer
-//	- added ARC compatibility
-//	2011-10-19 Sean McBride
-//	- code review of ARC changes
-//	2012-03-12 Sean McBride
-//	- replaced deprecated UpTime function with mach_absolute_time
-//	2016-03-17 Sean McBride
-//	- added nullability support
+//  2011-10-18 Andreas Mayer
+//  - added ARC compatibility
+//  2011-10-19 Sean McBride
+//  - code review of ARC changes
+//  2012-03-12 Sean McBride
+//  - replaced deprecated UpTime function with mach_absolute_time
+//  2016-03-17 Sean McBride
+//  - added nullability support
 
 #import "AMSDKCompatibility.h"
 

@@ -7,18 +7,31 @@
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
 //  2002-10-10 Andreas Mayer
-//	- some log messages changed
+//  - some log messages changed
+//  2002-10-17 Andreas Mayer
+//  - countWriteInBackgroundThreads and countWriteInBackgroundThreadsLock added
 //  2002-10-25 Andreas Mayer
-//	- additional locks and other changes for reading and writing in background
+//  - additional locks and other changes for reading and writing in background
 //  2003-11-26 James Watson
-//	- in dealloc [self close] reordered to execute before releasing closeLock
+//  - in dealloc [self close] reordered to execute before releasing closeLock
+//  2004-02-10 Andreas Mayer
+//    - added delegate for background reading/writing
+//  2005-04-04 Andreas Mayer
+//  - added setDTR and clearDTR
+//  2006-07-28 Andreas Mayer
+//  - added -canonicalMode, -endOfLineCharacter and friends
+//    (code contributed by Randy Bradley)
+//  - cleaned up accessor methods; moved deprecated methods to "Deprecated" category
+//  - -setSpeed: does support arbitrary values on 10.4 and later; returns YES on success, NO otherwiese
+//  2006-08-16 Andreas Mayer
+//  - cleaned up the code and removed some (presumably) unnecessary locks
 //  2007-05-22 Nick Zitzmann
 //  - added -hash and -isEqual: methods
 //  2007-07-18 Sean McBride
 //  - behaviour change: -open and -close must now always be matched, -dealloc checks this
 //  - added -debugDescription so gdb's 'po' command gives something useful
 //  2007-07-25 Andreas Mayer
-// - replaced -debugDescription by -description; works for both, gdb's 'po' and NSLog()
+//  - replaced -debugDescription by -description; works for both, gdb's 'po' and NSLog()
 //  2007-10-26 Sean McBride
 //  - made code 64 bit and garbage collection clean
 //  2008-10-21 Sean McBride
@@ -29,17 +42,17 @@
 //  - renamed method to start with lowercase letter, as per Cocoa convention
 //  2011-10-14 Sean McBride
 //  - very minor cleanup
-//	2011-10-18 Andreas Mayer
-//	- added ARC compatibility
-//	- added accessors for ISIG, ECHOE, XON/XOFF as well as Start and Stop characters
-//	- options dictionary will cover more settings; fixed handling of some flags
-//	2011-10-19 Sean McBride
-//	- code review of ARC changes
+//  2011-10-18 Andreas Mayer
+//  - added ARC compatibility
+//  - added accessors for ISIG, ECHOE, XON/XOFF as well as Start and Stop characters
+//  - options dictionary will cover more settings; fixed handling of some flags
+//  2011-10-19 Sean McBride
+//  - code review of ARC changes
 //  - changed delegate semantics to match Cocoa conventions: the delegate is no longer retained!
-//	2012-06-20 Sean McBride
-//	- fixed possible out of range exception and compiler warning
-//	2016-03-17 Sean McBride
-//	- added nullability support
+//  2012-06-20 Sean McBride
+//  - fixed possible out of range exception and compiler warning
+//  2016-03-17 Sean McBride
+//  - added nullability support
 
 #import "AMSDKCompatibility.h"
 

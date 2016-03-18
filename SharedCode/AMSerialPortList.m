@@ -8,8 +8,13 @@
 //  - reuse AMSerialPort objects when calling init on an existing AMSerialPortList
 //  2002-09-30 Andreas Mayer
 //  - added +sharedPortList
+//  2004-02-10 Andreas Mayer
+//  - added +portEnumerator
 //  2004-07-05 Andreas Mayer
 //  - added some log statements
+//  2006-08-16 Andreas Mayer
+//  - added methods dealing with ports of a certain serial type
+//  - renamed -getSerialPorts to -serialPorts - moved old declaration to Deprecated category
 //  2007-05-22 Nick Zitzmann
 //  - added notifications for when serial ports are added/removed
 //  2007-07-18 Sean McBride
@@ -26,15 +31,15 @@
 //  - minor edits to placate the clang static analyzer
 //  2011-10-14 Sean McBride
 //  - removed one NSRunLoop method in favour of CFRunLoop
-//	2011-10-18 Andreas Mayer
-//	- added ARC compatibility
-//	2011-10-19 Sean McBride
-//	- code review of ARC changes
+//  2011-10-18 Andreas Mayer
+//  - added ARC compatibility
+//  2011-10-19 Sean McBride
+//  - code review of ARC changes
 //  - greatly simplified the various singleton implementations
 //  2012-03-27 Sean McBride
 //  - use instancetype for singleton return value
-//	2016-03-17 Sean McBride
-//	- added nullability support
+//  2016-03-17 Sean McBride
+//  - added nullability support
 
 #import "AMSDKCompatibility.h"
 
