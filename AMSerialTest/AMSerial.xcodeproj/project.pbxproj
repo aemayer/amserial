@@ -16,7 +16,6 @@
 		E158FFF00C58DE2E00B8171B /* AMSerialPort.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF940C58DDAB00B8171B /* AMSerialPort.h */; };
 		E158FFF10C58DE2E00B8171B /* AMSerialPortAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF960C58DDAB00B8171B /* AMSerialPortAdditions.h */; };
 		E158FFF30C58DE2E00B8171B /* AMSerialPortList.h in Headers */ = {isa = PBXBuildFile; fileRef = E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */; };
-		E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		E158FFF80C58DE2E00B8171B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		E158FFF90C58DE2E00B8171B /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6E09502D03AB10100010A /* AppController.m */; };
 		E158FFFA0C58DE2E00B8171B /* AMStandardEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */; };
@@ -27,7 +26,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -35,7 +33,7 @@
 		5A5CB9201A3A5E410084190F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMStandardEnumerator.h; path = ../SharedCode/AMStandardEnumerator.h; sourceTree = SOURCE_ROOT; };
 		E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMStandardEnumerator.m; path = ../SharedCode/AMStandardEnumerator.m; sourceTree = SOURCE_ROOT; };
-		E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-AMSerialTest.plist"; sourceTree = "<group>"; };
+		E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */ = {isa = PBXFileReference; explicitFileType = text.xml; path = "Info-AMSerialTest.plist"; sourceTree = "<group>"; };
 		E15800080C58DE2F00B8171B /* AMSerialTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AMSerialTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E158FF910C58DDAB00B8171B /* AMSerialErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialErrors.h; path = ../SharedCode/AMSerialErrors.h; sourceTree = SOURCE_ROOT; };
 		E158FF940C58DDAB00B8171B /* AMSerialPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPort.h; path = ../SharedCode/AMSerialPort.h; sourceTree = SOURCE_ROOT; };
@@ -134,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				5A5CB91F1A3A5E410084190F /* MainMenu.xib */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				E1CC710C106E6C2B00F7D688 /* BSD License.txt */,
 			);
 			name = Resources;
@@ -222,7 +219,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A5CB9211A3A5E410084190F /* MainMenu.xib in Resources */,
-				E158FFF60C58DE2E00B8171B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,14 +241,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				089C165DFE840E0CC02AAC07 /* English */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		5A5CB91F1A3A5E410084190F /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

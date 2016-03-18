@@ -36,28 +36,10 @@
 }
 
 
-- (AMSerialPort *)port
-{
-    return _port;
-}
-
-- (void)setPort:(AMSerialPort *)newPort
-{
-#if !__has_feature(objc_arc)
-    id old = nil;
-
-    if (newPort != _port) {
-        old = _port;
-        _port = [newPort retain];
-        [old release];
-    }
-#else
-	port = newPort;
-#endif
-}
+@synthesize port = _port;
 
 
-- (void)initPort
+- (void)openPort
 {
 	NSString *deviceName = [deviceTextField stringValue];
 	if (![deviceName isEqualToString:[_port bsdPath]]) {
@@ -99,6 +81,8 @@
 
 - (void)serialPortReadData:(NSDictionary *)dataDictionary
 {
+	assert(dataDictionary);
+	
 	// this method is called if data arrives 
 	// @"data" is the actual data, @"serialPort" is the sending port
 	AMSerialPort *sendPort = [dataDictionary objectForKey:@"serialPort"];
@@ -121,6 +105,8 @@
 
 - (void)didAddPorts:(NSNotification *)theNotification
 {
+	assert(theNotification);
+	
 	[outputTextView insertText:@"didAddPorts:"];
 	[outputTextView insertText:@"\r"];
 	[outputTextView insertText:[[theNotification userInfo] description]];
@@ -130,6 +116,8 @@
 
 - (void)didRemovePorts:(NSNotification *)theNotification
 {
+	assert(theNotification);
+	
 	[outputTextView insertText:@"didRemovePorts:"];
 	[outputTextView insertText:@"\r"];
 	[outputTextView insertText:[[theNotification userInfo] description]];
@@ -160,7 +148,7 @@
 	(void)sender;
 	
 	// new device selected
-	[self initPort];
+	[self openPort];
 }
 
 - (IBAction)send:(id)sender
@@ -171,7 +159,7 @@
 
 	if(!_port) {
 		// open a new port if we don't already have one
-		[self initPort];
+		[self openPort];
 	}
 
 	if([_port isOpen]) { // in case an error occurred while opening the port
@@ -185,7 +173,7 @@
 	
 	if(!_port) {
 		// open a new port if we don't already have one
-		[self initPort];
+		[self openPort];
 	}
 
 	if([_port isOpen]) { // in case an error occurred while opening the port

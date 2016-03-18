@@ -15,7 +15,11 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.1</string>
+	<string>2</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© Andreas Mayer 2001-2016</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

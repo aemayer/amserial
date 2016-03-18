@@ -8,6 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "AMSerialPort.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface AppController : NSObject <AMSerialDelegate> {
 	IBOutlet NSTextField *inputTextField;
@@ -16,9 +17,7 @@
 	AMSerialPort *_port;
 }
 
-- (AMSerialPort *)port;
-- (void)setPort:(AMSerialPort *)newPort;
-
+@property(readwrite, retain, atomic, nullable) AMSerialPort *port;
 
 - (IBAction)listDevices:(id)sender;
 
@@ -28,5 +27,6 @@
 
 - (IBAction)sendSerialBreak:(id)sender;
 
-
 @end
+
+NS_ASSUME_NONNULL_END
