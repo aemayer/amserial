@@ -58,8 +58,19 @@ extern NSString *const AMSerialErrorDomain;
 @interface AMSerialPort : NSObject
 {
 @private
+	NSString *_bsdPath;
+	NSString *_serviceName;
+	NSString *_serviceType;
 	int _fileDescriptor;
+	struct termios * _options;
+	struct termios * _originalOptions;
+	NSMutableDictionary *_optionsDictionary;
+	NSFileHandle *_fileHandle;
+	BOOL _gotError;
+	int	_lastError;
+	id _owner;
 	char * _buffer;
+	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
 	fd_set * _readfds;
 	id<AMSerialDelegate> _delegate;
 	NSLock *_writeLock;

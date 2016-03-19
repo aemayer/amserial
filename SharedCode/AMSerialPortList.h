@@ -25,6 +25,10 @@ extern NSString * const AMSerialPortListAddedPorts;
 extern NSString * const AMSerialPortListRemovedPorts;
 
 @interface AMSerialPortList : NSObject <NSFastEnumeration>
+{
+@private
+	NSMutableArray *_portList;
+}
 
 // Returns a singleton instance, creating it first if necessary.
 // The first creation also starts observation of ports being added and removed and will post notifications right away for any already existing ports.

@@ -19,21 +19,6 @@
 
 #import "AMStandardEnumerator.h"
 
-typedef NSUInteger (*AMCountMethod)(id, SEL);
-typedef __nullable id (*AMNextObjectMethod)(id, SEL, NSUInteger);
-
-// Private Interface
-@interface AMStandardEnumerator()
-{
-@private
-	id _collection;
-	SEL _countSelector;
-	SEL _nextObjectSelector;
-	AMCountMethod _count;
-	AMNextObjectMethod _nextObject;
-	NSUInteger _position;
-}
-@end
 
 @implementation AMStandardEnumerator
 

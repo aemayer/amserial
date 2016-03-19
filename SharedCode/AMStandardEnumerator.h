@@ -11,7 +11,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// Private
+typedef NSUInteger (*AMCountMethod)(id, SEL);
+typedef __nullable id (*AMNextObjectMethod)(id, SEL, NSUInteger);
+
 @interface AMStandardEnumerator : NSEnumerator
+{
+@private
+	id _collection;
+	SEL _countSelector;
+	SEL _nextObjectSelector;
+	AMCountMethod _count;
+	AMNextObjectMethod _nextObject;
+	NSUInteger _position;
+}
 
 // Designated initializer
 - (instancetype)initWithCollection:(id)theCollection

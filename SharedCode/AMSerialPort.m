@@ -68,23 +68,6 @@
 
 NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
-// Private Interface
-@interface AMSerialPort()
-{
-@private
-	NSString *_bsdPath;
-	NSString *_serviceName;
-	NSString *_serviceType;
-	struct termios * _options;
-	struct termios * _originalOptions;
-	NSMutableDictionary *_optionsDictionary;
-	NSFileHandle *_fileHandle;
-	BOOL _gotError;
-	int	_lastError;
-	id _owner;
-	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
-}
-@end
 
 @implementation AMSerialPort
 

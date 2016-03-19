@@ -63,15 +63,6 @@ NSString *const AMSerialPortListAddedPorts = @"AMSerialPortListAddedPorts";
 NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 
-// Private Interface
-@interface AMSerialPortList()
-{
-@private
-	NSMutableArray *_portList;
-}
-@end
-
-
 @implementation AMSerialPortList
 
 + (instancetype)sharedPortList {
