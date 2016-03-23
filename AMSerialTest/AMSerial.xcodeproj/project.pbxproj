@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1408D69B1CA3382700A2C4C2 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = 1408D69A1CA3382700A2C4C2 /* PrefixHeader.pch */; };
-		5A5CB9211A3A5E410084190F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A5CB91F1A3A5E410084190F /* MainMenu.xib */; };
+		1408D69F1CA33A0000A2C4C2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1408D69D1CA33A0000A2C4C2 /* MainMenu.xib */; };
 		E15800010C58DE2E00B8171B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		E15800020C58DE2E00B8171B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B6E09E02D03CD90100010A /* IOKit.framework */; };
 		E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B6E09402D03AB10100010A /* AppController.h */; };
@@ -29,8 +29,9 @@
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1408D69A1CA3382700A2C4C2 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		1408D69C1CA33A0000A2C4C2 /* BSD License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "BSD License.txt"; sourceTree = "<group>"; };
+		1408D69D1CA33A0000A2C4C2 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		5A5CB9201A3A5E410084190F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMStandardEnumerator.h; path = ../SharedCode/AMStandardEnumerator.h; sourceTree = SOURCE_ROOT; };
 		E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMStandardEnumerator.m; path = ../SharedCode/AMStandardEnumerator.m; sourceTree = SOURCE_ROOT; };
 		E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */ = {isa = PBXFileReference; explicitFileType = text.xml; path = "Info-AMSerialTest.plist"; sourceTree = "<group>"; };
@@ -42,7 +43,6 @@
 		E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortAdditions.m; path = ../SharedCode/AMSerialPortAdditions.m; sourceTree = SOURCE_ROOT; };
 		E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSerialPortList.h; path = ../SharedCode/AMSerialPortList.h; sourceTree = SOURCE_ROOT; };
 		E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMSerialPortList.m; path = ../SharedCode/AMSerialPortList.m; sourceTree = SOURCE_ROOT; };
-		E1CC710C106E6C2B00F7D688 /* BSD License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "BSD License.txt"; sourceTree = "<group>"; };
 		E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMSDKCompatibility.h; path = ../SharedCode/AMSDKCompatibility.h; sourceTree = SOURCE_ROOT; };
 		F5B6E09402D03AB10100010A /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		F5B6E09502D03AB10100010A /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
@@ -62,9 +62,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
+		080E96DDFE201D6D7F000001 /* SharedCode */ = {
 			isa = PBXGroup;
 			children = (
+				E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */,
 				E158FF910C58DDAB00B8171B /* AMSerialErrors.h */,
 				E158FF940C58DDAB00B8171B /* AMSerialPort.h */,
 				E158FF950C58DDAB00B8171B /* AMSerialPort.m */,
@@ -72,13 +73,10 @@
 				E158FF970C58DDAB00B8171B /* AMSerialPortAdditions.m */,
 				E158FF9A0C58DDAB00B8171B /* AMSerialPortList.h */,
 				E158FF9B0C58DDAB00B8171B /* AMSerialPortList.m */,
-				E1D8DC0C0CE0F11300306A0A /* AMSDKCompatibility.h */,
 				E10D3BC405D8C8FF00399764 /* AMStandardEnumerator.h */,
 				E10D3BC505D8C8FF00399764 /* AMStandardEnumerator.m */,
-				F5B6E09402D03AB10100010A /* AppController.h */,
-				F5B6E09502D03AB10100010A /* AppController.m */,
 			);
-			name = Classes;
+			name = SharedCode;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -92,9 +90,8 @@
 		29B97314FDCFA39411CA2CEA /* AMSerial */ = {
 			isa = PBXGroup;
 			children = (
-				080E96DDFE201D6D7F000001 /* Classes */,
+				080E96DDFE201D6D7F000001 /* SharedCode */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
-				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -104,20 +101,15 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				1408D69C1CA33A0000A2C4C2 /* BSD License.txt */,
+				1408D69D1CA33A0000A2C4C2 /* MainMenu.xib */,
 				1408D69A1CA3382700A2C4C2 /* PrefixHeader.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				F5B6E09402D03AB10100010A /* AppController.h */,
+				F5B6E09502D03AB10100010A /* AppController.m */,
 				E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */,
 			);
 			name = "Other Sources";
-			sourceTree = "<group>";
-		};
-		29B97317FDCFA39411CA2CEA /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				5A5CB91F1A3A5E410084190F /* MainMenu.xib */,
-				E1CC710C106E6C2B00F7D688 /* BSD License.txt */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
@@ -202,7 +194,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A5CB9211A3A5E410084190F /* MainMenu.xib in Resources */,
+				1408D69F1CA33A0000A2C4C2 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,17 +215,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		5A5CB91F1A3A5E410084190F /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5A5CB9201A3A5E410084190F /* English */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E13F800D0863426A00EC3999 /* Debug */ = {
