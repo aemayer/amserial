@@ -1,0 +1,9 @@
+//
+//  PrefexHeader.pch
+//  AMSerialTest
+//
+//  Copyright (c) 2016 Andreas Mayer. All rights reserved.
+//
+
+// Define if you want debug logging.
+//#define AMSerialDebug

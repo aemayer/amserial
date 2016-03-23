@@ -123,7 +123,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)dealloc
 {
 #ifdef AMSerialDebug
-	if (fileDescriptor != -1) {
+	if (_fileDescriptor != -1) {
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
 	}
 #endif
@@ -153,7 +153,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 - (void)finalize
 {
 #ifdef AMSerialDebug
-	if (fileDescriptor != -1) {
+	if (_fileDescriptor != -1) {
 		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
 	}
 #endif
@@ -312,12 +312,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	_fileDescriptor = open(path, flags);
 
 #ifdef AMSerialDebug
-	NSLog(@"open %@ (%d)\n", bsdPath, fileDescriptor);
+	NSLog(@"open %@ (%d)\n", _bsdPath, _fileDescriptor);
 #endif
 	
 	if (_fileDescriptor < 0)	{
 #ifdef AMSerialDebug
-		NSLog(@"Error opening serial port %@ - %s(%d).\n", bsdPath, strerror(errno), errno);
+		NSLog(@"Error opening serial port %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
 #endif
 	} else {
 		/*
@@ -329,7 +329,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		// get the current options and save them for later reset
 		if (tcgetattr(_fileDescriptor, _originalOptions) == -1) {
 #ifdef AMSerialDebug
-			NSLog(@"Error getting tty attributes %@ - %s(%d).\n", bsdPath, strerror(errno), errno);
+			NSLog(@"Error getting tty attributes %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
 #endif
 		} else {
 			// Make an exact copy of the options
@@ -376,7 +376,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		// kill pending read by setting O_NONBLOCK
 		if (fcntl(_fileDescriptor, F_SETFL, fcntl(_fileDescriptor, F_GETFL, 0) | O_NONBLOCK) == -1) {
 #ifdef AMSerialDebug
-			NSLog(@"Error clearing O_NONBLOCK %@ - %s(%d).\n", bsdPath, strerror(errno), errno);
+			NSLog(@"Error clearing O_NONBLOCK %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
 #endif
 		}
 		if (tcsetattr(_fileDescriptor, TCSANOW, _originalOptions) == -1) {
@@ -395,7 +395,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		_fileHandle = nil;
 		
 #ifdef AMSerialDebug
-		NSLog(@"close (%d)\n", fileDescriptor);
+		NSLog(@"close (%d)\n", _fileDescriptor);
 #endif
 		// Close the fileDescriptor, that is our responsibility since the fileHandle does not own it
 		close(_fileDescriptor);
@@ -613,7 +613,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		[self commitChanges];
 	} else {
 #ifdef AMSerialDebug
-		NSLog(@"Error setting options for port %s (wrong port name: %s).\n", [self name], [newOptions objectForKey:AMSerialOptionServiceName]);
+		NSLog(@"Error setting options for port %@ (wrong port name: %@).\n", [self name], [newOptions objectForKey:AMSerialOptionServiceName]);
 #endif
 	}
 }

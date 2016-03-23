@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1408D69B1CA3382700A2C4C2 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = 1408D69A1CA3382700A2C4C2 /* PrefixHeader.pch */; };
 		5A5CB9211A3A5E410084190F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A5CB91F1A3A5E410084190F /* MainMenu.xib */; };
 		E15800010C58DE2E00B8171B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		E15800020C58DE2E00B8171B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B6E09E02D03CD90100010A /* IOKit.framework */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1408D69A1CA3382700A2C4C2 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -122,6 +124,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				1408D69A1CA3382700A2C4C2 /* PrefixHeader.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				E15800070C58DE2E00B8171B /* Info-AMSerialTest.plist */,
 			);
@@ -153,6 +156,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1408D69B1CA3382700A2C4C2 /* PrefixHeader.pch in Headers */,
 				E158FFEC0C58DE2E00B8171B /* AppController.h in Headers */,
 				E158FFED0C58DE2E00B8171B /* AMStandardEnumerator.h in Headers */,
 				E158FFEE0C58DE2E00B8171B /* AMSerialErrors.h in Headers */,
@@ -286,6 +290,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -336,6 +341,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;

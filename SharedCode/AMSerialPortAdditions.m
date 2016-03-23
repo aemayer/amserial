@@ -228,7 +228,8 @@
 			error:(NSError **)error
 {
 #ifdef AMSerialDebug
-	NSLog(@"•wrote: %@ • %@", data, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+	NSString *dataAsString = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
+	NSLog(@"•wrote: %@ • %@", data, dataAsString);
 #endif
 
 	BOOL result = NO;
@@ -588,7 +589,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			timeout.tv_sec = (__darwin_time_t)(remainingTimeout / 1000000);
 			timeout.tv_usec = (__darwin_suseconds_t)(remainingTimeout - (timeout.tv_sec * 1000000));
 #ifdef AMSerialDebug
-			NSLog(@"timeout remaining: %qd us = %d s and %d us", remainingTimeout, timeout.tv_sec, timeout.tv_usec);
+			NSLog(@"timeout remaining: %qd us = %ld s and %d us", remainingTimeout, timeout.tv_sec, timeout.tv_usec);
 #endif
 			
 			// If the remaining time is so small that it has rounded to zero, bump it up to 1 microsecond.
@@ -669,7 +670,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	}
 	
 #ifdef AMSerialDebug
-	NSLog(@"• read: %@ • %@", result, [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding]);
+	NSString *resultAsString = result ? [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding] : nil;
+	NSLog(@"• read: %@ • %@", result, resultAsString);
 #endif
 
 	return result;
