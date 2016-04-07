@@ -613,9 +613,11 @@ static int64_t AMMicrosecondsSinceBoot (void)
 				} else {
 					sizeToRead = AMSER_MAXBUFSIZE-bytesRead;
 				}
+				assert(sizeToRead > 0);
 				ssize_t	readResult = read(_fileDescriptor, _buffer+bytesRead, sizeToRead);
 				if (readResult > 0) {
 					bytesRead += readResult;
+					assert((bytesRead > 0) && (bytesRead <= AMSER_MAXBUFSIZE));
 					if (stopAfterBytes) {
 						if (bytesRead == bytesToRead) {
 							endCode = kAMSerialEndCodeStopLengthReached;
@@ -638,8 +640,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 					errorCode = kAMSerialErrorFatal;
 					break;
 				} else {
+					assert(readResult == -1);
+					
 					// Make underlying error
-					underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:readResult userInfo:nil];
+					underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
 					errorCode = kAMSerialErrorFatal;
 					break;
 				}
