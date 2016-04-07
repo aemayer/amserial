@@ -121,7 +121,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 - (nullable AMSerialPort *)getNextSerialPort:(io_iterator_t)serialPortIterator
 {
-	assert(serialPortIterator);
+	assert(serialPortIterator != 0);
 	
 	AMSerialPort	*serialPort = nil;
 
@@ -163,7 +163,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 - (void)portsWereAdded:(io_iterator_t)iterator
 {
-	assert(iterator);
+	assert(iterator != 0);
 	
 	AMSerialPort *serialPort;
 	NSMutableArray *addedPorts = [NSMutableArray array];
@@ -183,7 +183,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 - (void)portsWereRemoved:(io_iterator_t)iterator
 {
-	assert(iterator);
+	assert(iterator != 0);
 	
 	AMSerialPort *serialPort;
 	NSMutableArray *removedPorts = [NSMutableArray array];
@@ -207,7 +207,7 @@ NSString *const AMSerialPortListRemovedPorts = @"AMSerialPortListRemovedPorts";
 
 static void AMSerialPortWasAddedCallback(void *refcon, io_iterator_t iterator)
 {
-	assert(iterator);
+	assert(iterator != 0);
 	(void)refcon;
 	
 	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
@@ -216,7 +216,7 @@ static void AMSerialPortWasAddedCallback(void *refcon, io_iterator_t iterator)
 
 static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 {
-	assert(iterator);
+	assert(iterator != 0);
 	(void)refcon;
 	
 	AMSerialPortList * sharedPortList = [AMSerialPortList sharedPortList];
@@ -240,7 +240,7 @@ static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 				CFRunLoopAddSource(CFRunLoopGetCurrent(), notificationSource, kCFRunLoopCommonModes);
 				
 				// Set up notification for ports being added.
-				io_iterator_t unused;
+				io_iterator_t unused = 0;
 				kern_return_t kernResult = IOServiceAddMatchingNotification(notificationPort, kIOPublishNotification, classesToMatch1, AMSerialPortWasAddedCallback, NULL, &unused); // consumes a reference to classesToMatch1
 				if (kernResult != KERN_SUCCESS) {
 #ifdef AMSerialDebug
@@ -252,6 +252,7 @@ static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 				
 				if (classesToMatch2) {
 					// Set up notification for ports being removed.
+					unused = 0;
 					kernResult = IOServiceAddMatchingNotification(notificationPort, kIOTerminatedNotification, classesToMatch2, AMSerialPortWasRemovedCallback, NULL, &unused); // consumes a reference to classesToMatch2
 					if (kernResult != KERN_SUCCESS) {
 #ifdef AMSerialDebug
@@ -277,7 +278,7 @@ static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 	
 	kern_return_t kernResult;
 	CFMutableDictionaryRef classesToMatch;
-	io_iterator_t serialPortIterator;
+	io_iterator_t serialPortIterator = 0;
 	AMSerialPort* serialPort;
 	
 	// Serial devices are instances of class IOSerialBSDClient
@@ -286,8 +287,10 @@ static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 		CFDictionarySetValue(classesToMatch, CFSTR(kIOSerialBSDTypeKey), CFSTR(kIOSerialBSDAllTypes));
 
 		// This function decrements the refcount of the dictionary passed it
+		// Note: Despite its documentation, this function has been observed returning KERN_SUCCESS,
+		// yet not returning any iterator by reference <rdar://25608800>, hence the extra check.
 		kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &serialPortIterator);
-		if (kernResult == KERN_SUCCESS) {
+		if ((kernResult == KERN_SUCCESS) && (serialPortIterator != 0)) {
 			while ((serialPort = [self getNextSerialPort:serialPortIterator]) != nil) {
 				[array addObject:serialPort];
 			}
