@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas Mayer on 2002-04-24.
-//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -180,10 +180,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return [[self bsdPath] hash];
 }
 
-- (BOOL)isEqual:(id)otherObject
+- (BOOL)isEqual:(nullable id)otherObject
 {
-	assert(otherObject);
-	
 	if ([otherObject isKindOfClass:[AMSerialPort class]]) {
 		return [[self bsdPath] isEqualToString:[otherObject bsdPath]];
 	}
