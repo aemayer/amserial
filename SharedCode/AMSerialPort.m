@@ -55,6 +55,8 @@
 //  - added nullability support
 //  2016-03-18 Sean McBride
 //  - setDelegate: no longer caches respondsToSelector: results of delegate, insteads checks before messaging it
+//  2018-01-08 Sean McBride
+//  - Added new openWithFlags:error: API to be able to pass custom flags and get an NSError back
 
 #import "AMSDKCompatibility.h"
 
@@ -297,16 +299,18 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return _owner;
 }
 
-// Private
-- (nullable NSFileHandle *)openWithFlags:(int)flags // use returned file handle to read and write
+// use returned file handle to read and write
+- (nullable NSFileHandle *)openWithFlags:(int)flags error:(NSError**)error
 {
 	NSFileHandle *result = nil;
+	NSError *localErr = nil;
 	
 #ifdef __OBJC_GC__
 	__strong const char *path = [_bsdPath fileSystemRepresentation];
 #else
 	const char *path = [_bsdPath fileSystemRepresentation];
 #endif
+	assert(path);
 	_fileDescriptor = open(path, flags);
 
 #ifdef AMSerialDebug
@@ -314,6 +318,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 #endif
 	
 	if (_fileDescriptor < 0)	{
+		localErr = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
 #ifdef AMSerialDebug
 		NSLog(@"Error opening serial port %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
 #endif
@@ -326,15 +331,16 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		 */
 		// get the current options and save them for later reset
 		if (tcgetattr(_fileDescriptor, _originalOptions) == -1) {
+			localErr = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
 #ifdef AMSerialDebug
 			NSLog(@"Error getting tty attributes %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
 #endif
 		} else {
-			// Make an exact copy of the options
+			// Make an exact copy of the options struct
 			*_options = *_originalOptions;
 			
-			// This object owns the fileDescriptor and must dispose it later
-			// In other words, you must balance calls to -open with -close
+			// This object (not the NSFileHandle) owns the fileDescriptor and must dispose it later
+			// In other words, you must balance calls to -open/openExclusively/openWithFlags:error: with -close
 			_fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:_fileDescriptor];
 			result = _fileHandle;
 		}
@@ -344,6 +350,11 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 			close(_fileDescriptor);
 		}
 		_fileDescriptor = -1;
+		
+		assert(localErr);
+		if (error) {
+			*error = localErr;
+		}
 	}
 	return result;
 }
@@ -353,13 +364,15 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 // use returned file handle to read and write
 - (nullable NSFileHandle *)open
 {
-	return [self openWithFlags:(O_RDWR | O_NOCTTY)]; // | O_NONBLOCK);
+	int flags = (O_RDWR | O_NOCTTY); // | O_NONBLOCK);
+	return [self openWithFlags:flags error:nil];
 }
 
 // use returned file handle to read and write
 - (nullable NSFileHandle *)openExclusively
 {
-	return [self openWithFlags:(O_RDWR | O_NOCTTY | O_EXLOCK | O_NONBLOCK)]; // | O_NONBLOCK);
+	int flags = (O_RDWR | O_NOCTTY | O_EXLOCK | O_NONBLOCK); // | O_NONBLOCK);
+	return [self openWithFlags:flags error:nil];
 }
 
 - (void)close

@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas Mayer on 2002-04-24.
-//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
 //
 
 #import "AMSDKCompatibility.h"
@@ -122,15 +122,18 @@ extern NSString *const AMSerialErrorDomain;
 // who obtained the port?
 
 
-- (nullable NSFileHandle *)open;
-// opens port for read and write operations, allow shared access of port
-// to actually read or write data use the methods provided by NSFileHandle
+- (nullable NSFileHandle *)openWithFlags:(int)flags error:(NSError**)error;
+// opens port for read and write operations, passing the given flags to open().
+// Returns nil upon error and an NSError by reference.
+// You must balance a successful invocation with a call to close.
+// To actually read or write data, use the methods provided by NSFileHandle
 // (alternatively you may use those from AMSerialPortAdditions)
 
+- (nullable NSFileHandle *)open;
+// invokes openWithFlags:error: with flags to allow shared access of port
+
 - (nullable NSFileHandle *)openExclusively;
-// opens port for read and write operations, insist on exclusive access to port
-// to actually read or write data use the methods provided by NSFileHandle
-// (alternatively you may use those from AMSerialPortAdditions)
+// invokes openWithFlags:error: with flags to insist on exclusive access to port
 
 - (void)close;
 // close port - no more read or write operations allowed
