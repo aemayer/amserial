@@ -434,10 +434,12 @@ static int64_t AMMicrosecondsSinceBoot (void)
 		if ((res >= 1) && (_fileDescriptor >= 0)) {
 			bytesRead = read(_fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
 		}
-		data = [NSData dataWithBytes:localBuffer length:bytesRead];
+		if (bytesRead >= 0) {
+			data = [NSData dataWithBytes:localBuffer length:(NSUInteger)bytesRead];
+		}
 		NSDictionary* tmp = [NSDictionary dictionaryWithObjectsAndKeys:
 							 self, @"serialPort",
-							 data, @"data",
+							 data, @"data", // data may be nil
 							 nil];
 		[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortReadData:)
 											   withObject:tmp
@@ -505,10 +507,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 
 		[data getBytes:localBuffer range:NSMakeRange(pos, bufferLen)];
 		written = write(_fileDescriptor, localBuffer, bufferLen);
-		error = (written == 0); // error condition
+		error = (written <= 0); // error condition
 		if (error)
 			break;
-		pos += written;
+		pos += (NSUInteger)written;
 
 		if ([(NSDate *)[NSDate date] compare:nextNotificationDate] == NSOrderedDescending) {
 			if (notificationSent || (pos < dataLen)) { // not for last block only
@@ -618,7 +620,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 				assert(sizeToRead > 0);
 				ssize_t	readResult = read(_fileDescriptor, _buffer+bytesRead, sizeToRead);
 				if (readResult > 0) {
-					bytesRead += readResult;
+					bytesRead += (NSUInteger)readResult;
 					assert((bytesRead > 0) && (bytesRead <= AMSER_MAXBUFSIZE));
 					if (stopAfterBytes) {
 						if (bytesRead == bytesToRead) {
