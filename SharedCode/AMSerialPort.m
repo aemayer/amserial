@@ -385,12 +385,14 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		//NSLog(@"close - closeLock locked");
 		
 		// kill pending read by setting O_NONBLOCK
-		if (fcntl(_fileDescriptor, F_SETFL, fcntl(_fileDescriptor, F_GETFL, 0) | O_NONBLOCK) == -1) {
+		int err = fcntl(_fileDescriptor, F_SETFL, fcntl(_fileDescriptor, F_GETFL, 0) | O_NONBLOCK);
+		if (err == -1) {
 #ifdef AMSerialDebug
 			NSLog(@"Error clearing O_NONBLOCK %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
 #endif
 		}
-		if (tcsetattr(_fileDescriptor, TCSANOW, _originalOptions) == -1) {
+		err = tcsetattr(_fileDescriptor, TCSANOW, _originalOptions);
+		if (err == -1) {
 #ifdef AMSerialDebug
 			NSLog(@"Error resetting tty attributes - %s(%d).\n", strerror(errno), errno);
 #endif
@@ -409,7 +411,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		NSLog(@"close (%d)\n", _fileDescriptor);
 #endif
 		// Close the fileDescriptor, that is our responsibility since the fileHandle does not own it
-		close(_fileDescriptor);
+		err = close(_fileDescriptor);
+		if (err == -1) {
+#ifdef AMSerialDebug
+			NSLog(@"Error closing file descriptor - %s(%d).\n", strerror(errno), errno);
+#endif
+		}
 		_fileDescriptor = -1;
 		
 		[_closeLock unlock];
