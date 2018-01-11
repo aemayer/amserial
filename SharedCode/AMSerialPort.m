@@ -106,7 +106,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		_readLock = [[NSLock alloc] init];
 		_closeLock = [[NSLock alloc] init];
 		
-		// By default blocking read attempts will timeout after 1 second
+		// By default blocking read attempts will timeout after about 1 second
 		_readTimeout = 1.0;
 		
 		// These are used by the AMSerialPortAdditions category only; pretend to use them here to silence warnings by the clang static analyzer.

@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas Mayer on 2002-05-02.
-//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //  - initialize buffer in readString
@@ -390,8 +390,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	// Convert to microseconds.
 	uint64_t uptime = mach_absolute_time();
 	uint64_t uptimeMicro = uptime * machTimeBaseInfo.numer / machTimeBaseInfo.denom / NSEC_PER_USEC;
+	assert(uptimeMicro < INT64_MAX);
 	
-	return uptimeMicro;
+	return (int64_t)uptimeMicro;
 }
 
 @implementation AMSerialPort (AMSerialPortAdditionsPrivate)
@@ -572,7 +573,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 	NSError *underlyingError = nil;
 	
 	// How long, in total, in microseconds, do we block before timing out?
-	int64_t totalTimeout = (int64_t)([self readTimeout] * 1000000.0);
+	int64_t totalTimeout = llround([self readTimeout] * 1000000.0);
+	assert(totalTimeout >= 0);
 	
 	// This value will be decreased each time through the loop
 	int64_t remainingTimeout = totalTimeout;
@@ -589,7 +591,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			timeout.tv_sec = (__darwin_time_t)(remainingTimeout / 1000000);
 			timeout.tv_usec = (__darwin_suseconds_t)(remainingTimeout - (timeout.tv_sec * 1000000));
 #ifdef AMSerialDebug
-			NSLog(@"timeout remaining: %qd us = %ld s and %d us", remainingTimeout, timeout.tv_sec, timeout.tv_usec);
+			NSLog(@"timeout remaining: %qd µs = %ld s and %d µs", remainingTimeout, timeout.tv_sec, timeout.tv_usec);
 #endif
 			
 			// If the remaining time is so small that it has rounded to zero, bump it up to 1 microsecond.
@@ -650,7 +652,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			}
 			
 			// Reduce the timeout value by the amount of time actually spent so far
-			remainingTimeout -= (AMMicrosecondsSinceBoot() - startTime);
+			int64_t elapsed = AMMicrosecondsSinceBoot() - startTime;
+			assert(elapsed > 0);
+			remainingTimeout -= elapsed;
 		}
 	}
 	
