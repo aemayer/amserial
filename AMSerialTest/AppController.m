@@ -2,7 +2,7 @@
 //  AppController.m
 //  AMSerialTest
 //
-//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
 //
 //	2009-09-09		Andreas Mayer
 //	- fixed memory leak in -serialPortReadData:
@@ -54,14 +54,14 @@
 		// register as self as delegate for port
 		[_port setDelegate:self];
 		
-		[outputTextView insertText:@"attempting to open port\r"];
+		[[[outputTextView textStorage] mutableString] appendString:@"attempting to open port\r"];
 		[outputTextView setNeedsDisplay:YES];
 		[outputTextView displayIfNeeded];
 		
 		// open port - may take a few seconds ...
 		if ([_port open]) {
 			
-			[outputTextView insertText:@"port opened\r"];
+			[[[outputTextView textStorage] mutableString] appendString:@"port opened\r"];
 			[outputTextView setNeedsDisplay:YES];
 			[outputTextView displayIfNeeded];
 
@@ -69,9 +69,9 @@
 			[_port readDataInBackground];
 			
 		} else { // an error occurred while creating port
-			[outputTextView insertText:@"couldn't open port for device "];
-			[outputTextView insertText:deviceName];
-			[outputTextView insertText:@"\r"];
+			[[[outputTextView textStorage] mutableString] appendString:@"couldn't open port for device "];
+			[[[outputTextView textStorage] mutableString] appendString:deviceName];
+			[[[outputTextView textStorage] mutableString] appendString:@"\r"];
 			[outputTextView setNeedsDisplay:YES];
 			[outputTextView displayIfNeeded];
 			[self setPort:nil];
@@ -89,14 +89,14 @@
 	NSData *data = [dataDictionary objectForKey:@"data"];
 	if ([data length] > 0) {
 		NSString *text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-		[outputTextView insertText:text];
+		[[[outputTextView textStorage] mutableString] appendString:text];
 #if !__has_feature(objc_arc)
 		[text release];
 #endif
 		// continue listening
 		[sendPort readDataInBackground];
 	} else { // port closed
-		[outputTextView insertText:@"port closed\r"];
+		[[[outputTextView textStorage] mutableString] appendString:@"port closed\r"];
 	}
 	[outputTextView setNeedsDisplay:YES];
 	[outputTextView displayIfNeeded];
@@ -107,10 +107,10 @@
 {
 	assert(theNotification);
 	
-	[outputTextView insertText:@"didAddPorts:"];
-	[outputTextView insertText:@"\r"];
-	[outputTextView insertText:[[theNotification userInfo] description]];
-	[outputTextView insertText:@"\r"];
+	[[[outputTextView textStorage] mutableString] appendString:@"didAddPorts:"];
+	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
+	[[[outputTextView textStorage] mutableString] appendString:[[theNotification userInfo] description]];
+	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
 	[outputTextView setNeedsDisplay:YES];
 }
 
@@ -118,10 +118,10 @@
 {
 	assert(theNotification);
 	
-	[outputTextView insertText:@"didRemovePorts:"];
-	[outputTextView insertText:@"\r"];
-	[outputTextView insertText:[[theNotification userInfo] description]];
-	[outputTextView insertText:@"\r"];
+	[[[outputTextView textStorage] mutableString] appendString:@"didRemovePorts:"];
+	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
+	[[[outputTextView textStorage] mutableString] appendString:[[theNotification userInfo] description]];
+	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
 	[outputTextView setNeedsDisplay:YES];
 }
 
@@ -134,10 +134,10 @@
 	AMSerialPortList *sharedPortList = [AMSerialPortList sharedPortList];
 	for (AMSerialPort *aPort in sharedPortList) {
 		// print port name
-		[outputTextView insertText:[aPort name]];
-		[outputTextView insertText:@":"];
-		[outputTextView insertText:[aPort bsdPath]];
-		[outputTextView insertText:@"\r"];
+		[[[outputTextView textStorage] mutableString] appendString:[aPort name]];
+		[[[outputTextView textStorage] mutableString] appendString:@":"];
+		[[[outputTextView textStorage] mutableString] appendString:[aPort bsdPath]];
+		[[[outputTextView textStorage] mutableString] appendString:@"\r"];
 	}
 	[outputTextView setNeedsDisplay:YES];
 }
