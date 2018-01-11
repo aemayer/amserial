@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.h
 //
 //  Created by Andreas Mayer on 2002-05-02.
-//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
 //
 
 #import "AMSDKCompatibility.h"
@@ -28,7 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSData *)readBytes:(NSUInteger)bytes
 						 error:(NSError **)error;
 
-// returns when 'stopChar' is encountered
+// returns when 'stopChar' is encountered at the end of the read buffer.
+// the value is treated as a byte, there is no regard for character/string encoding.
+// NOTE: this doesn't necessarily stop at the first encountered such character,
+// but rather once a chunk it reads ends with the given character.
 - (nullable NSData *)readUpToChar:(char)stopChar
 							error:(NSError **)error;
 
@@ -46,7 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 				   usingEncoding:(NSStringEncoding)encoding
 						   error:(NSError **)error;
 
-// NOTE: 'stopChar' has to be a byte value, using the given encoding; you can not wait for an arbitrary character from a multi-byte encoding
+// same as readUpToChar:error: except attempts to convert the resulting data
+// into a string of the given encoding.
 - (nullable NSString *)readUpToChar:(char)stopChar
 					  usingEncoding:(NSStringEncoding)encoding
 							  error:(NSError **)error;
