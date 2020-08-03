@@ -61,6 +61,7 @@
 //  - Added additional error logging.
 //  - Changed delegate method declaration to conform to NSObject protocol
 //  - Made delegate weak under ARC
+//  - The close method no longer calls close() because it already calls closeFile
 
 #import "AMSDKCompatibility.h"
 
@@ -343,9 +344,10 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 			// Make an exact copy of the options struct
 			*_options = *_originalOptions;
 			
-			// This object (not the NSFileHandle) owns the fileDescriptor and must dispose it later
+			// The AMSerialPort (not the NSFileHandle) owns the fileDescriptor and must dispose it later.
 			// In other words, you must balance calls to -open/openExclusively/openWithFlags:error: with -close
-			_fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:_fileDescriptor];
+			_fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:_fileDescriptor
+														closeOnDealloc:NO];
 			result = _fileHandle;
 		}
 	}
@@ -408,26 +410,20 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 #endif
 		}
 		
+		// Close the fileHandle, which also closes the fileDescriptor!
 		// Disallows further access to the communications channel
 		[_fileHandle closeFile];
-
-		// Release the fileHandle
+		
+#ifdef AMSerialDebug
+		NSLog(@"closed (%d)", _fileDescriptor);
+#endif
+		_fileDescriptor = -1;
+		
+		// Release memory.
 #if !__has_feature(objc_arc)
 		[_fileHandle release];
 #endif
 		_fileHandle = nil;
-		
-#ifdef AMSerialDebug
-		NSLog(@"close (%d)\n", _fileDescriptor);
-#endif
-		// Close the fileDescriptor, that is our responsibility since the fileHandle does not own it
-		err = close(_fileDescriptor);
-		if (err == -1) {
-#ifdef AMSerialDebug
-			NSLog(@"Error closing file descriptor - %s(%d).\n", strerror(errno), errno);
-#endif
-		}
-		_fileDescriptor = -1;
 		
 		[_closeLock unlock];
 		//NSLog(@"close - closeLock unlocked");
