@@ -316,26 +316,26 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	_fileDescriptor = open(path, flags);
 
 #ifdef AMSerialDebug
-	NSLog(@"open %@ (%d)\n", _bsdPath, _fileDescriptor);
+	NSLog(@"open %@ (%d)", _bsdPath, _fileDescriptor);
 #endif
 	
 	if (_fileDescriptor < 0)	{
 		localErr = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
 #ifdef AMSerialDebug
-		NSLog(@"Error opening serial port %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
+		NSLog(@"Error opening serial port %@ - %s(%d).", _bsdPath, strerror(errno), errno);
 #endif
 	} else {
 		/*
 		 if (fcntl(fileDescriptor, F_SETFL, fcntl(fileDescriptor, F_GETFL, 0) & !O_NONBLOCK) == -1)
 		 {
-			 NSLog(@"Error clearing O_NDELAY %@ - %s(%d).\n", bsdPath, strerror(errno), errno);
+			 NSLog(@"Error clearing O_NDELAY %@ - %s(%d).", bsdPath, strerror(errno), errno);
 		 } // ... else
 		 */
 		// get the current options and save them for later reset
 		if (tcgetattr(_fileDescriptor, _originalOptions) == -1) {
 			localErr = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
 #ifdef AMSerialDebug
-			NSLog(@"Error getting tty attributes %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
+			NSLog(@"Error getting tty attributes %@ - %s(%d).", _bsdPath, strerror(errno), errno);
 #endif
 		} else {
 			// Make an exact copy of the options struct
@@ -396,13 +396,13 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		int err = fcntl(_fileDescriptor, F_SETFL, flags | O_NONBLOCK);
 		if (err == -1) {
 #ifdef AMSerialDebug
-			NSLog(@"Error clearing O_NONBLOCK %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
+			NSLog(@"Error clearing O_NONBLOCK %@ - %s(%d).", _bsdPath, strerror(errno), errno);
 #endif
 		}
 		err = tcsetattr(_fileDescriptor, TCSANOW, _originalOptions);
 		if (err == -1) {
 #ifdef AMSerialDebug
-			NSLog(@"Error resetting tty attributes - %s(%d).\n", strerror(errno), errno);
+			NSLog(@"Error resetting tty attributes - %s(%d).", strerror(errno), errno);
 #endif
 		}
 		
@@ -664,7 +664,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		[self commitChanges];
 	} else {
 #ifdef AMSerialDebug
-		NSLog(@"Error setting options for port %@ (wrong port name: %@).\n", [self name], [newOptions objectForKey:AMSerialOptionServiceName]);
+		NSLog(@"Error setting options for port %@ (wrong port name: %@).", [self name], [newOptions objectForKey:AMSerialOptionServiceName]);
 #endif
 	}
 }
