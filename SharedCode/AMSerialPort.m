@@ -59,6 +59,8 @@
 //  - Added new openWithFlags:error: API to be able to pass custom flags and get an NSError back
 //  2020-08-03 Sean McBride
 //  - Added additional error logging.
+//  - Changed delegate method declaration to conform to NSObject protocol
+//  - Made delegate weak under ARC
 
 #import "AMSDKCompatibility.h"
 
@@ -193,12 +195,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 }
 
 
-- (nullable id<AMSerialDelegate>)delegate
+- (nullable NSObject<AMSerialDelegate>*)delegate
 {
 	return _delegate;
 }
 
-- (void)setDelegate:(nullable id<AMSerialDelegate>)newDelegate
+- (void)setDelegate:(nullable NSObject<AMSerialDelegate>*)newDelegate
 {
 	// As per Cocoa conventions, delegates are not retained.
 	_delegate = newDelegate;

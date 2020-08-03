@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.m
 //
 //  Created by Andreas Mayer on 2002-05-02.
-//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 //  2002-07-02 Andreas Mayer
 //  - initialize buffer in readString
@@ -324,7 +324,8 @@
 #ifdef AMSerialDebug
 	NSLog(@"readDataInBackground");
 #endif
-	if ([_delegate respondsToSelector:@selector(serialPortReadData:)]) {
+	NSObject<AMSerialDelegate>* strongDelegate = [self delegate];
+	if ([strongDelegate respondsToSelector:@selector(serialPortReadData:)]) {
 		_countReadInBackgroundThreads++;
 		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread:)
 								 toTarget:self
@@ -347,7 +348,8 @@
 #ifdef AMSerialDebug
 	NSLog(@"writeDataInBackground");
 #endif
-	if ([_delegate respondsToSelector:@selector(serialPortWriteProgress:)]) {
+	NSObject<AMSerialDelegate>* strongDelegate = [self delegate];
+	if ([strongDelegate respondsToSelector:@selector(serialPortWriteProgress:)]) {
 		_countWriteInBackgroundThreads++;
 		[NSThread detachNewThreadSelector:@selector(writeDataInBackgroundThread:)
 								 toTarget:self
@@ -439,9 +441,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 							 self, @"serialPort",
 							 data, @"data", // data may be nil
 							 nil];
-		[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortReadData:)
-											   withObject:tmp
-											waitUntilDone:NO];
+		NSObject<AMSerialDelegate>* strongDelegate = [self delegate];
+		[strongDelegate performSelectorOnMainThread:@selector(serialPortReadData:)
+										 withObject:tmp
+									  waitUntilDone:NO];
 	} else {
 		[_closeLock unlock];
 	}
@@ -695,9 +698,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 						 [NSNumber numberWithUnsignedLongLong:progress], @"value",
 						 [NSNumber numberWithUnsignedLongLong:dataLen], @"total",
 						 nil];
-	[(NSObject*)_delegate performSelectorOnMainThread:@selector(serialPortWriteProgress:)
-										   withObject:tmp
-										waitUntilDone:NO];
+	NSObject<AMSerialDelegate>* strongDelegate = [self delegate];
+	[strongDelegate performSelectorOnMainThread:@selector(serialPortWriteProgress:)
+									 withObject:tmp
+								  waitUntilDone:NO];
 }
 
 @end

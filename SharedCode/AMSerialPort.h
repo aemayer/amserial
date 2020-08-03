@@ -2,7 +2,7 @@
 //  AMSerialPort.h
 //
 //  Created by Andreas Mayer on 2002-04-24.
-//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 
 #import "AMSDKCompatibility.h"
@@ -72,7 +72,7 @@ extern NSString *const AMSerialErrorDomain;
 	char * _buffer;
 	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
 	fd_set * _readfds;
-	id<AMSerialDelegate> _delegate;
+	NSObject<AMSerialDelegate>* _delegate;
 	NSLock *_writeLock;
 	NSLock *_readLock;
 	NSLock *_closeLock;
@@ -226,7 +226,11 @@ extern NSString *const AMSerialErrorDomain;
 - (int)errorCode;				// if -commitChanges returns NO, look here for further info
 
 // the delegate (for background reading/writing)
-@property(readwrite, assign, nullable) id<AMSerialDelegate> delegate;
+#if __has_feature(objc_arc)
+@property(readwrite, weak, nullable) NSObject<AMSerialDelegate>* delegate;
+#else
+@property(readwrite, assign, nullable) NSObject<AMSerialDelegate>* delegate;
+#endif
 
 // time out for blocking reads in seconds. Honoured as best a possible, but is not an upper or lower bound. Must be finite and non-negative.
 @property(readwrite, atomic) NSTimeInterval readTimeout;
