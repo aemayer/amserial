@@ -65,7 +65,7 @@
 #endif
 
 @interface AMSerialPort (AMSerialPortAdditionsPrivate)
-- (void)readDataInBackgroundThread;
+- (void)readDataInBackgroundThread:(id)unused;
 - (void)writeDataInBackgroundThread:(NSData *)data;
 - (nullable id)am_readTarget;
 - (void)am_setReadTarget:(nullable id)newReadTarget;
@@ -326,11 +326,9 @@
 #endif
 	if ([_delegate respondsToSelector:@selector(serialPortReadData:)]) {
 		_countReadInBackgroundThreads++;
-		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread)
+		[NSThread detachNewThreadSelector:@selector(readDataInBackgroundThread:)
 								 toTarget:self
 							   withObject:nil];
-	} else {
-		// ... throw exception?
 	}
 }
 
@@ -354,8 +352,6 @@
 		[NSThread detachNewThreadSelector:@selector(writeDataInBackgroundThread:)
 								 toTarget:self
 							   withObject:data];
-	} else {
-		// ... throw exception?
 	}
 }
 
@@ -402,8 +398,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 #pragma mark threaded methods
 // ============================================================
 
-- (void)readDataInBackgroundThread
+- (void)readDataInBackgroundThread:(nullable id)unused
 {
+	(void)unused;
+	
 	(void)pthread_setname_np ("de.harmless.AMSerialPort.readDataInBackgroundThread");
 	
 	NSData *data = nil;
