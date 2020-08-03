@@ -2,7 +2,7 @@
 //  AMSerialPort.m
 //
 //  Created by Andreas Mayer on 2002-04-24.
-//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 //  2002-09-18 Andreas Mayer
 //  - added available & owner
@@ -57,6 +57,8 @@
 //  - setDelegate: no longer caches respondsToSelector: results of delegate, insteads checks before messaging it
 //  2018-01-08 Sean McBride
 //  - Added new openWithFlags:error: API to be able to pass custom flags and get an NSError back
+//  2020-08-03 Sean McBride
+//  - Added additional error logging.
 
 #import "AMSDKCompatibility.h"
 
@@ -384,8 +386,14 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		[_closeLock lock];
 		//NSLog(@"close - closeLock locked");
 		
-		// kill pending read by setting O_NONBLOCK
-		int err = fcntl(_fileDescriptor, F_SETFL, fcntl(_fileDescriptor, F_GETFL, 0) | O_NONBLOCK);
+		// kill pending read by setting O_NONBLOCK flag (which is maybe already set)
+		int flags = fcntl(_fileDescriptor, F_GETFL, 0);
+		if (flags == -1) {
+#ifdef AMSerialDebug
+			NSLog(@"Error getting descriptor status flags %@ - %s(%d).", _bsdPath, strerror(errno), errno);
+#endif
+		}
+		int err = fcntl(_fileDescriptor, F_SETFL, flags | O_NONBLOCK);
 		if (err == -1) {
 #ifdef AMSerialDebug
 			NSLog(@"Error clearing O_NONBLOCK %@ - %s(%d).\n", _bsdPath, strerror(errno), errno);
@@ -426,8 +434,13 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)drainInput
 {
-	BOOL result = (tcdrain(_fileDescriptor) != -1);
-	return result;
+	int result = tcdrain(_fileDescriptor);
+#ifdef AMSerialDebug
+	if (result == -1) {
+		NSLog(@"Error from tcdrain on %@ - %s(%d).", _bsdPath, strerror(errno), errno);
+	}
+#endif
+	return (result != -1);
 }
 
 - (BOOL)flushInput:(BOOL)fIn output:(BOOL)fOut	// (fIn or fOut) must be YES
@@ -443,26 +456,46 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		mode = TCIOFLUSH;
 	}
 	
-	BOOL result = (tcflush(_fileDescriptor, mode) != -1);
-	return result;
+	int result = tcflush(_fileDescriptor, mode);
+#ifdef AMSerialDebug
+	if (result == -1) {
+		NSLog(@"Error from tcflush on %@ - %s(%d).", _bsdPath, strerror(errno), errno);
+	}
+#endif
+	return (result != -1);
 }
 
 - (BOOL)sendBreak
 {
-	BOOL result = (tcsendbreak(_fileDescriptor, 0) != -1);
-	return result;
+	int result = tcsendbreak(_fileDescriptor, 0);
+#ifdef AMSerialDebug
+	if (result == -1) {
+		NSLog(@"Error from tcsendbreak on %@ - %s(%d).", _bsdPath, strerror(errno), errno);
+	}
+#endif
+	return (result != -1);
 }
 
 - (BOOL)setDTR
 {
-	BOOL result = (ioctl(_fileDescriptor, TIOCSDTR) != -1);
-	return result;
+	int result = ioctl(_fileDescriptor, TIOCSDTR);
+#ifdef AMSerialDebug
+	if (result == -1) {
+		NSLog(@"Error from ioctl on %@ - %s(%d).", _bsdPath, strerror(errno), errno);
+	}
+#endif
+	return (result != -1);
 }
 
 - (BOOL)clearDTR
 {
-	BOOL result = (ioctl(_fileDescriptor, TIOCCDTR) != -1);
-	return result;
+	int result = ioctl(_fileDescriptor, TIOCCDTR);
+#ifdef AMSerialDebug
+	if (result == -1) {
+		NSLog(@"Error from ioctl on %@ - %s(%d).", _bsdPath, strerror(errno), errno);
+	}
+#endif
+	return (result != -1);
 }
 
 
@@ -1000,8 +1033,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		return NO;
 	}
 	
-	if (tcsetattr(_fileDescriptor, TCSANOW, _options) == -1) {
+	int result = tcsetattr(_fileDescriptor, TCSANOW, _options);
+	if (result == -1) {
 		// something went wrong
+#ifdef AMSerialDebug
+		NSLog(@"Error setting tty attributes - %s(%d).", strerror(errno), errno);
+#endif
 		_gotError = YES;
 		_lastError = errno;
 		return NO;
