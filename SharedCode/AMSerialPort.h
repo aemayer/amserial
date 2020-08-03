@@ -45,7 +45,7 @@ typedef NS_ENUM(int, AMSerialStopBits) {
 };
 
 // Private constant
-#define AMSER_MAXBUFSIZE  4096UL
+#define AMSER_MAXBUFSIZE  (4096UL)
 
 extern NSString *const AMSerialErrorDomain;
 
@@ -100,7 +100,7 @@ extern NSString *const AMSerialErrorDomain;
 // IOKit service name (e.g. 'modem')
 
 - (NSString *)type;
-// IOKit service type (e.g. kIOSerialBSDRS232Type)
+// IOKit service type (kIOSerialBSDAllTypes, kIOSerialBSDModemType, kIOSerialBSDRS232Type)
 
 - (nullable NSDictionary *)properties;
 // IORegistry entry properties - see IORegistryEntryCreateCFProperties()

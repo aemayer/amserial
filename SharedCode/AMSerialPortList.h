@@ -47,7 +47,7 @@ extern NSString * const AMSerialPortListRemovedPorts;
 - (NSArray *)serialPorts;
 
 // Returns an array of all currently known ports that match the given type. May be an empty array.
-// Types are from IOSerialKeys.h, ex: @kIOSerialBSDModemType or @kIOSerialBSDRS232Type.
+// Types are from IOSerialKeys.h, ex: @kIOSerialBSDAllTypes, @kIOSerialBSDModemType, @kIOSerialBSDRS232Type.
 - (NSArray *)serialPortsOfType:(NSString *)serialTypeKey;
 
 @end

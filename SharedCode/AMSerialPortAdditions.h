@@ -2,7 +2,7 @@
 //  AMSerialPortAdditions.h
 //
 //  Created by Andreas Mayer on 2002-05-02.
-//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 
 #import "AMSDKCompatibility.h"
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AMSerialPort (AMSerialPortAdditions)
 
-// returns the number of bytes available in the input buffer
+// returns the number of bytes available in the input buffer, or -1 upon error
 // Be careful how you use this information, it may be out of date just after you get it
 - (int)bytesAvailable;
 
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 						 error:(NSError **)error;
 
 // returns when 'stopChar' is encountered at the end of the read buffer.
-// the value is treated as a byte, there is no regard for character/string encoding.
+// the 'stopChar' value is treated as a byte, there is no regard for character/string encoding.
 // NOTE: this doesn't necessarily stop at the first encountered such character,
 // but rather once a chunk it reads ends with the given character.
 - (nullable NSData *)readUpToChar:(char)stopChar

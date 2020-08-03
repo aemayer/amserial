@@ -224,6 +224,9 @@
 
 
 // write to the serial port; NO if an error occurred
+//
+// Perhaps surprisingly, note that if 'error' is non-nil, an NSError is always created,
+// even if the method was successful. Only consult the error if the method returns NO.
 - (BOOL)writeData:(nullable NSData *)data
 			error:(NSError **)error
 {
@@ -513,7 +516,8 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			break;
 		pos += (NSUInteger)written;
 
-		if ([(NSDate *)[NSDate date] compare:nextNotificationDate] == NSOrderedDescending) {
+		NSDate* now = [NSDate date];
+		if ([now compare:nextNotificationDate] == NSOrderedDescending) {
 			if (notificationSent || (pos < dataLen)) { // not for last block only
 				notificationSent = YES;
 				[self reportProgress:pos dataLen:dataLen];
@@ -561,6 +565,9 @@ static int64_t AMMicrosecondsSinceBoot (void)
 //
 // Upon return: as long as some data was actually read, and no serious error occurred, an autoreleased NSData
 // object with that data is created and returned, otherwise nil is.
+//
+// Perhaps surprisingly, note that if 'error' is non-nil, an NSError is always created,
+// even if the method was successful. Only consult the error if the method returns NO.
 - (nullable NSData *)readAndStopAfterBytes:(BOOL)stopAfterBytes
 									 bytes:(NSUInteger)bytesToRead
 								stopAtChar:(BOOL)stopAtChar
