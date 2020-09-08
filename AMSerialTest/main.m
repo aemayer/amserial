@@ -2,8 +2,7 @@
 //  main.m
 //  AMSerialTest
 //
-//  Created by landvogt on Mon Jul 01 2002.
-//  Copyright (c) 2001 iWelt AG. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
