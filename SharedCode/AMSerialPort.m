@@ -930,7 +930,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)echoEnabled
 {
-	return (_options->c_lflag & ECHO);
+	return (_options->c_lflag & ECHO) != 0;
 }
 
 - (void)setEchoEnabled:(BOOL)echo
@@ -943,7 +943,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)echoEraseEnabled
 {
-	return (_options->c_lflag & ECHO);
+	return (_options->c_lflag & ECHO) != 0;
 }
 
 - (void)setEchoEraseEnabled:(BOOL)echoE
