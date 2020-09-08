@@ -2,7 +2,7 @@
 //  AppController.m
 //  AMSerialTest
 //
-//  Copyright (c) 2001-2018 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 //	2009-09-09		Andreas Mayer
 //	- fixed memory leak in -serialPortReadData:
@@ -88,11 +88,14 @@
 	AMSerialPort *sendPort = [dataDictionary objectForKey:@"serialPort"];
 	NSData *data = [dataDictionary objectForKey:@"data"];
 	if ([data length] > 0) {
-		NSString *text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-		[[[outputTextView textStorage] mutableString] appendString:text];
+		NSString *text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		if (text) {
+			[[[outputTextView textStorage] mutableString] appendString:text];
 #if !__has_feature(objc_arc)
-		[text release];
+			[text release];
 #endif
+		}
+
 		// continue listening
 		[sendPort readDataInBackground];
 	} else { // port closed
