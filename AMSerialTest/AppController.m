@@ -38,6 +38,14 @@
 
 @synthesize port = _port;
 
+- (void)appendOutputString:(NSString *)string
+{
+	assert(string);
+	
+	[[[outputTextView textStorage] mutableString] appendString:string];
+	[outputTextView setNeedsDisplay:YES];
+	[outputTextView displayIfNeeded];
+}
 
 - (void)openPort
 {
@@ -54,26 +62,20 @@
 		// register as self as delegate for port
 		[_port setDelegate:self];
 		
-		[[[outputTextView textStorage] mutableString] appendString:@"attempting to open port\r"];
-		[outputTextView setNeedsDisplay:YES];
-		[outputTextView displayIfNeeded];
+		[self appendOutputString:@"attempting to open port\r"];
 		
 		// open port - may take a few seconds ...
 		if ([_port open]) {
 			
-			[[[outputTextView textStorage] mutableString] appendString:@"port opened\r"];
-			[outputTextView setNeedsDisplay:YES];
-			[outputTextView displayIfNeeded];
+			[self appendOutputString:@"port opened\r"];
 
 			// listen for data in a separate thread
 			[_port readDataInBackground];
 			
 		} else { // an error occurred while creating port
-			[[[outputTextView textStorage] mutableString] appendString:@"couldn't open port for device "];
-			[[[outputTextView textStorage] mutableString] appendString:deviceName];
-			[[[outputTextView textStorage] mutableString] appendString:@"\r"];
-			[outputTextView setNeedsDisplay:YES];
-			[outputTextView displayIfNeeded];
+			NSString *message = [NSString stringWithFormat:@"couldn't open port for device %@\r",
+								 deviceName];
+			[self appendOutputString:message];
 			[self setPort:nil];
 		}
 	}
@@ -90,7 +92,7 @@
 	if ([data length] > 0) {
 		NSString *text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 		if (text) {
-			[[[outputTextView textStorage] mutableString] appendString:text];
+			[self appendOutputString:text];
 #if !__has_feature(objc_arc)
 			[text release];
 #endif
@@ -99,10 +101,8 @@
 		// continue listening
 		[sendPort readDataInBackground];
 	} else { // port closed
-		[[[outputTextView textStorage] mutableString] appendString:@"port closed\r"];
+		[self appendOutputString:@"port closed\r"];
 	}
-	[outputTextView setNeedsDisplay:YES];
-	[outputTextView displayIfNeeded];
 }
 
 
@@ -110,22 +110,18 @@
 {
 	assert(theNotification);
 	
-	[[[outputTextView textStorage] mutableString] appendString:@"didAddPorts:"];
-	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
-	[[[outputTextView textStorage] mutableString] appendString:[[theNotification userInfo] description]];
-	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
-	[outputTextView setNeedsDisplay:YES];
+	NSString *message = [NSString stringWithFormat:@"didAddPorts:\r%@\r",
+						 [[theNotification userInfo] description]];
+	[self appendOutputString:message];
 }
 
 - (void)didRemovePorts:(NSNotification *)theNotification
 {
 	assert(theNotification);
 	
-	[[[outputTextView textStorage] mutableString] appendString:@"didRemovePorts:"];
-	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
-	[[[outputTextView textStorage] mutableString] appendString:[[theNotification userInfo] description]];
-	[[[outputTextView textStorage] mutableString] appendString:@"\r"];
-	[outputTextView setNeedsDisplay:YES];
+	NSString *message = [NSString stringWithFormat:@"didRemovePorts:\r%@\r",
+						 [[theNotification userInfo] description]];
+	[self appendOutputString:message];
 }
 
 
@@ -133,16 +129,15 @@
 {
 	(void)sender;
 	
-	// get an port enumerator
+	// get a port enumerator
 	AMSerialPortList *sharedPortList = [AMSerialPortList sharedPortList];
 	for (AMSerialPort *aPort in sharedPortList) {
 		// print port name
-		[[[outputTextView textStorage] mutableString] appendString:[aPort name]];
-		[[[outputTextView textStorage] mutableString] appendString:@":"];
-		[[[outputTextView textStorage] mutableString] appendString:[aPort bsdPath]];
-		[[[outputTextView textStorage] mutableString] appendString:@"\r"];
+		NSString *message = [NSString stringWithFormat:@"%@ : %@\r",
+							 [aPort name],
+							 [aPort bsdPath]];
+		[self appendOutputString:message];
 	}
-	[outputTextView setNeedsDisplay:YES];
 }
 
 - (IBAction)chooseDevice:(id)sender
