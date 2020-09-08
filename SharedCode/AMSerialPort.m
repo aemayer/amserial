@@ -443,6 +443,8 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (BOOL)flushInput:(BOOL)fIn output:(BOOL)fOut	// (fIn or fOut) must be YES
 {
+	assert(fIn || fOut);
+	
 	int mode = 0;
 	if (fIn) {
 		mode = TCIFLUSH;
