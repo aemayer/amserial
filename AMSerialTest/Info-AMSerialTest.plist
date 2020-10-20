@@ -17,9 +17,9 @@
 	<key>CFBundleVersion</key>
 	<string>2</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>2.1</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>© Andreas Mayer 2001-2016</string>
+	<string>© Andreas Mayer 2001-2020</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

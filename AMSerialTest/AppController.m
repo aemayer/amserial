@@ -6,6 +6,9 @@
 //
 //	2009-09-09		Andreas Mayer
 //	- fixed memory leak in -serialPortReadData:
+//	2020-08-03		Sean McBride
+//  - the device textfield no longer sends an action message, instead there are Open and Close push buttons
+//	- added a Send Serial Break push button
 
 
 #import "AppController.h"
@@ -18,7 +21,7 @@
 - (void)awakeFromNib
 {
 	[deviceTextField setStringValue:@"/dev/cu.modem"]; // internal modem
-	[inputTextField setStringValue: @"ati"]; // will ask for modem type
+	[inputTextField setStringValue:@"ati"]; // will ask for modem type
 
 	// register for port add/remove notification
 	NSNotificationCenter* defaultCenter = [NSNotificationCenter defaultCenter];
@@ -35,6 +38,13 @@
 	(void)[AMSerialPortList sharedPortList];
 }
 
+#if !__has_feature(objc_arc)
+- (void)dealloc
+{
+	[_port release];
+	[super dealloc];
+}
+#endif
 
 @synthesize port = _port;
 
@@ -50,34 +60,64 @@
 - (void)openPort
 {
 	NSString *deviceName = [deviceTextField stringValue];
-	if (![deviceName isEqualToString:[_port bsdPath]]) {
-		[_port close];
+	if ([deviceName length] <= 0) {
+		[self appendOutputString:@"no port to open\r"];
+		
+		return;
+	}
 
-		AMSerialPort* newPort = [[AMSerialPort alloc] init:deviceName withName:deviceName type:@kIOSerialBSDModemType];
+	AMSerialPort *oldPort = [self port];
+	NSString *oldPortPath = [oldPort bsdPath];
+	if (deviceName && oldPortPath && [deviceName isEqualToString:oldPortPath]) {
+		[self appendOutputString:@"that port already open\r"];
+		
+		return;
+	}
+
+	[oldPort setDelegate:nil];
+	[oldPort close];
+	oldPort = nil;
+
+	AMSerialPort* newPort = [[AMSerialPort alloc] init:deviceName
+											  withName:deviceName
+												  type:@kIOSerialBSDModemType];
 #if !__has_feature(objc_arc)
-		[newPort autorelease];
+	[newPort autorelease];
 #endif
-		[self setPort:newPort];
-		
-		// register as self as delegate for port
-		[_port setDelegate:self];
-		
-		[self appendOutputString:@"attempting to open port\r"];
-		
-		// open port - may take a few seconds ...
-		if ([_port open]) {
-			
-			[self appendOutputString:@"port opened\r"];
+	[self setPort:newPort];
 
-			// listen for data in a separate thread
-			[_port readDataInBackground];
-			
-		} else { // an error occurred while creating port
-			NSString *message = [NSString stringWithFormat:@"couldn't open port for device %@\r",
-								 deviceName];
-			[self appendOutputString:message];
-			[self setPort:nil];
-		}
+	// register self as delegate of port
+	[newPort setDelegate:self];
+
+	NSString *message = [NSString stringWithFormat:@"attempting to open port %@\r", deviceName];
+	[self appendOutputString:message];
+
+	// open port - may take a few seconds ...
+	if ([newPort open]) {
+
+		[self appendOutputString:@"port opened\r"];
+
+		// listen for data in a separate thread
+		[newPort readDataInBackground];
+
+	} else { // an error occurred while creating port
+		[self appendOutputString:@"couldn't open port\r"];
+
+		[self setPort:nil];
+	}
+}
+
+- (void)closePort
+{
+	AMSerialPort *port = [self port];
+	if (port) {
+		[port setDelegate:nil];
+		[port close];
+		[self setPort:nil];
+
+		[self appendOutputString:@"port closed\r"];
+	} else {
+		[self appendOutputString:@"no port to close\r"];
 	}
 }
 
@@ -140,27 +180,39 @@
 	}
 }
 
-- (IBAction)chooseDevice:(id)sender
+- (IBAction)chooseOpen:(id)sender
 {
 	(void)sender;
 	
-	// new device selected
+	// open the named port, if any
 	[self openPort];
+}
+
+- (IBAction)chooseClose:(id)sender
+{
+	(void)sender;
+	
+	// close the current port, if any
+	[self closePort];
 }
 
 - (IBAction)send:(id)sender
 {
 	(void)sender;
 	
-	NSString *sendString = [[inputTextField stringValue] stringByAppendingString:@"\r"];
+	AMSerialPort *port = [self port];
+	if ([port isOpen]) {
+		NSString *sendString = [[inputTextField stringValue] stringByAppendingString:@"\r"];
 
-	if(!_port) {
-		// open a new port if we don't already have one
-		[self openPort];
+		NSError *error = nil;
+		BOOL success = [port writeString:sendString usingEncoding:NSUTF8StringEncoding error:&error];
+		if (!success) {
+			NSString *message = [NSString stringWithFormat:@"writing to port failed with: %@\r", error];
+			[self appendOutputString:message];
+		}
 	}
-
-	if([_port isOpen]) { // in case an error occurred while opening the port
-		[_port writeString:sendString usingEncoding:NSUTF8StringEncoding error:nil];
+	else {
+		[self appendOutputString:@"no port is open\r"];
 	}
 }
 
@@ -168,13 +220,18 @@
 {
 	(void)sender;
 	
-	if(!_port) {
-		// open a new port if we don't already have one
-		[self openPort];
+	AMSerialPort *port = [self port];
+	if ([port isOpen]) {
+		BOOL success = [port sendBreak];
+		if (success) {
+			[self appendOutputString:@"sendBreak successful\r"];
+		}
+		else {
+			[self appendOutputString:@"sendBreak failed\r"];
+		}
 	}
-
-	if([_port isOpen]) { // in case an error occurred while opening the port
-		[_port sendBreak];
+	else {
+		[self appendOutputString:@"no port is open\r"];
 	}
 }
 

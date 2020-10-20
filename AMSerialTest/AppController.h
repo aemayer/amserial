@@ -2,7 +2,7 @@
 //  AppController.h
 //  AMSerialTest
 //
-//  Copyright (c) 2001-2016 Andreas Mayer. All rights reserved.
+//  Copyright (c) 2001-2020 Andreas Mayer. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -10,7 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppController : NSObject <AMSerialDelegate> {
+@interface AppController : NSObject <AMSerialDelegate>
+{
+@private
 	IBOutlet NSTextField *inputTextField;
 	IBOutlet NSTextField *deviceTextField;
 	IBOutlet NSTextView *outputTextView;
@@ -18,14 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property(readwrite, retain, atomic, nullable) AMSerialPort *port;
-
-- (IBAction)listDevices:(id)sender;
-
-- (IBAction)chooseDevice:(id)sender;
-
-- (IBAction)send:(id)sender;
-
-- (IBAction)sendSerialBreak:(id)sender;
 
 @end
 
