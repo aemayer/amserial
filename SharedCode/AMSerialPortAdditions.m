@@ -613,12 +613,15 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			AM_FD_SET(_fileDescriptor, _readfds);
 			int selectResult = select(_fileDescriptor+1, _readfds, NULL, NULL, &timeout);
 			if (selectResult == -1) {
+				underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
 				errorCode = kAMSerialErrorFatal;
 				break;
 			} else if (selectResult == 0) {
 				errorCode = kAMSerialErrorTimeout;
 				break;
-			} else {
+			} else if (selectResult == 1) {
+				assert(FD_ISSET(_fileDescriptor, _readfds));
+				
 				size_t	sizeToRead;
 				if (stopAfterBytes) {
 					sizeToRead = (MIN(bytesToRead, AMSER_MAXBUFSIZE))-bytesRead;
@@ -626,6 +629,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 					sizeToRead = AMSER_MAXBUFSIZE-bytesRead;
 				}
 				assert(sizeToRead > 0);
+				
 				ssize_t	readResult = read(_fileDescriptor, _buffer+bytesRead, sizeToRead);
 				if (readResult > 0) {
 					bytesRead += (NSUInteger)readResult;
@@ -648,9 +652,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 						break;
 					}
 				} else if (readResult == 0) {
-					// Should not be possible since select() has indicated data is available
-					errorCode = kAMSerialErrorFatal;
-					break;
+					// Even though select() has indicated the descriptor is ready for reading, that doesn't actually mean there's any data there, and indeed upon reading end-of-file, zero is returned. We'll just try again next loop.
 				} else {
 					assert(readResult == -1);
 					
@@ -659,6 +661,10 @@ static int64_t AMMicrosecondsSinceBoot (void)
 					errorCode = kAMSerialErrorFatal;
 					break;
 				}
+			}
+			else {
+				// We only tried to examine one descriptor, so any other return value from select should be impossible.
+				assert(0);
 			}
 			
 			// Reduce the timeout value by the amount of time actually spent so far
