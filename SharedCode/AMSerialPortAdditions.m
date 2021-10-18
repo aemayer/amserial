@@ -669,7 +669,7 @@ static int64_t AMMicrosecondsSinceBoot (void)
 			
 			// Reduce the timeout value by the amount of time actually spent so far
 			int64_t elapsed = AMMicrosecondsSinceBoot() - startTime;
-			assert(elapsed > 0);
+			assert(elapsed >= 0);
 			remainingTimeout -= elapsed;
 		}
 	}
