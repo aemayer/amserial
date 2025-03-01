@@ -2,7 +2,8 @@
 //  AMSDKCompatibility.h
 //
 //  Created by Nick Zitzmann on 2007-10-22.
-//  Copyright (c) 2007-2016 Andreas Mayer. All rights reserved.
+//  SPDX-FileCopyrightText: Copyright (c) 2007-2016 Andreas Mayer. All rights reserved.
+//  SPDX-License-Identifier: BSD-3-Clause
 //
 
 // AMSerialPort uses some features from newer SDKs.

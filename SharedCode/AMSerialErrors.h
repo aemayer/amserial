@@ -2,7 +2,8 @@
 //  AMSerialErrors.h
 //
 //  Created by Andreas Mayer on 2006-07-27.
-//  Copyright (c) 2006-2016 Andreas Mayer. All rights reserved.
+//  SPDX-FileCopyrightText: Copyright (c) 2006-2016 Andreas Mayer. All rights reserved.
+//  SPDX-License-Identifier: BSD-3-Clause
 //
 
 typedef NS_ENUM(NSInteger, AMSerialError) {

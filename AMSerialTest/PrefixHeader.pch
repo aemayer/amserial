@@ -2,7 +2,8 @@
 //  PrefexHeader.pch
 //  AMSerialTest
 //
-//  Copyright (c) 2016 Andreas Mayer. All rights reserved.
+//  SPDX-FileCopyrightText: Copyright (c) 2016 Andreas Mayer. All rights reserved.
+//  SPDX-License-Identifier: BSD-3-Clause
 //
 
 // Define if you want debug logging.

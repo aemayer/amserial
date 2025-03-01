@@ -2,7 +2,8 @@
 //  AMStandardEnumerator.h
 //
 //  Created by Andreas Mayer on 2003-08-04.
-//  Copyright (c) 2003-2016 Andreas Mayer. All rights reserved.
+//  SPDX-FileCopyrightText: Copyright (c) 2003-2016 Andreas Mayer. All rights reserved.
+//  SPDX-License-Identifier: BSD-3-Clause
 //
 
 #import "AMSDKCompatibility.h"
