@@ -691,12 +691,12 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	// and output speed. 
 	
 	speed_t newSpeed = speed;
-	if (fileDescriptor >= 0) {
-		errorCode = ioctl(fileDescriptor, IOSSIOSPEED, &newSpeed);
+	if (_fileDescriptor >= 0) {
+		errorCode = ioctl(_fileDescriptor, IOSSIOSPEED, &newSpeed);
 	} else {
 		result = NO;
-		gotError = YES;
-		lastError = EBADF; // Bad file descriptor
+		_gotError = YES;
+		_lastError = EBADF; // Bad file descriptor
 	}
 #else
 	// set both the input and output speed
