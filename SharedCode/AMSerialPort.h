@@ -72,7 +72,9 @@ extern NSString *const AMSerialErrorDomain;
 	char * _buffer;
 	NSTimeInterval _readTimeout; // for public blocking read methods and doRead
 	fd_set * _readfds;
+#if !__has_feature(objc_arc)
 	NSObject<AMSerialDelegate>* _delegate;
+#endif
 	NSLock *_writeLock;
 	NSLock *_readLock;
 	NSLock *_closeLock;
@@ -227,9 +229,9 @@ extern NSString *const AMSerialErrorDomain;
 
 // the delegate (for background reading/writing)
 #if __has_feature(objc_arc)
-@property(readwrite, weak, nullable) NSObject<AMSerialDelegate>* delegate;
+@property(readwrite, weak, nullable, atomic) NSObject<AMSerialDelegate>* delegate;
 #else
-@property(readwrite, assign, nullable) NSObject<AMSerialDelegate>* delegate;
+@property(readwrite, assign, nullable, nonatomic) NSObject<AMSerialDelegate>* delegate;
 #endif
 
 // time out for blocking reads in seconds. Honoured as best a possible, but is not an upper or lower bound. Must be finite and non-negative.

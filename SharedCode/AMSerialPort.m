@@ -196,6 +196,9 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 }
 
 
+#if __has_feature(objc_arc)
+@synthesize delegate = _delegate;
+#else
 - (nullable NSObject<AMSerialDelegate>*)delegate
 {
 	return _delegate;
@@ -206,7 +209,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	// As per Cocoa conventions, delegates are not retained.
 	_delegate = newDelegate;
 }
-
+#endif
 
 - (NSString *)bsdPath
 {
