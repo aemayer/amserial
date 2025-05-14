@@ -1,0 +1,22 @@
+#
+#  .clang-tidy
+#
+#  Created by Sean McBride on 2025-05-14.
+#  SPDX-FileCopyrightText: Copyright (c) 2025 Andreas Mayer. All rights reserved.
+#  SPDX-License-Identifier: BSD-3-Clause
+
+Checks: '-*,
+  android-*,
+  bugprone-*,
+  -bugprone-narrowing-conversions,
+  cert-*,
+  clang-analyzer-*,
+  -clang-analyzer-optin.osx.cocoa.localizability.NonLocalizedStringChecker,
+  google-*,
+  -google-readability-todo,
+  misc-*,
+  performance-*,
+  readability-*,
+  -readability-magic-numbers,
+  -readability-else-after-return,
+  -readability-avoid-unconditional-preprocessor-if'
