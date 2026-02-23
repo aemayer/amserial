@@ -226,7 +226,7 @@ static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 
 - (void)registerForSerialPortChangeNotifications
 {
-	IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
+	IONotificationPortRef notificationPort = IONotificationPortCreate(0);
 	if (notificationPort) {
 		CFRunLoopSourceRef notificationSource = IONotificationPortGetRunLoopSource(notificationPort);
 		if (notificationSource) {
@@ -290,7 +290,7 @@ static void AMSerialPortWasRemovedCallback(void *refcon, io_iterator_t iterator)
 		// This function decrements the refcount of the dictionary passed it
 		// Note: Despite its documentation, this function has been observed returning KERN_SUCCESS,
 		// yet not returning any iterator by reference <rdar://25608800>, hence the extra check.
-		kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &serialPortIterator);
+		kernResult = IOServiceGetMatchingServices(0, classesToMatch, &serialPortIterator);
 		if ((kernResult == KERN_SUCCESS) && (serialPortIterator != 0)) {
 			while ((serialPort = [self getNextSerialPort:serialPortIterator]) != nil) {
 				[array addObject:serialPort];

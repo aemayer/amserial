@@ -243,7 +243,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	if (matchingDictionary != NULL) {
 		CFRetain(matchingDictionary);
 		// This function decrements the refcount of the dictionary passed it
-		serialService = IOServiceGetMatchingService(kIOMasterPortDefault, matchingDictionary);
+		serialService = IOServiceGetMatchingService(0, matchingDictionary);
 		
 		if (serialService) {
 			CFMutableDictionaryRef propertiesDict = NULL;
