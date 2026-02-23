@@ -112,7 +112,7 @@ extern NSString *const AMSerialErrorDomain;
 - (BOOL)isOpen;
 // YES if port is open
 
-- (nullable AMSerialPort *)obtainBy:(id)sender;
+- (nullable AMSerialPort *)obtainBy:(nullable id)sender;
 // get this port exclusively; nil if it's not free
 
 - (void)free;

@@ -255,7 +255,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return (_fileDescriptor >= 0);
 }
 
-- (nullable AMSerialPort *)obtainBy:(id)sender
+- (nullable AMSerialPort *)obtainBy:(nullable id)sender
 {
 	// get this port exclusively; nil if it's not free
 	if (_owner == nil) {
