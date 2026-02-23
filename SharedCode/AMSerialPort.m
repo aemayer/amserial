@@ -555,7 +555,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 
 - (NSDictionary *)options
 {
-	// will open the port to get options if neccessary
+	// will open the port to get options if necessary
 	if ([_optionsDictionary objectForKey:AMSerialOptionServiceName] == nil) {
 		if (_fileDescriptor < 0) {
 			[self open];

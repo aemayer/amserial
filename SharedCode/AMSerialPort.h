@@ -154,7 +154,7 @@ extern NSString *const AMSerialErrorDomain;
 // read and write serial port settings through a dictionary
 
 - (NSDictionary *)options;
-// will open the port to get options if neccessary
+// will open the port to get options if necessary
 
 - (void)setOptions:(NSDictionary *)options;
 // AMSerialOptionServiceName HAS to match! You may NOT switch ports using this
