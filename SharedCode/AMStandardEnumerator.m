@@ -54,7 +54,6 @@
 	return self;
 }
 
-#ifndef __OBJC_GC__
 #if !__has_feature(objc_arc)
 
 - (void)dealloc
@@ -63,7 +62,6 @@
 	[super dealloc];
 }
 
-#endif
 #endif
 
 - (nullable id)nextObject

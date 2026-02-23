@@ -126,8 +126,6 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	return self;
 }
 
-#ifndef __OBJC_GC__
-
 - (void)dealloc
 {
 #ifdef AMSerialDebug
@@ -155,26 +153,6 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	[super dealloc];
 #endif
 }
-
-#else
-
-- (void)finalize
-{
-#ifdef AMSerialDebug
-	if (_fileDescriptor != -1) {
-		NSLog(@"It is a programmer error to have not called -close on an AMSerialPort you have opened");
-	}
-#endif
-	assert (_fileDescriptor == -1);
-
-	free(_readfds); _readfds = NULL;
-	free(_buffer); _buffer = NULL;
-	free(_originalOptions); _originalOptions = NULL;
-	free(_options); _options = NULL;
-	[super finalize];
-}
-
-#endif
 
 // So NSLog and gdb's 'po' command give something useful
 - (NSString *)description
@@ -314,11 +292,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 	NSFileHandle *result = nil;
 	NSError *localErr = nil;
 	
-#ifdef __OBJC_GC__
-	__strong const char *path = [_bsdPath fileSystemRepresentation];
-#else
 	const char *path = [_bsdPath fileSystemRepresentation];
-#endif
 	assert(path);
 	_fileDescriptor = open(path, flags);
 
