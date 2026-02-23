@@ -135,21 +135,21 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 #endif
 	assert (_fileDescriptor == -1);
 
-	free(_readfds); _readfds = NULL;
-	free(_buffer); _buffer = NULL;
-	free(_originalOptions); _originalOptions = NULL;
-	free(_options); _options = NULL;
+	free(_readfds);
+	free(_buffer);
+	free(_originalOptions);
+	free(_options);
 	
 #if !__has_feature(objc_arc)
-	[_readLock release]; _readLock = nil;
-	[_writeLock release]; _writeLock = nil;
-	[_closeLock release]; _closeLock = nil;
-	[_am_readTarget release]; _am_readTarget = nil;
+	[_readLock release];
+	[_writeLock release];
+	[_closeLock release];
+	[_am_readTarget release];
 	
-	[_optionsDictionary release]; _optionsDictionary = nil;
-	[_serviceName release]; _serviceName = nil;
-	[_serviceType release]; _serviceType = nil;
-	[_bsdPath release]; _bsdPath = nil;
+	[_optionsDictionary release];
+	[_serviceName release];
+	[_serviceType release];
+	[_bsdPath release];
 	[super dealloc];
 #endif
 }

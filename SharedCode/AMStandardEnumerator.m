@@ -58,7 +58,7 @@
 
 - (void)dealloc
 {
-	[_collection release]; _collection = nil;
+	[_collection release];
 	[super dealloc];
 }
 
