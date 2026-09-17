@@ -483,7 +483,7 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 {
 	[_optionsDictionary removeAllObjects];
 	[_optionsDictionary setObject:[self name] forKey:AMSerialOptionServiceName];
-	[_optionsDictionary setObject:[NSString stringWithFormat:@"%ld", [self speed]] forKey:AMSerialOptionSpeed];
+	[_optionsDictionary setObject:[NSString stringWithFormat:@"%lu", [self speed]] forKey:AMSerialOptionSpeed];
 	[_optionsDictionary setObject:[NSString stringWithFormat:@"%lu", [self dataBits]] forKey:AMSerialOptionDataBits];
 	switch ([self parity]) {
 		case kAMSerialParityOdd: {
@@ -579,10 +579,10 @@ NSString *const AMSerialErrorDomain = @"de.harmless.AMSerial.ErrorDomain";
 		[_optionsDictionary addEntriesFromDictionary:newOptions];
 		// parse dictionary
 		temp = (NSString *)[_optionsDictionary objectForKey:AMSerialOptionSpeed];
-		[self setSpeed:[temp intValue]];
-		
+		[self setSpeed:[temp integerValue]];
+
 		temp = (NSString *)[_optionsDictionary objectForKey:AMSerialOptionDataBits];
-		[self setDataBits:[temp intValue]];
+		[self setDataBits:[temp integerValue]];
 		
 		temp = (NSString *)[_optionsDictionary objectForKey:AMSerialOptionParity];
 		if (temp == nil || [temp isEqualToString:@"None"]) {
